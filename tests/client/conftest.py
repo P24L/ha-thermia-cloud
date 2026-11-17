@@ -35,6 +35,7 @@ class FakeCloud:
         self._sticky: dict[tuple[str, str], Reply] = {}
         self.calls: list[tuple[str, str]] = []
         self.cookies_sent: dict[tuple[str, str], str] = {}
+        self.bodies: list[tuple[str, str, Any]] = []  # (method, path, json body)
         self.base_url = ""
 
     def on(self, method: str, path: str, *replies: Reply) -> None:
@@ -50,6 +51,8 @@ class FakeCloud:
         key = (request.method, request.path)
         self.calls.append(key)
         self.cookies_sent[key] = request.headers.get("Cookie", "")
+        if request.can_read_body and request.content_type == "application/json":
+            self.bodies.append((request.method, request.path, await request.json()))
         queue = self._queues[key]
         reply = queue.popleft() if queue else self._sticky.get(key, Reply(500, "unscripted"))
         if isinstance(reply.body, str):

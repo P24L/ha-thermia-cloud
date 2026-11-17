@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json as jsonlib
 import logging
 import random
 import re
@@ -62,7 +63,8 @@ class ThermiaHttp:
                     status = resp.status
                     _LOGGER.debug("%s %s -> %s", method, _redact(path), status)
                     if status == 200:
-                        return await resp.json(content_type=None)
+                        text = await resp.text()
+                        return jsonlib.loads(text) if text.strip() else None
                     retry_after = resp.headers.get("Retry-After")
             except (aiohttp.ClientError, TimeoutError) as err:
                 raise NetworkError(str(err)) from err
