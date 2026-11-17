@@ -141,12 +141,14 @@ class LabelResolver:
         return self._culture
 
     def label(self, key: str, translation_key: str | None = None) -> str:
-        if translation_key and translation_key in self._curated:
-            return self._curated[translation_key]
+        for curated_key in (translation_key, key):  # a register's key or, for flags, the flag's key
+            if curated_key and curated_key in self._curated:
+                return self._curated[curated_key]
         if self._english_fallback:
             sources: list[Mapping[str, str]] = []
-            if translation_key and translation_key in self._curated_fallback:
-                return self._curated_fallback[translation_key]
+            for curated_key in (translation_key, key):
+                if curated_key and curated_key in self._curated_fallback:
+                    return self._curated_fallback[curated_key]
         else:
             sources = [self._refreshed, self._bundled.get(self._culture, {})]
             sources += [self._bundled[c] for c in self._same_language]
@@ -154,8 +156,9 @@ class LabelResolver:
             text = source.get(key)
             if text:
                 return strip_unit_bracket(text)
-        if translation_key and translation_key in self._curated_fallback:
-            return self._curated_fallback[translation_key]
+        for curated_key in (translation_key, key):
+            if curated_key and curated_key in self._curated_fallback:
+                return self._curated_fallback[curated_key]
         text = self._bundled.get(FALLBACK_CULTURE, {}).get(key)
         if text:
             return strip_unit_bracket(text)

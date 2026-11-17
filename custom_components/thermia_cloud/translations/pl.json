@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Wykryj rejestry ponownie"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Sprężarka pracuje"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Ogrzewanie aktywne"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Podgrzewanie CWU"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Odszranianie"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Chłodzenie aktywne"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Podgrzewanie basenu"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Pompa obiegu grzewczego"
+      }
     }
   },
   "exceptions": {

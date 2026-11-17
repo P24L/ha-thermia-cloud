@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Etsi rekisterit uudelleen"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompressori käy"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Lämmitys käynnissä"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Käyttöveden lämmitys"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Sulatus"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Jäähdytys käynnissä"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Altaan lämmitys"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Lämmityspiirin pumppu"
+      }
     }
   },
   "exceptions": {

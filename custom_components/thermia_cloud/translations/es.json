@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Redescubrir registros"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Compresor en marcha"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Calefacción activa"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Producción de ACS"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Desescarche"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Refrigeración activa"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Calentamiento de piscina"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Bomba del circuito de calefacción"
+      }
     }
   },
   "exceptions": {

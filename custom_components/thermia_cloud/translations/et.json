@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Tuvasta registrid uuesti"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompressor töötab"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Küte aktiivne"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Soojaveeküte"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Sulatus"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Jahutus aktiivne"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Basseini küte"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Küttekontuuri pump"
+      }
     }
   },
   "exceptions": {

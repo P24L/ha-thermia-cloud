@@ -372,3 +372,29 @@ async def test_registers_step_aborts_when_the_cloud_is_unreachable(
         result["flow_id"], {"next_step_id": "registers"}
     )
     assert result["type"] == "abort" and result["reason"] == "cannot_connect"
+
+
+async def test_status_flags_have_clear_unique_names(hass: HomeAssistant) -> None:
+    hass.config.language = "cs"
+    await setup(hass, make_entry(hass))
+    names = [
+        state.attributes["friendly_name"]
+        for state in hass.states.async_all()
+        if state.entity_id.startswith(
+            ("binary_sensor.", "switch.", "sensor.", "number.", "select.")
+        )
+        and state.attributes.get("friendly_name", "").startswith("Test installation")
+    ]
+    assert len(names) == len(set(names))
+    assert not [
+        n for n in names if n.endswith(")") and n.split(" (")[0].endswith(n.rsplit("(", 1)[-1][:-1])
+    ]
+    flags = {
+        s.attributes["friendly_name"]
+        for s in hass.states.async_all("binary_sensor")
+        if s.attributes.get("friendly_name", "").startswith("Test installation")
+    }
+    assert {
+        "Test installation 42 Ohřev teplé vody",
+        "Test installation 42 Kompresor v provozu",
+    } <= flags

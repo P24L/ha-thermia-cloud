@@ -322,5 +322,8 @@ def resolve_name_collisions(
     for (_, name), group in by_name.items():
         if len(group) > 1:
             for plan in group:
-                result[plan.key] = f"{name} ({suffix(plan)})"
+                extra = suffix(plan)
+                if extra.strip().casefold() == name.strip().casefold():
+                    extra = plan.platform.replace("_", " ")  # the group says the same as the name
+                result[plan.key] = f"{name} ({extra})"
     return result

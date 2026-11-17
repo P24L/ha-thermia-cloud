@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Redécouvrir les registres"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Compresseur en marche"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Chauffage actif"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Production d'ECS"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Dégivrage"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Refroidissement actif"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Chauffage de la piscine"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Pompe du circuit de chauffage"
+      }
     }
   },
   "exceptions": {

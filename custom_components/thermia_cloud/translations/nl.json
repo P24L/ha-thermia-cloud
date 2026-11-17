@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Registers opnieuw detecteren"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Compressor draait"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Verwarming actief"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Warmwaterbereiding"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Ontdooien"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Koeling actief"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Zwembadverwarming"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Verwarmingspomp"
+      }
     }
   },
   "exceptions": {

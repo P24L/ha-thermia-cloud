@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Sök register igen"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompressor igång"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Värme aktiv"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Varmvattenladdning"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Avfrostning"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Kylning aktiv"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Poolvärme"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Cirkulationspump värme"
+      }
     }
   },
   "exceptions": {

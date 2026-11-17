@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Ponovno odkrij registre"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompresor deluje"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Ogrevanje aktivno"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Priprava tople vode"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Odtaljevanje"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Hlajenje aktivno"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Ogrevanje bazena"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Obtočna črpalka ogrevanja"
+      }
     }
   },
   "exceptions": {

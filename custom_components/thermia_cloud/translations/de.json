@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Register neu erkennen"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompressor läuft"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Heizen aktiv"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Warmwasserbereitung"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Abtauung"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Kühlen aktiv"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Poolheizung"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Heizkreispumpe"
+      }
     }
   },
   "exceptions": {

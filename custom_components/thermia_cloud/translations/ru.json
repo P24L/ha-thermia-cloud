@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Повторно обнаружить регистры"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Компрессор работает"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Отопление активно"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Нагрев ГВС"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Оттайка"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Охлаждение активно"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Нагрев бассейна"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Насос контура отопления"
+      }
     }
   },
   "exceptions": {

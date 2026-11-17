@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Rediscover registers"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Compressor running"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Heating active"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Hot water heating"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Defrosting"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Cooling active"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Pool heating"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Heating circuit pump"
+      }
     }
   },
   "exceptions": {

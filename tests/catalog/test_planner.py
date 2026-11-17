@@ -292,3 +292,14 @@ def test_constant_mode_register_becomes_an_enabled_number_on_circuit_1() -> None
     assert (constant.unit, constant.risk, constant.default_enabled) == ("°C", "heating", True)
     assert (constant.min_value, constant.max_value, constant.step) == (20.0, 55.0, 1.0)
     assert constant.translation_key == "constant_temperature"
+
+
+def test_a_suffix_that_repeats_the_name_is_replaced() -> None:
+    a = replace(_dummy(), key="1", platform="switch", group_name="G_HOT")
+    b = replace(_dummy(), key="2", platform="binary_sensor", group_name="G_STATUS")
+    names = resolve_name_collisions(
+        [a, b],
+        lambda p: "Hot water",
+        lambda p: "Hot water" if p.group_name == "G_HOT" else "Status",
+    )
+    assert names["1"] == "Hot water (switch)" and names["2"] == "Hot water (Status)"

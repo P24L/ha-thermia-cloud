@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Find registre igen"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompressor kører"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Opvarmning aktiv"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Varmtvandsproduktion"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Afrimning"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Køling aktiv"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Poolopvarmning"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Varmekredspumpe"
+      }
     }
   },
   "exceptions": {

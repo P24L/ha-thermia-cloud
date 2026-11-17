@@ -179,6 +179,29 @@
       "rediscover": {
         "name": "Znovu vyhledat registry"
       }
+    },
+    "binary_sensor": {
+      "COMP_VALUE_COMPR": {
+        "name": "Kompresor v provozu"
+      },
+      "COMP_VALUE_HEATING": {
+        "name": "Vytápění aktivní"
+      },
+      "COMP_VALUE_HOT_WATER": {
+        "name": "Ohřev teplé vody"
+      },
+      "COMP_VALUE_DEFROST": {
+        "name": "Odmrazování"
+      },
+      "COMP_VALUE_COOLING": {
+        "name": "Chlazení aktivní"
+      },
+      "COMP_VALUE_POOL": {
+        "name": "Ohřev bazénu"
+      },
+      "COMP_VALUE_RADIATORPUMP": {
+        "name": "Čerpadlo topného okruhu"
+      }
     }
   },
   "exceptions": {
