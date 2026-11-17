@@ -1,0 +1,22 @@
+name: New model / missing registers
+description: Help support another heat pump model or add missing entities
+labels: [new-model]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Heat pump model / family
+    validations:
+      required: true
+  - type: textarea
+    id: missing
+    attributes:
+      label: What is missing or wrong?
+      description: Entities that do not appear, wrong units or names.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Attach the downloaded diagnostics file (redacted). Look through it before posting.
