@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Přihlaste se účtem Thermia Online / MyThermia.\n\nJde o neoficiální integraci, nijak nesouvisející se společnostmi Thermia ani Danfoss.",
+        "data": {
+          "username": "E-mail",
+          "password": "Heslo"
+        }
+      },
+      "installations": {
+        "title": "Instalace",
+        "description": "Vyberte, která tepelná čerpadla přidat. Výběr můžete později změnit v možnostech.",
+        "data": {
+          "installations": "Instalace"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-mail nebo heslo bylo odmítnuto.",
+      "cannot_connect": "Nepodařilo se spojit s cloudem Thermia. Zkuste to později.",
+      "policy_acceptance_required": "Jednou se přihlaste na online.thermia.se, odsouhlaste aktualizované podmínky a zkuste to znovu.",
+      "unknown": "Neočekávaná chyba. Podrobnosti jsou v logu Home Assistantu."
+    },
+    "abort": {
+      "already_configured": "Tento účet Thermia je již nastaven.",
+      "no_installations": "K tomuto účtu není přiřazeno žádné tepelné čerpadlo."
+    }
+  }
+}

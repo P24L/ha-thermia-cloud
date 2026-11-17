@@ -86,3 +86,19 @@ async def test_concurrent_renewals_are_single_flight(
     await auth.close()
     assert {r[0] for r in results} == {"a1"}
     assert cloud.count("POST", TOKEN) == 1
+
+
+async def test_subject_is_read_from_the_access_token(
+    config: ThermiaConfig, cloud: FakeCloud
+) -> None:
+    import base64
+    import json
+
+    payload = base64.urlsafe_b64encode(json.dumps({"sub": "account-123"}).encode()).rstrip(b"=")
+    jwt = f"h.{payload.decode()}.s"
+    cloud.on("POST", TOKEN, cloud.token(access=jwt))
+    auth = ThermiaAuth(config, "u", "p", refresh_token="r0")
+    await auth.get_token()
+    await auth.close()
+    assert auth.subject == "account-123"
+    assert auth.refresh_token == "refresh-1"

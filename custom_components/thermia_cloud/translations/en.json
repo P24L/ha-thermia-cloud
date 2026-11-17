@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Sign in with your Thermia Online / MyThermia account.\n\nThis is an unofficial integration, not affiliated with Thermia or Danfoss.",
+        "data": {
+          "username": "E-mail",
+          "password": "Password"
+        }
+      },
+      "installations": {
+        "title": "Installations",
+        "description": "Choose which heat pumps to add. You can change this later in the options.",
+        "data": {
+          "installations": "Installations"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "The e-mail or password was rejected.",
+      "cannot_connect": "Could not reach the Thermia cloud. Try again later.",
+      "policy_acceptance_required": "Log in once at online.thermia.se and accept the updated terms, then try again.",
+      "unknown": "Unexpected error. See the Home Assistant log."
+    },
+    "abort": {
+      "already_configured": "This Thermia account is already configured.",
+      "no_installations": "No heat pump is linked to this account."
+    }
+  }
+}

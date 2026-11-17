@@ -22,6 +22,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P0.9 🧪 `REG_PID` ("Heat demand"): unit and range; is it gone for good?
 - [ ] P0.10 🧪 Meaning of group `visibility` 1/2/3/null (role level?) *(not derivable from one dump; `null` = empty technical groups, 1–3 do not predict data; ignore in v0.1)*
 - [ ] P0.11 🧪 Is the WebSocket (`isWebSocketEnabled`) enabled for other regions/accounts? Is `api-prod.thermia.com` reachable with a mobile-app token? (optional)
+- [x] P0.12 Thermia terms of use reviewed by the maintainer (2026-11-17); label snapshots (D4) and public announcement are cleared
 - [x] P0.13 Remaining decisions D3, D5, D7, D9 and the override-editor question confirmed by the maintainer (2026-11-17); editor is **not** in v0.1
 
 ## Phase 1 — Repository bootstrap
@@ -65,8 +66,8 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 4 — HA integration core (read-only)
 
-- [ ] P4.1 `manifest.json`, `const.py`; review the existing `hacs.json` (name *Thermia Cloud (unofficial)*, min HA 2026.10); brand images in `custom_components/thermia_cloud/brand/` (`icon.png` 256×256, `icon@2x.png`)
-- [ ] P4.2 Config flow: user → create; entry `unique_id` = token `sub`; errors per `UI-DESIGN.md` §1; installation selection in options
+- [ ] P4.1 `manifest.json`, `const.py`; review the existing `hacs.json` (name *Thermia Cloud (unofficial)*, min HA 2026.10); brand images in `custom_components/thermia_cloud/brand/` (`icon.png` 256×256, `icon@2x.png`) *(done: `manifest.json`, `const.py`; still open: brand images)*
+- [x] P4.2 Config flow: user → create; entry `unique_id` = token `sub`; errors per `UI-DESIGN.md` §1; installation selection in options *(user → installations → create; installation selection in the options flow comes with P6.2)*
 - [ ] P4.3 Reauth flow
 - [ ] P4.4 Reconfigure flow
 - [ ] P4.5 Coordinator per installation: explicit `config_entry`, `always_update=False`, discovery cache in a `Store`, needed groups from the entity registry (verify HA's reload-on-enable behaviour), `ConfigEntryAuthFailed` / `UpdateFailed(retry_after)`

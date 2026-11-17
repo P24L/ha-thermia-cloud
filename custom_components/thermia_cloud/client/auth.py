@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import base64
 import hashlib
+import json
 import logging
 import re
 import secrets
@@ -26,6 +27,17 @@ POLICY = "B2C_1A_SignUpOrSigninOnline"
 REFRESH_MARGIN = 120  # seconds before expiry at which the token is renewed proactively
 _TRANS_ID = re.compile(r'"transId"\s*:\s*"([^"]+)"')
 _CSRF = re.compile(r'"csrf"\s*:\s*"([^"]+)"')
+
+
+def _jwt_subject(token: str) -> str | None:
+    """``sub`` of a JWT, read without verifying it (we only need an account identity)."""
+    try:
+        payload = token.split(".")[1]
+        claims = json.loads(base64.urlsafe_b64decode(payload + "=" * (-len(payload) % 4)))
+        sub = claims.get("sub")
+    except IndexError, ValueError, AttributeError:
+        return None
+    return str(sub) if sub else None
 
 
 class ThermiaAuth:
@@ -52,6 +64,7 @@ class ThermiaAuth:
         self._access_token: str | None = None
         self._expires_at = 0.0
         self._generation = 0
+        self._subject: str | None = None
         self._lock = asyncio.Lock()
         # Private session and cookie jar: never share login cookies with anything else.
         self._session: aiohttp.ClientSession | None = None
@@ -61,6 +74,15 @@ class ThermiaAuth:
     def generation(self) -> int:
         """Incremented on every successful (re)authentication."""
         return self._generation
+
+    @property
+    def subject(self) -> str | None:
+        """The account's stable ``sub`` claim from the access token (identity of the account)."""
+        return self._subject
+
+    @property
+    def refresh_token(self) -> str | None:
+        return self._refresh_token
 
     async def close(self) -> None:
         if self._session is not None:
@@ -138,6 +160,7 @@ class ThermiaAuth:
 
     def _store(self, body: dict[str, object]) -> None:
         self._access_token = str(body["access_token"])
+        self._subject = _jwt_subject(self._access_token) or self._subject
         expires_on = body.get("expires_on")
         if expires_on is not None:
             self._expires_at = float(str(expires_on))
