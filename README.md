@@ -1,8 +1,8 @@
 <!-- Status banner: remove when v0.1.0 is released -->
-> 🚧 **Status: design phase.** The architecture, UI and roadmap are written (see [`docs/`](docs/)); the code is being built. Nothing here can be installed yet. Progress: [`docs/ROADMAP.md`](docs/ROADMAP.md).
+> 🚧 **Status: pre-release (not published yet).** The integration is feature-complete for v0.1 and runs against a real iTec heat pump **read-only**. **Writing to a real heat pump has not been verified yet** — the write path is tested against fakes only. Progress: [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 <p align="center">
-  <!-- <img src="custom_components/thermia_cloud/brand/icon.png" width="120" alt="Thermia Cloud"> -->
+  <img src="custom_components/thermia_cloud/brand/icon@2x.png" width="120" alt="Thermia Cloud">
   <h1 align="center">Thermia Cloud (unofficial) for Home Assistant</h1>
   <p align="center">
     Read <b>and</b> control your Thermia heat pump through the Thermia cloud —<br>
@@ -28,7 +28,7 @@ The existing [Thermia integration by klejejs](https://github.com/klejejs/ha-ther
 | Which entities exist | Hard-coded per register in Python | **Discovered from the cloud's own description** of your heat pump; unknown registers still show up |
 | Changing settings | Hot water and operation mode | **Any writable register** the cloud allows (heating curve, min/max supply temperature, heating stop, …) with the cloud's own limits |
 | Several heating circuits | Main values only | Main circuit **and** circuits 1/2, pool, … as child devices |
-| Names | English | **The same localized names as the Thermia app** (16 languages, e.g. *Přívod – minimum*) |
+| Names | English | Our own short names in **English and Czech**; in the other languages Thermia's own texts (16 languages, e.g. *Přívod – minimum*) |
 | Hidden / unsupported registers | Silently unavailable | Hidden by Thermia's own visibility rules; vanished registers explained by a Repair |
 | Cloud traffic | ~9 requests every 10 s | Only the groups you use, every 60 s by default |
 | Safety | — | Optional **read-only mode**, installer-level registers opt-in, every write validated and read back |
@@ -39,8 +39,9 @@ The existing [Thermia integration by klejejs](https://github.com/klejejs/ha-ther
 - ✅ Sensors, binary sensors (compressor, heating, hot water, defrost, …), numbers, selects and switches generated from your pump's register list
 - ✅ **Control, not just monitoring:** hot water on/off and mode, operation mode, heating curve — plus minimum/maximum supply temperature, heating stop and any other writable register, all with the cloud's own limits
 - ✅ Main circuit and additional circuits/pool as separate devices
-- ✅ UI in English and Czech; register names in the language of your choice (default: your HA language) taken from Thermia's own texts, with a **Refresh names** button
-- ✅ Options in the HA UI: update interval, read-only mode, installations, show/hide registers, label language
+- ✅ UI in English and Czech; entity names in the language of your choice (default: your HA language): our own names where we have them, Thermia's own texts otherwise, with a **Refresh names** button
+- ✅ Action `thermia_cloud.set_register` for registers without an entity
+- ✅ Options in the HA UI: update interval, read-only mode, request timeout, installations, show/hide registers, label language, debug attributes
 - ✅ Reauth and reconfigure flows, Repairs, downloadable diagnostics
 - ✅ Multiple installations per account
 
@@ -90,7 +91,7 @@ Copy `custom_components/thermia_cloud` into your `config/custom_components/` fol
 | Outdoor, supply line, desired supply line, hot water temperature | `sensor` | ✔ |
 | Compressor, heating, hot water, defrost (status flags Thermia marks as visible) | `binary_sensor` | ✔ |
 | Compressor / heating / hot-water / aux-heater hours | `sensor` (diagnostic) | ✔ |
-| Heating curve (main and per circuit) | `number` | ✔ |
+| Heating curve (main circuit on the heat pump device, mixing circuit 1/2 as child devices) | `number` | ✔ |
 | Supply min/max, heating stop, circuit mode (installer-level) | `number` / `select` | ✘ (enable when needed) |
 | Hot water on/off, hot water mode, operation mode | `switch` / `select` | ✔ |
 | Anything else the cloud exposes | generic | ✘ |
@@ -119,6 +120,25 @@ Controlling the heat pump is a core feature: switch hot water, change the operat
 
 Buttons on the device page: **Refresh names** (pull the latest label texts from Thermia) and **Rediscover registers**.
 
+## Actions
+
+`thermia_cloud.set_register` writes any register by name, including ones that have no entity. Fields: `device_id` (the heat pump device), `group` (e.g. `REG_GROUP_HEATING_CURVE`), `register` (name or index) and `value`. It follows the same rules as the entities: Read-only mode blocks it, installer-level registers are refused, and the value is validated against the limits the cloud reports. It returns when the cloud has accepted the value (it does not wait for the read-back).
+
+## How data is updated
+
+The integration polls the Thermia cloud every 60 seconds (configurable, 10–600 s) and only reads the register groups that contain an enabled entity — typically about seven requests per minute. After a write it polls every 5 seconds for up to 30 seconds until the value shows up. The register list is cached and refreshed daily. Thermia does not offer push notifications.
+
+## Known limitations
+
+- Unofficial API: Thermia may change it without notice.
+- The cloud answers writes with "accepted" even when the pump is offline; the change is applied when the pump reconnects, so the displayed value can lag (`pending_value` attribute).
+- Registers can disappear from the cloud's answer; their entities stay `unavailable` (and after 7 days a Repair explains it).
+- Only the iTec family has been checked so far.
+
+## Removing the integration
+
+*Settings → Devices & services → Thermia Cloud → ⋮ → Delete*. Nothing is left on the heat pump; the integration stores only its own cache files inside Home Assistant.
+
 ## Dashboard example (Mushroom)
 
 Entity ids are derived from the names in your language when the entity is first created (a Czech setup gets Czech ids), so copy your own from *Settings → Entities*:
@@ -138,7 +158,7 @@ cards:
 
 | Family | Status | Notes |
 |---|---|---|
-| iTec | ✅ register discovery verified on the author's pump | 26 registers visible on profile 1005; entities not built yet |
+| iTec | ✅ read-only operation verified on the author's pump; ⏳ writing not yet verified | 26 registers visible on profile 1005; 28 entities, 11 enabled by default |
 | Genesis, Atlas, Diplomat, ATEC, Mega, … | ❓ expected to work, unpolished | Registers are discovered automatically; help us with a fixture |
 
 **Help us support your model:** install the integration, *Download diagnostics*, open a *New model* issue. Diagnostics are redacted; we turn them into test fixtures and catalog entries.
@@ -198,7 +218,7 @@ Different approach, different strengths — pick what fits your heat pump:
 
 ## Contributing
 
-Fixtures, catalog entries, translations and bug reports are the most valuable contributions. See the [roadmap](docs/ROADMAP.md) for open work and [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) for the development setup and test instructions. (A `CONTRIBUTING.md` follows with roadmap item P1.6.)
+Fixtures, catalog entries, translations and bug reports are the most valuable contributions. See the [roadmap](docs/ROADMAP.md) for open work and [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) for the development setup and test instructions. See also [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Credits and license
 

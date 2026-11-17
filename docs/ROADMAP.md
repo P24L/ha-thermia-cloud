@@ -93,12 +93,12 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 ## Phase 6 — Options, repairs, UX
 
 - [x] P6.1 Options flow: General (interval, read-only, timeout, debug attributes) *(interval, read-only, timeout, debug attributes; the options menu with installations/names comes with P6.2/P6.4)*
-- [ ] P6.2 Options flow: Installations & registers (installation selection, show hidden, expose unknown)
+- [x] P6.2 Options flow: Installations & registers (installation selection, show hidden, expose unknown) *(menu: General / Installations & registers / Names & language)*
 - [ ] P6.3 *(moved to P10.8 — not in v0.1)*
-- [ ] P6.4 Names: **Refresh names** button, *Label language* option (Auto / explicit culture), stored labels. **No weekly auto-refresh** (D4)
-- [ ] P6.5 Repairs: `policy_acceptance_required` (not fixable), `register_vanished`, `discovery_empty`. No `auth_failed` Repair — reauth covers it
-- [ ] P6.6 Buttons on the device page: Refresh names, Rediscover registers
-- [ ] P6.7 Tests for options/repairs/overrides
+- [x] P6.4 Names: **Refresh names** button, *Label language* option (Auto / explicit culture), stored labels. **No weekly auto-refresh** (D4) *(label language option, *Refresh names* button, stored labels in `.storage`; no automatic refresh (D4))*
+- [x] P6.5 Repairs: `policy_acceptance_required` (not fixable), `register_vanished`, `discovery_empty`. No `auth_failed` Repair — reauth covers it *(`policy_acceptance_required` (raised when the client reports it; the detection itself is still P0.6), `register_vanished` (after 7 days, persisted), `discovery_empty`)*
+- [x] P6.6 Buttons on the device page: Refresh names, Rediscover registers *(Refresh names, Rediscover registers (diagnostic buttons))*
+- [x] P6.7 Tests for options/repairs/overrides *(options steps, names, buttons, repairs, generic sensor kinds; the overrides item does not apply (editor is P10.8))*
 
 ## Phase 7 — Polish
 
@@ -109,7 +109,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P7.5 Final README with screenshots/GIF (see README outline)
 - [ ] P7.6 Czech translation review; optional `README.cs.md`
 - [ ] P7.7 Final icon, dashboard example (Mushroom) in README
-- [ ] P7.8 Performance check: request rate matches plan; no blocking calls in the event loop
+- [x] P7.8 Performance check: request rate matches plan; no blocking calls in the event loop *(dev HA log: 7 requests/min, no blocking-call warnings; file I/O runs in worker threads)*
 
 ## Phase 8 — Validate on the maintainer's production setup 🔒
 
