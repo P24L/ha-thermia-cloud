@@ -4,3 +4,4 @@ syrupy
 ruff
 mypy
 pre-commit
+types-PyYAML

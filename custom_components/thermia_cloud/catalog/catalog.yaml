@@ -1,0 +1,157 @@
+# Curated register knowledge. Format and rules: docs/CATALOG.md
+# Everything not listed here still works through the generic planner rules.
+version: 1
+
+devices:
+  main: {}
+  circuit_1: {translation_key: device_circuit_1}
+  circuit_2: {translation_key: device_circuit_2}
+  pool: {translation_key: device_pool}
+
+groups:
+  REG_GROUP_HEATING_CURVE: {device: main}
+  REG_GROUP_HEATING_CURVE_CIRC1: {device: circuit_1}
+  REG_GROUP_HEATING_CURVE_CIRC2: {device: circuit_2}
+  REG_GROUP_POOL: {device: pool}
+  REG_GROUP_OPERATIONAL_TIME: {device: main, category: diagnostic}
+
+registers:
+  # --- heating curves (the same names exist in the main and the circuit-1 group) ---
+  REG_HEATING_HEAT_CURVE:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    icon: mdi:chart-bell-curve
+    default_enabled: true
+    risk: heating
+    translation_key: heating_curve
+    shared: true
+  REG_HEATING_HEAT_CURVE_MIN:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+    shared: true
+  REG_HEATING_HEAT_CURVE_MAX:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+    shared: true
+  REG_HEATING_HEAT_STOP:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+
+  # circuit mode: the cloud label says "Aktivovat", the values are OFF (hidden) / Curve / Constant
+  REG_ACTIVATE_CIRC1:
+    kind: select
+    translation_key: circuit_mode
+    risk: heating
+
+  # --- operation modes: the same name exists in two groups ---
+  REG_GROUP_OPERATIONAL_OPERATION/REG_OPERATIONMODE:
+    kind: select
+    translation_key: operation_mode
+    default_enabled: true
+    risk: heating  # OFF is exposed without extra confirmation (DECISIONS D6)
+  REG_GROUP_HOT_WATER/REG_OPERATIONMODE:
+    kind: select
+    translation_key: hot_water_mode
+    default_enabled: true
+
+  # --- hot water ---
+  REG_HOT_WATER_STATUS:
+    kind: switch
+    default_enabled: true
+  REG_HOT_WATER_TEMPERATURE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_SER_HOT_WATER_TOPH_INTER:  # REG_SER_* defaults to risk "service"; this one is harmless
+    kind: number
+    unit: d
+    risk: none
+
+  # --- temperatures ---
+  REG_OPER_DATA_OUTDOOR_TEMP_MA_SA:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_OPER_DATA_SUPPLY_MA_SA:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_DESIRED_SUPPLY_LINE_TEMP:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_DESIRED_SYS_SUPPLY_LINE_TEMP:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+  REG_INDOOR_TEMPERATURE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_OPER_DATA_DISTR_CIR1:  # lives in the temperatures group but belongs to circuit 1
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    device: circuit_1
+    default_enabled: true
+
+  # --- operating hours (group REG_GROUP_OPERATIONAL_TIME is diagnostic) ---
+  REG_OPER_TIME_COMPRESSOR:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+    default_enabled: true
+  REG_OPER_TIME_HEATING:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+    default_enabled: true
+  REG_OPER_TIME_HOT_WATER:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+    default_enabled: true
+  REG_OPER_TIME_IMM1:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+  REG_OPER_TIME_IMM2:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+
+  # --- status ---
+  COMP_STATUS_ITEC:  # bitmask: one binary sensor per visible flag
+    kind: binary_sensor
+    default_enabled: true
+  COMP_HAS_LINK:  # hidden helper, meaning unknown (API-NOTES section 10)
+    kind: skip
+
+  # "Heat demand": gone from the cloud since 2026-09-18, unit and range unverified (roadmap P0.9)
+  REG_PID:
+    kind: sensor
+    state_class: measurement
