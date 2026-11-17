@@ -119,3 +119,91 @@ async def test_account_without_installations_aborts(hass: HomeAssistant) -> None
     with patch("custom_components.thermia_cloud.config_flow.async_probe", return_value=probe()):
         result = await hass.config_entries.flow.async_configure(result["flow_id"], CREDS)
     assert result["type"] is FlowResultType.ABORT and result["reason"] == "no_installations"
+
+
+def existing_entry(hass: HomeAssistant) -> MockConfigEntry:
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id="sub-1",
+        title="user@example.invalid",
+        data={
+            CONF_USERNAME: "user@example.invalid",
+            CONF_PASSWORD: "old",
+            CONF_REFRESH_TOKEN: "r0",
+        },
+    )
+    entry.add_to_hass(hass)
+    return entry
+
+
+async def test_reauth_updates_password_and_token(hass: HomeAssistant) -> None:
+    entry = existing_entry(hass)
+    result = await entry.start_reauth_flow(hass)
+    assert result["type"] is FlowResultType.FORM and result["step_id"] == "reauth_confirm"
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe", return_value=probe(inst(1))
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_PASSWORD: "new"}
+        )
+    assert result["type"] is FlowResultType.ABORT and result["reason"] == "reauth_successful"
+    assert entry.data[CONF_PASSWORD] == "new" and entry.data[CONF_REFRESH_TOKEN] == "refresh-1"
+
+
+async def test_reauth_wrong_password_and_wrong_account(hass: HomeAssistant) -> None:
+    entry = existing_entry(hass)
+    result = await entry.start_reauth_flow(hass)
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe", side_effect=AuthError("no")
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_PASSWORD: "bad"}
+        )
+    assert result["errors"] == {"base": "invalid_auth"}
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe",
+        return_value=probe(inst(1), subject="someone-else"),
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_PASSWORD: "other-account"}
+        )
+    assert result["type"] is FlowResultType.ABORT and result["reason"] == "wrong_account"
+    assert entry.data[CONF_PASSWORD] == "old"
+
+
+async def test_reconfigure_changes_email_and_keeps_the_entry(hass: HomeAssistant) -> None:
+    entry = existing_entry(hass)
+    result = await entry.start_reconfigure_flow(hass)
+    assert result["type"] is FlowResultType.FORM and result["step_id"] == "reconfigure"
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe", return_value=probe(inst(1))
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_USERNAME: "new@example.invalid", CONF_PASSWORD: "pw"}
+        )
+    assert result["type"] is FlowResultType.ABORT and result["reason"] == "reconfigure_successful"
+    assert (
+        entry.data[CONF_USERNAME] == "new@example.invalid" and entry.title == "new@example.invalid"
+    )
+    assert entry.unique_id == "sub-1"
+
+
+async def test_reconfigure_refuses_another_account_and_shows_errors(hass: HomeAssistant) -> None:
+    entry = existing_entry(hass)
+    result = await entry.start_reconfigure_flow(hass)
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe", side_effect=NetworkError("x")
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_USERNAME: "a@example.invalid", CONF_PASSWORD: "pw"}
+        )
+    assert result["errors"] == {"base": "cannot_connect"}
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe",
+        return_value=probe(inst(1), subject="someone-else"),
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_USERNAME: "a@example.invalid", CONF_PASSWORD: "pw"}
+        )
+    assert result["type"] is FlowResultType.ABORT and result["reason"] == "wrong_account"
+    assert entry.data[CONF_USERNAME] == "user@example.invalid"

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
@@ -92,13 +93,9 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self._username = user_input[CONF_USERNAME].strip()
             self._password = user_input[CONF_PASSWORD]
-            try:
-                self._probe = await async_probe(self.hass, self._username, self._password)
-            except ThermiaError as err:
-                errors["base"] = error_key(err)
-            except Exception:
-                _LOGGER.exception("Unexpected error during sign-in")
-                errors["base"] = "unknown"
+            self._probe, error = await self._try_probe(self._username, self._password)
+            if self._probe is None:
+                errors["base"] = error
             else:
                 await self.async_set_unique_id(self._probe.subject)
                 self._abort_if_unique_id_configured()
@@ -138,6 +135,76 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
             }
         )
         return self.async_show_form(step_id="installations", data_schema=schema)
+
+    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Ask for the password only; the account is fixed by the entry's unique id."""
+        entry = self._get_reauth_entry()
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            probe, error = await self._try_probe(
+                entry.data[CONF_USERNAME], user_input[CONF_PASSWORD]
+            )
+            if probe is not None:
+                await self.async_set_unique_id(probe.subject)
+                self._abort_if_unique_id_mismatch(reason="wrong_account")
+                return self.async_update_reload_and_abort(
+                    entry,
+                    data_updates={
+                        CONF_PASSWORD: user_input[CONF_PASSWORD],
+                        CONF_REFRESH_TOKEN: probe.refresh_token,
+                    },
+                )
+            errors["base"] = error
+        return self.async_show_form(
+            step_id="reauth_confirm",
+            data_schema=vol.Schema({vol.Required(CONF_PASSWORD): str}),
+            description_placeholders={"username": entry.data[CONF_USERNAME]},
+            errors=errors,
+        )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Change e-mail and/or password; signing in as a different account is refused."""
+        entry = self._get_reconfigure_entry()
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            username = user_input[CONF_USERNAME].strip()
+            probe, error = await self._try_probe(username, user_input[CONF_PASSWORD])
+            if probe is not None:
+                await self.async_set_unique_id(probe.subject)
+                self._abort_if_unique_id_mismatch(reason="wrong_account")
+                return self.async_update_reload_and_abort(
+                    entry,
+                    title=username,
+                    data_updates={
+                        CONF_USERNAME: username,
+                        CONF_PASSWORD: user_input[CONF_PASSWORD],
+                        CONF_REFRESH_TOKEN: probe.refresh_token,
+                    },
+                )
+            errors["base"] = error
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_USERNAME, default=entry.data[CONF_USERNAME]): str,
+                vol.Required(CONF_PASSWORD): str,
+            }
+        )
+        return self.async_show_form(step_id="reconfigure", data_schema=schema, errors=errors)
+
+    async def _try_probe(self, username: str, password: str) -> tuple[Probe | None, str]:
+        try:
+            return await async_probe(self.hass, username, password), ""
+        except ThermiaError as err:
+            return None, error_key(err)
+        except Exception:
+            _LOGGER.exception("Unexpected error during sign-in")
+            return None, "unknown"
 
     def _create_entry(self, installation_ids: list[int]) -> ConfigFlowResult:
         assert self._probe is not None

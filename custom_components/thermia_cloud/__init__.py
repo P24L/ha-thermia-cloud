@@ -12,12 +12,19 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.storage import Store
 
 from .catalog.labels import LabelResolver, async_load_bundled
 from .catalog.loader import async_load_catalog
-from .catalog.planner import EntityPlan, PlannerOptions, build_plan, resolve_name_collisions
+from .catalog.planner import (
+    EntityPlan,
+    PlannerOptions,
+    PlanNote,
+    build_plan,
+    resolve_name_collisions,
+)
 from .catalog.schema import Catalog
 from .client.api import ThermiaApi
 from .client.auth import ThermiaAuth
@@ -26,6 +33,7 @@ from .client.errors import AuthError, ThermiaError
 from .client.http import ThermiaHttp
 from .client.models import Installation
 from .client.sources import PollingSource
+from .client.visibility import VisibilityParseError, parse_condition
 from .const import (
     CONF_INSTALLATIONS,
     CONF_PASSWORD,
@@ -54,6 +62,8 @@ class InstallationRuntime:
     coordinator: ThermiaCoordinator
     plans: tuple[EntityPlan, ...]
     names: dict[str, str]
+    notes: tuple[PlanNote, ...]
+    devices: frozenset[str]
 
 
 @dataclass(slots=True)
@@ -161,9 +171,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                 lambda p: labels.label(p.label_key, p.translation_key),
                 lambda p: labels.label(p.group_name),
             )
-            coordinator.set_plans(plan.entities, _needed_groups(plan.entities, discovery))
+            coordinator.set_plans(plan.entities, _needed_groups(hass, plan.entities, discovery))
             _register_devices(device_registry, entry, installation, catalog, plan.entities)
-            runtimes.append(InstallationRuntime(installation, coordinator, plan.entities, names))
+            runtimes.append(
+                InstallationRuntime(
+                    installation,
+                    coordinator,
+                    plan.entities,
+                    names,
+                    plan.notes,
+                    frozenset({"main"} | {p.device for p in plan.entities}),
+                )
+            )
     except AuthError as err:
         await auth.close()
         raise ConfigEntryAuthFailed(str(err)) from err
@@ -179,10 +198,41 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
     return True
 
 
-def _needed_groups(plans: tuple[EntityPlan, ...], discovery: Discovery) -> tuple[str, ...]:
-    """Groups with an enabled entity. (Entity-registry awareness follows with P4.5 review.)"""
-    wanted = {p.group_name for p in plans if p.default_enabled}
-    return tuple(g for g in discovery.groups if g in wanted) or discovery.groups
+def _needed_groups(
+    hass: HomeAssistant, plans: tuple[EntityPlan, ...], discovery: Discovery
+) -> tuple[str, ...]:
+    """Groups holding an enabled entity, plus groups its runtime condition looks at.
+
+    "Enabled" follows the entity registry (the user's choice); entities not registered yet use
+    the plan's default. HA reloads the entry after the user enables an entity, which brings
+    this set up to date; disabling does not reload, so we over-poll until the next reload.
+    """
+    registry = er.async_get(hass)
+    installation_id = discovery.installation_id
+    groups_by_name: dict[str, set[str]] = {}
+    for spec in discovery.specs:
+        groups_by_name.setdefault(spec.name, set()).add(spec.group_name)
+
+    needed: set[str] = set()
+    for plan in plans:
+        entity_id = registry.async_get_entity_id(
+            plan.platform, DOMAIN, f"{installation_id}_{plan.key}"
+        )
+        entry = registry.async_get(entity_id) if entity_id else None
+        enabled = entry.disabled_by is None if entry else plan.default_enabled
+        if not enabled:
+            continue
+        needed.add(plan.group_name)
+        if plan.runtime_condition:
+            try:
+                refs = parse_condition(plan.runtime_condition).refs
+            except VisibilityParseError:
+                continue
+            for name in refs:
+                candidates = groups_by_name.get(name, set())
+                if plan.group_name not in candidates:
+                    needed |= candidates
+    return tuple(g for g in discovery.groups if g in needed)
 
 
 def _register_devices(
@@ -217,3 +267,15 @@ async def async_unload_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> 
     if unloaded:
         await entry.runtime_data.auth.close()
     return unloaded
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant, entry: ThermiaConfigEntry, device_entry: dr.DeviceEntry
+) -> bool:
+    """The user may delete devices that are no longer part of the current plan."""
+    active = {
+        device_identifier(runtime.installation.id, device)
+        for runtime in entry.runtime_data.installations
+        for device in runtime.devices
+    }
+    return not (device_entry.identifiers & active)

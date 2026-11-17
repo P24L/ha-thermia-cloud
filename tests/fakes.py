@@ -34,6 +34,8 @@ class FakeApi:
         self.calls: list[str] = []
         self.hide: set[str] = set()  # register names the cloud stops returning
         self.overrides: dict[str, float] = {}  # register name -> value
+        self.installation_ids = [INSTALLATION_ID]
+        self.group_calls: list[str] = []  # groups read, in order
 
     def _check(self, name: str) -> None:
         self.calls.append(name)
@@ -42,7 +44,10 @@ class FakeApi:
 
     async def list_installations(self) -> list[Installation]:
         self._check("list_installations")
-        return [Installation(INSTALLATION_ID, "Test installation", "iTec", True, "1.0", None)]
+        return [
+            Installation(i, f"Test installation {i}", "iTec", True, "1.0", "AA:BB:CC:00:00:01")
+            for i in self.installation_ids
+        ]
 
     async def get_installation(self, installation_id: int) -> InstallationDetail:
         self._check("get_installation")
@@ -58,6 +63,7 @@ class FakeApi:
         self, installation_id: int, group_name: str
     ) -> list[tuple[RegisterSpec, RegisterValue]]:
         self._check("get_group_registers")
+        self.group_calls.append(group_name)
         raw: list[dict[str, Any]] = json.loads((FIXTURES / f"group_{group_name}.json").read_text())
         out = []
         for item in raw:

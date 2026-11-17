@@ -35,7 +35,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P1.5 CI: `validate.yml` (hassfest + HACS action), `tests.yml`
 - [x] P1.6 `CONTRIBUTING.md`, `SECURITY.md`, issue templates (bug / new model / feature)
 - [x] P1.7 🔒 Create the **public** GitHub repo `P24L/ha-thermia-cloud` (decision D12), push, set description + topics (`home-assistant`, `hacs`, `homeassistant-integration`, `thermia`, `heat-pump`)
-- [ ] P1.8 Draft icon (own generic heat-pump drawing, not the Thermia logo)
+- [x] P1.8 Draft icon (own generic heat-pump drawing, not the Thermia logo) *(draft done: `scripts/make_icon.py`, own drawing; replace whenever a nicer one exists)*
 - [ ] P1.9 🔒 Heads-up post to `klejejs/ha-thermia-heat-pump-integration` discussions (courtesy; announce the alternative) — after P0.12
 
 ## Phase 2 — Client library (`custom_components/thermia_cloud/client/`)
@@ -66,18 +66,18 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 4 — HA integration core (read-only)
 
-- [ ] P4.1 `manifest.json`, `const.py`; review the existing `hacs.json` (name *Thermia Cloud (unofficial)*, min HA 2026.10); brand images in `custom_components/thermia_cloud/brand/` (`icon.png` 256×256, `icon@2x.png`) *(done: `manifest.json`, `const.py`; still open: brand images)*
+- [x] P4.1 `manifest.json`, `const.py`; review the existing `hacs.json` (name *Thermia Cloud (unofficial)*, min HA 2026.10); brand images in `custom_components/thermia_cloud/brand/` (`icon.png` 256×256, `icon@2x.png`) *(done; the icon is a draft drawn by `scripts/make_icon.py`)*
 - [x] P4.2 Config flow: user → create; entry `unique_id` = token `sub`; errors per `UI-DESIGN.md` §1; installation selection in options *(user → installations → create; installation selection in the options flow comes with P6.2)*
-- [ ] P4.3 Reauth flow
-- [ ] P4.4 Reconfigure flow
-- [ ] P4.5 Coordinator per installation: explicit `config_entry`, `always_update=False`, discovery cache in a `Store`, needed groups from the entity registry (verify HA's reload-on-enable behaviour), `ConfigEntryAuthFailed` / `UpdateFailed(retry_after)` *(coordinator, cached discovery, `async_setup_entry`, error mapping done; needed groups still come from `default_enabled` only — entity-registry awareness open)*
-- [ ] P4.6 Base entity, devices, child devices (`via_device`, `DeviceInfo(translation_key)`), `runtime_data`, dynamic devices + `async_remove_config_entry_device` *(base entity, devices incl. child devices, `runtime_data` done; dynamic devices and `async_remove_config_entry_device` open)*
+- [x] P4.3 Reauth flow
+- [x] P4.4 Reconfigure flow
+- [x] P4.5 Coordinator per installation: explicit `config_entry`, `always_update=False`, discovery cache in a `Store`, needed groups from the entity registry (verify HA's reload-on-enable behaviour), `ConfigEntryAuthFailed` / `UpdateFailed(retry_after)` *(needed groups follow the entity registry; verified: enabling an entity makes HA reload the entry ~30 s later, disabling does not)*
+- [x] P4.6 Base entity, devices, child devices (`via_device`, `DeviceInfo(translation_key)`), `runtime_data`, dynamic devices + `async_remove_config_entry_device` *(child devices via `via_device_id`; removable only when no longer in the plan; devices for new groups appear at the next setup/rediscovery)*
 - [x] P4.7 `sensor.py` (generic + timestamp + enum)
 - [x] P4.8 `binary_sensor.py` (status flags)
-- [ ] P4.9 `diagnostics.py` (redaction + plan + visibility results)
-- [ ] P4.10 `translations/en.json`, `translations/cs.json` *(config flow and device names done; entity/curated names follow with the platforms)*
-- [ ] P4.11 HA integration tests (setup/unload, entities from fixture, auth failure → reauth, multi-installation) *(setup/unload, entities from fixture, unavailable/recovery, setup errors done; reauth and multi-installation open)*
-- [ ] P4.12 **Bronze acceptance criteria enforced here, not at the end:** `test-before-configure`, `test-before-setup`, `unique-config-entry`, `config-flow-test-coverage`, `runtime-data`, `has-entity-name`, `entity-unique-id`, `appropriate-polling`, `entity-unavailable` (one log line down / one up)
+- [x] P4.9 `diagnostics.py` (redaction + plan + visibility results)
+- [x] P4.10 `translations/en.json`, `translations/cs.json`
+- [x] P4.11 HA integration tests (setup/unload, entities from fixture, auth failure → reauth, multi-installation)
+- [x] P4.12 **Bronze acceptance criteria enforced here, not at the end:** `test-before-configure`, `test-before-setup`, `unique-config-entry`, `config-flow-test-coverage`, `runtime-data`, `has-entity-name`, `entity-unique-id`, `appropriate-polling`, `entity-unavailable` (one log line down / one up) *(config_flow 100 % covered; down/up logged once each, tested)*
 
 ## Phase 5 — Writing
 

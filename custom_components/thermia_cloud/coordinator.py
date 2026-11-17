@@ -78,7 +78,12 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
             raise UpdateFailed(str(err)) from err
 
         values = snapshot.values
-        missing = [p.register_name for p in self._plans if p.register_id not in values]
+        polled = set(self._groups)
+        missing = [
+            p.register_name
+            for p in self._plans
+            if p.group_name in polled and p.register_id not in values
+        ]
         if missing and not self._reported_missing:
             _LOGGER.warning("Registers no longer returned by the cloud: %s", sorted(set(missing)))
             self._reported_missing = True

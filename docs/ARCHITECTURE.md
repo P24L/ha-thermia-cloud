@@ -98,7 +98,7 @@ flowchart TD
 
 ### 3.2 Polling
 
-- **Needed groups** = groups with at least one *enabled* entity (read from the entity registry at setup) **plus** groups referenced by runtime visibility conditions. HA itself reloads the entry shortly after a user *enables* an entity, which refreshes the set; *disabling* does not reload, so we over-poll until the next reload. (Verify this behaviour in P4.5; do not build our own reload.)
+- **Needed groups** = groups with at least one *enabled* entity (read from the entity registry at setup) **plus** groups referenced by runtime visibility conditions. HA itself reloads the entry shortly after a user *enables* an entity, which refreshes the set; *disabling* does not reload, so we over-poll until the next reload. (Verified in P4.5 by a test: enabling an entity makes HA reload the entry about 30 s later; we do not build our own reload.)
 - Default interval **60 s** (10–600 s), groups fetched concurrently. The default-enabled set touches about **7 groups → ~7 requests/min per installation**, versus ~54/min (9 requests every 10 s) in the upstream integration.
 - One `DataUpdateCoordinator` per installation with an explicit `config_entry` and `always_update=False`; the snapshot is a comparable dataclass, so entities only write state when something changed (no custom change detection). `timeStamp` is exposed as an attribute.
 - **Errors/backoff:** the HTTP layer only retries immediately within one update. Longer waits belong to the coordinator: `UpdateFailed(retry_after=…)` for 429/5xx. `CoordinatorEntity` entities become `unavailable` on the **first** failed update; we log exactly one line when the cloud goes down and one when it recovers.

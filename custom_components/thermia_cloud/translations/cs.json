@@ -15,6 +15,21 @@
         "data": {
           "installations": "Instalace"
         }
+      },
+      "reauth_confirm": {
+        "title": "Přihlásit znovu",
+        "description": "Cloud Thermia odmítl uložené heslo pro {username}. Zadejte aktuální heslo.",
+        "data": {
+          "password": "Heslo"
+        }
+      },
+      "reconfigure": {
+        "title": "Účet",
+        "description": "Změňte e-mail nebo heslo. Musí jít o stejný účet Thermia.",
+        "data": {
+          "username": "E-mail",
+          "password": "Heslo"
+        }
       }
     },
     "error": {
@@ -25,7 +40,10 @@
     },
     "abort": {
       "already_configured": "Tento účet Thermia je již nastaven.",
-      "no_installations": "K tomuto účtu není přiřazeno žádné tepelné čerpadlo."
+      "no_installations": "K tomuto účtu není přiřazeno žádné tepelné čerpadlo.",
+      "wrong_account": "Toto je jiný účet Thermia než ten, který je nastaven.",
+      "reauth_successful": "Přihlášení obnoveno.",
+      "reconfigure_successful": "Účet aktualizován."
     }
   },
   "device": {

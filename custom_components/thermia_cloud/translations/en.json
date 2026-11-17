@@ -15,6 +15,21 @@
         "data": {
           "installations": "Installations"
         }
+      },
+      "reauth_confirm": {
+        "title": "Sign in again",
+        "description": "The Thermia cloud rejected the saved password for {username}. Enter the current password.",
+        "data": {
+          "password": "Password"
+        }
+      },
+      "reconfigure": {
+        "title": "Account",
+        "description": "Change the e-mail or password. It must be the same Thermia account.",
+        "data": {
+          "username": "E-mail",
+          "password": "Password"
+        }
       }
     },
     "error": {
@@ -25,7 +40,10 @@
     },
     "abort": {
       "already_configured": "This Thermia account is already configured.",
-      "no_installations": "No heat pump is linked to this account."
+      "no_installations": "No heat pump is linked to this account.",
+      "wrong_account": "This is a different Thermia account than the one set up.",
+      "reauth_successful": "Signed in again.",
+      "reconfigure_successful": "Account updated."
     }
   },
   "device": {
