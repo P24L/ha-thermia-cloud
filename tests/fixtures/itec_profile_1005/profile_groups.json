@@ -1,0 +1,163 @@
+[
+ {
+  "description": null,
+  "id": 50,
+  "name": "REG_GROUP_DEVICETIME",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 23,
+  "name": "REG_GROUP_HOT_WATER",
+  "parentId": null,
+  "visibility": 2
+ },
+ {
+  "description": null,
+  "id": 14,
+  "name": "REG_GROUP_OPERATIONAL_OPERATION",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "description": null,
+  "id": 2,
+  "name": "REG_GROUP_OPERATIONAL_STATUS",
+  "parentId": null,
+  "visibility": 3
+ },
+ {
+  "description": null,
+  "id": 3,
+  "name": "REG_GROUP_TEMPERATURES",
+  "parentId": null,
+  "visibility": 3
+ },
+ {
+  "description": null,
+  "id": 10,
+  "name": "REG_GROUP_OPERATIONAL_TIME",
+  "parentId": null,
+  "visibility": 3
+ },
+ {
+  "description": null,
+  "id": 7,
+  "name": "REG_GROUP_POOL",
+  "parentId": null,
+  "visibility": 2
+ },
+ {
+  "description": null,
+  "id": 19,
+  "name": "REG_GROUP_HEATING_CURVE",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "description": null,
+  "id": 20,
+  "name": "REG_GROUP_HEAT_PUMP",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 27,
+  "name": "REG_GROUP_IMMERSION_HEATER",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 17,
+  "name": "REG_GROUP_OPERATIONAL_DIAGNOSTICS",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 16,
+  "name": "REG_GROUP_SOFTWARE_VERSIONS",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 6,
+  "name": "REG_GROUP_COOLING",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "description": null,
+  "id": 21,
+  "name": "REG_GROUP_IMMERSION_HEATER_AUX",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 42,
+  "name": "REG_GROUP_CALIBRATION",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 53,
+  "name": "REG_GROUP_BUFFER_TANK",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "description": null,
+  "id": 45,
+  "name": "REG_GROUP_DEFROSTING",
+  "parentId": null,
+  "visibility": 3
+ },
+ {
+  "description": null,
+  "id": 51,
+  "name": "REG_GROUP_HEATING_CURVE_CIRC1",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "description": null,
+  "id": 43,
+  "name": "REG_GROUP_HEATING_CURVE_CIRC2",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "description": null,
+  "id": 40,
+  "name": "REG_OPTIMUM",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 48,
+  "name": "REG_ERROR_CODES",
+  "parentId": null,
+  "visibility": null
+ },
+ {
+  "description": null,
+  "id": 46,
+  "name": "REG_GROUP_TEMPERATURES_SLAVE",
+  "parentId": null,
+  "visibility": 3
+ },
+ {
+  "description": null,
+  "id": 44,
+  "name": "REG_GROUP_CALENDAR",
+  "parentId": null,
+  "visibility": null
+ }
+]

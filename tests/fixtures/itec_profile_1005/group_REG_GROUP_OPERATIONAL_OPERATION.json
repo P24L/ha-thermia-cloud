@@ -1,0 +1,100 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": false,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 110030,
+  "groupId": 14,
+  "groupItemId": 25106,
+  "groupItemOrder": 70000,
+  "groupName": "REG_GROUP_OPERATIONAL_OPERATION",
+  "groupOrder": 10001,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": false,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 0,
+  "presentation": "Enumeration",
+  "registerId": 110030,
+  "registerIndex": 1363,
+  "registerName": "REG_OPERATIONMODE",
+  "registerValue": 1.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2026-11-13T21:11:07.836",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": [
+   {
+    "confirmation": "UI_OPERATION_MODE_CHANGE_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_OFF",
+    "value": 0,
+    "visible": true
+   },
+   {
+    "confirmation": "UI_OPERATION_MODE_CHANGE_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_AUTO",
+    "value": 1,
+    "visible": true
+   },
+   {
+    "confirmation": "UI_OPERATION_MODE_CHANGE_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_COMPRESSOR",
+    "value": 2,
+    "visible": true
+   },
+   {
+    "confirmation": "UI_OPERATION_MODE_CHANGE_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_AUXILIARY",
+    "value": 3,
+    "visible": true
+   },
+   {
+    "confirmation": "UI_OPERATION_MODE_CHANGE_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_HOT_WATER",
+    "value": 4,
+    "visible": true
+   }
+  ]
+ },
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": false,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 10003,
+  "groupId": 14,
+  "groupItemId": 25146,
+  "groupItemOrder": 70005,
+  "groupName": "REG_GROUP_OPERATIONAL_OPERATION",
+  "groupOrder": 10001,
+  "groupParentId": null,
+  "isComputedRegister": true,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 0,
+  "presentation": "Hidden",
+  "registerId": 10003,
+  "registerIndex": 10003,
+  "registerName": "COMP_HAS_LINK",
+  "registerValue": 0.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2026-11-17T12:25:36.3725224",
+  "trueText": null,
+  "unit": "0",
+  "valueNames": null
+ }
+]

@@ -1,0 +1,271 @@
+{
+ "installationId": 0,
+ "registers": [
+  {
+   "disabledRegisterValue": -100,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2010,
+   "registerName": "REG_OPER_DATA_OUTDOOR_TEMP_MA_SA",
+   "registerVisibilityCondition": null
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2060,
+   "registerName": "REG_INDOOR_TEMPERATURE",
+   "registerVisibilityCondition": null
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 12,
+   "registerId": 2000,
+   "registerName": "REG_OPER_DATA_SUPPLY_MA_SA",
+   "registerVisibilityCondition": null
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2121,
+   "registerName": "REG_DESIRED_SUPPLY_LINE_TEMP",
+   "registerVisibilityCondition": "{REG_DESIRED_SUPPLY_LINE_TEMP} >= 0"
+  },
+  {
+   "disabledRegisterValue": -100,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2003,
+   "registerName": "REG_HOT_WATER_TEMPERATURE",
+   "registerVisibilityCondition": "{REG_HOT_WATER_TEMPERATURE} > 0"
+  },
+  {
+   "disabledRegisterValue": -100,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2122,
+   "registerName": "REG_DESIRED_SYS_SUPPLY_LINE_TEMP",
+   "registerVisibilityCondition": "{REG_DESIRED_SYS_SUPPLY_LINE_TEMP} >= 0"
+  },
+  {
+   "disabledRegisterValue": -100,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2008,
+   "registerName": "REG_OPER_DATA_DISTR_CIR1",
+   "registerVisibilityCondition": "{REG_OPER_DATA_DISTR_CIR1} > 0"
+  },
+  {
+   "disabledRegisterValue": -100,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2063,
+   "registerName": "REG_OPER_DATA_DISTR_CIR2",
+   "registerVisibilityCondition": "{REG_OPER_DATA_DISTR_CIR2} > 0"
+  },
+  {
+   "disabledRegisterValue": -100,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_TEMPERATURES"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 8,
+   "registerId": 2061,
+   "registerName": "REG_OPER_DATA_POOL",
+   "registerVisibilityCondition": "{REG_ACTIVATE_POOL} = 1"
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 16,
+   "registerId": 2160,
+   "registerName": "REG_OPER_TIME_COMPRESSOR",
+   "registerVisibilityCondition": null
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 16,
+   "registerId": 2162,
+   "registerName": "REG_OPER_TIME_HEATING",
+   "registerVisibilityCondition": null
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 16,
+   "registerId": 2166,
+   "registerName": "REG_OPER_TIME_HOT_WATER",
+   "registerVisibilityCondition": "{REG_OPER_TIME_HOT_WATER} > 0 AND {REG_OPER_TIME_HOT_WATER} < 65535"
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 16,
+   "registerId": 2167,
+   "registerName": "REG_OPER_TIME_IMM1",
+   "registerVisibilityCondition": "{REG_SER_AUX_HEAT_MAX_STEP} >= 1"
+  },
+  {
+   "disabledRegisterValue": null,
+   "exclusiveVisibilityCondition": null,
+   "groupsInfo": [
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    },
+    {
+     "canBeShownInGraph": true,
+     "name": "REG_GROUP_OPERATIONAL_TIME"
+    }
+   ],
+   "isComputed": false,
+   "modifier": 16,
+   "registerId": 2168,
+   "registerName": "REG_OPER_TIME_IMM2",
+   "registerVisibilityCondition": "{REG_SER_AUX_HEAT_MAX_STEP} >= 2"
+  }
+ ]
+}
