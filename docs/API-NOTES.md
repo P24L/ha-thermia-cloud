@@ -117,6 +117,8 @@ Keys are per name, not per group (`REG_OPERATIONMODE` has one label). Examples (
 
 - ✅ `GET …/installationstatus/{id}/status` carries `hasIndoorTempSensor` (false on the maintainer's pump). The indoor-temperature register is still returned (a stale 2024 value), so the integration reads the flag at setup and skips `REG_INDOOR_TEMPERATURE` when it is `false`; unknown/unreadable status hides nothing.
 
+- ✅ **Status-flag visibility is state-dependent too** (2026-11-17): in `COMP_STATUS_ITEC` the *hot water* flag (value 8) is `visible: false` while hot water is off and visible while it is on (compressor 1, heating 16 and defrost 32 are always visible; radiator pump 2, pool 64 and cooling 128 hidden). A first installation made while hot water was off therefore saw it hidden → the integration keeps the four core flags enabled regardless of visibility.
+
 ## 9. Not yet explored
 
 Alarms/events payloads, calendar/schedule registers, data-history download, smart-tariff features, the newer `api-prod.thermia.com` API, other profile families (Genesis, Atlas, Diplomat, ATEC) — fixtures from community diagnostics will tell.

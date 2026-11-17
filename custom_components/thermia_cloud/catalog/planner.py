@@ -24,6 +24,11 @@ from .schema import Catalog, CatalogRegister, Kind, Risk
 from .units import HOURS_MODIFIER, TEMPERATURE_MODIFIERS, resolve_unit
 
 MAX_DISPLAY_DECIMALS = 2
+# Core status flags: the cloud shows e.g. "hot water" only while hot water is on (visibility
+# depends on the pump's state), so these are enabled whether or not they are visible right now.
+CORE_FLAGS = frozenset(
+    {"COMP_VALUE_COMPR", "COMP_VALUE_HEATING", "COMP_VALUE_HOT_WATER", "COMP_VALUE_DEFROST"}
+)
 INDOOR_TEMPERATURE_REGISTER = "REG_INDOOR_TEMPERATURE"
 STATUS_FLAG_PRESENTATIONS = frozenset({"StatusFlags", "StatusFlagsTextInd", "MultipleStatusFlags"})
 SLIDER_MAX_STEPS = 100
@@ -272,12 +277,12 @@ def build_plan(
                 for v in spec.value_names
                 if not v.visible and v.value not in visible_values
             }
-            # Visible flags follow the catalog. Flags the cloud hides (e.g. the heating circuit
-            # pump) are still real signals worth a history: offered as disabled diagnostics.
+            # Visible flags follow the catalog. Other flags the cloud hides (e.g. the heating
+            # circuit pump) are real signals worth a history: offered as disabled diagnostics.
             flags = [(f, False) for f in visible] + [(f, True) for f in hidden.values()]
             for flag, is_hidden in flags:
                 flag_common = dict(common)
-                if is_hidden:
+                if is_hidden and flag.name not in CORE_FLAGS:
                     flag_common.update(default_enabled=False, entity_category="diagnostic")
                 entities.append(
                     EntityPlan(

@@ -456,3 +456,20 @@ def test_an_enum_with_nothing_selectable_is_shown_as_a_sensor() -> None:
     [entity] = build_plan([locked], load_catalog(), now=NOW).entities
     assert entity.platform == "sensor" and not entity.writable
     assert [v for v, _ in entity.options] == [0, 1]  # the state can still be shown
+
+
+def test_core_status_flags_are_enabled_even_while_the_cloud_hides_them() -> None:
+    """Hot water is a hidden flag while hot water is off; it must not start out disabled."""
+    raw = json.loads((FIXTURES / "group_REG_GROUP_OPERATIONAL_STATUS.json").read_text())
+    for register in raw:
+        for value in register.get("valueNames") or ():
+            if value["name"] == "COMP_VALUE_HOT_WATER":
+                value["visible"] = False  # as seen live with hot water off
+    pairs = [(RegisterSpec.from_json(r), RegisterValue.from_json(r)) for r in raw]
+    flags = {
+        f.flag_value: f
+        for f in build_plan(pairs, load_catalog(), now=NOW).entities
+        if f.register_name == "COMP_STATUS_ITEC"
+    }
+    assert flags[8].default_enabled and flags[8].entity_category is None
+    assert not flags[2].default_enabled and flags[2].entity_category == "diagnostic"  # pump

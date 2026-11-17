@@ -2,7 +2,7 @@
  "entities": [
   "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', False, 'none', None]",
   "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', False, 'none', None]",
-  "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', False, 'none', None]",
+  "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', True, 'none', None]",
   "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', True, 'none', None]",
   "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', True, 'none', None]",
   "['binary_sensor', 'COMP_STATUS_ITEC', 'REG_GROUP_OPERATIONAL_STATUS', 'main', True, 'none', None]",
