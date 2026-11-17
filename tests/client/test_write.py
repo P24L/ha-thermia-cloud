@@ -111,6 +111,12 @@ async def test_rejected_write_raises_write_error(api: ThermiaApi, cloud: FakeClo
         await api.write_register(5, CURVE, 30)
 
 
+async def test_the_clouds_answer_is_part_of_the_error(api: ThermiaApi, cloud: FakeCloud) -> None:
+    cloud.always("POST", WRITE, Reply(400, "register is not writable right now"))
+    with pytest.raises(RegisterWriteError, match="not writable right now"):
+        await api.write_register(5, CURVE, 30)
+
+
 async def test_rate_limit_is_passed_through(api: ThermiaApi, cloud: FakeCloud) -> None:
     cloud.always("POST", WRITE, Reply(429, "", {"Retry-After": "7"}))
     with pytest.raises(RateLimitError):

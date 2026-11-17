@@ -67,6 +67,7 @@ class ThermiaHttp:
                         text = await resp.text()
                         return jsonlib.loads(text) if text.strip() else None
                     retry_after = resp.headers.get("Retry-After")
+                    detail = (await resp.text())[:200].strip()
             except (aiohttp.ClientError, TimeoutError) as err:
                 raise NetworkError(str(err)) from err
 
@@ -80,4 +81,4 @@ class ThermiaHttp:
                 server_retries += 1
                 await self._sleep(random.uniform(0.5, 1.5) * server_retries)
                 continue
-            raise ApiError(status)
+            raise ApiError(status, detail)

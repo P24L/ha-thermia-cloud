@@ -23,7 +23,7 @@ from .errors import AuthError, LoginFlowError, NetworkError
 
 _LOGGER = logging.getLogger(__name__)
 
-POLICY = "B2C_1A_SignUpOrSigninOnline"
+DEFAULT_POLICY = "B2C_1A_SignUpOrSigninOnline"  # used when the authority does not name one
 REFRESH_MARGIN = 120  # seconds before expiry at which the token is renewed proactively
 _TRANS_ID = re.compile(r'"transId"\s*:\s*"([^"]+)"')
 _CSRF = re.compile(r'"csrf"\s*:\s*"([^"]+)"')
@@ -127,6 +127,12 @@ class ThermiaAuth:
         return {"Cookie": "; ".join(f"{k}={v}" for k, v in self._cookies.items())}
 
     @property
+    def _policy(self) -> str:
+        """The B2C policy is the last path segment of the authority the cloud advertises."""
+        last = self._config.authority.rstrip("/").rsplit("/", 1)[-1]
+        return last if last.startswith("B2C_") else DEFAULT_POLICY
+
+    @property
     def _scope(self) -> str:
         return " ".join(self._config.scopes)
 
@@ -208,7 +214,7 @@ class ThermiaAuth:
             tx = trans.group(1)
 
             async with session.post(
-                f"{authority}/SelfAsserted?tx={tx}&p={POLICY}",
+                f"{authority}/SelfAsserted?tx={tx}&p={self._policy}",
                 data={
                     "request_type": "RESPONSE",
                     "signInName": self._username,
@@ -225,7 +231,7 @@ class ThermiaAuth:
 
             async with session.get(
                 f"{authority}/api/CombinedSigninAndSignup/confirmed"
-                f"?csrf_token={csrf.group(1)}&tx={tx}&p={POLICY}",
+                f"?csrf_token={csrf.group(1)}&tx={tx}&p={self._policy}",
                 headers=self._cookie_header,
                 allow_redirects=False,
             ) as resp:

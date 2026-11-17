@@ -94,5 +94,5 @@ class ThermiaApi:
             except RateLimitError:
                 raise
             except ApiError as err:
-                raise RegisterWriteError(f"the cloud answered HTTP {err.status}") from err
+                raise RegisterWriteError(f"the cloud answered {err}") from err
         return to_send

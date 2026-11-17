@@ -88,6 +88,18 @@ async def test_concurrent_renewals_are_single_flight(
     assert cloud.count("POST", TOKEN) == 1
 
 
+async def test_policy_name_comes_from_the_authority(cloud: FakeCloud) -> None:
+    other = ThermiaConfig(
+        api_base_url=cloud.base_url,
+        authority=cloud.base_url + "/tenant/B2C_1A_SomethingElse",
+        client_id="c",
+        scopes=("c",),
+    )
+    assert ThermiaAuth(other, "u", "p")._policy == "B2C_1A_SomethingElse"
+    plain = ThermiaConfig(cloud.base_url, cloud.base_url + "/tenant/other", "c", ("c",))
+    assert ThermiaAuth(plain, "u", "p")._policy == "B2C_1A_SignUpOrSigninOnline"
+
+
 async def test_subject_is_read_from_the_access_token(
     config: ThermiaConfig, cloud: FakeCloud
 ) -> None:
