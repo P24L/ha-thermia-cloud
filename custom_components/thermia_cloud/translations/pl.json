@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Zaloguj się na swoje konto Thermia Online / MyThermia.\n\nTo nieoficjalna integracja, niezwiązana z firmą Thermia ani Danfoss.",
+        "data": {
+          "username": "E-mail",
+          "password": "Hasło"
+        },
+        "data_description": {
+          "username": "Adres e-mail konta Thermia Online / MyThermia.",
+          "password": "Hasło do tego konta. Jest przechowywane w Home Assistant, aby zalogować się ponownie po wygaśnięciu zapisanej sesji."
+        }
+      },
+      "installations": {
+        "title": "Instalacje",
+        "description": "Wybierz, które pompy ciepła dodać. Możesz to później zmienić w opcjach.",
+        "data": {
+          "installations": "Instalacje"
+        },
+        "data_description": {
+          "installations": "Pompy ciepła z tego konta do dodania."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Zaloguj się ponownie",
+        "description": "Chmura Thermia odrzuciła zapisane hasło dla {username}. Wpisz aktualne hasło.",
+        "data": {
+          "password": "Hasło"
+        },
+        "data_description": {
+          "password": "Aktualne hasło do tego konta."
+        }
+      },
+      "reconfigure": {
+        "title": "Konto",
+        "description": "Zmień e-mail lub hasło. Musi to być to samo konto Thermia.",
+        "data": {
+          "username": "E-mail",
+          "password": "Hasło"
+        },
+        "data_description": {
+          "username": "Adres e-mail tego samego konta Thermia.",
+          "password": "Aktualne hasło."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-mail lub hasło zostało odrzucone.",
+      "cannot_connect": "Nie można połączyć się z chmurą Thermia. Spróbuj ponownie później.",
+      "policy_acceptance_required": "Zaloguj się raz na online.thermia.se i zaakceptuj zaktualizowane warunki, a następnie spróbuj ponownie.",
+      "unknown": "Nieoczekiwany błąd. Sprawdź dziennik Home Assistant."
+    },
+    "abort": {
+      "already_configured": "To konto Thermia jest już skonfigurowane.",
+      "no_installations": "Do tego konta nie jest przypisana żadna pompa ciepła.",
+      "wrong_account": "To inne konto Thermia niż skonfigurowane.",
+      "reauth_successful": "Zalogowano ponownie.",
+      "reconfigure_successful": "Konto zaktualizowano."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Obieg mieszany 1"
+    },
+    "device_circuit_2": {
+      "name": "Obieg mieszany 2"
+    },
+    "device_pool": {
+      "name": "Basen"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Temperatura CWU"
+      },
+      "outdoor_temperature": {
+        "name": "Temperatura zewnętrzna"
+      },
+      "supply_temperature": {
+        "name": "Temperatura zasilania"
+      },
+      "desired_supply_temperature": {
+        "name": "Żądana temperatura zasilania"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Żądana temperatura zasilania systemu"
+      },
+      "indoor_temperature": {
+        "name": "Temperatura wewnętrzna"
+      },
+      "circuit_supply_temperature": {
+        "name": "Temperatura zasilania"
+      },
+      "hours_compressor": {
+        "name": "Czas pracy sprężarki"
+      },
+      "hours_heating": {
+        "name": "Czas pracy ogrzewania"
+      },
+      "hours_hot_water": {
+        "name": "Czas pracy CWU"
+      },
+      "hours_aux_1": {
+        "name": "Czas pracy podgrzewacza pomocniczego 1"
+      },
+      "hours_aux_2": {
+        "name": "Czas pracy podgrzewacza pomocniczego 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Krzywa grzewcza"
+      },
+      "heating_curve_min": {
+        "name": "Minimum krzywej grzewczej"
+      },
+      "heating_curve_max": {
+        "name": "Maksimum krzywej grzewczej"
+      },
+      "heating_curve_main": {
+        "name": "Krzywa grzewcza (obieg główny)"
+      },
+      "heating_curve_min_main": {
+        "name": "Minimum krzywej grzewczej (obieg główny)"
+      },
+      "heating_curve_max_main": {
+        "name": "Maksimum krzywej grzewczej (obieg główny)"
+      },
+      "heating_stop": {
+        "name": "Temperatura wyłączenia ogrzewania"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "CWU"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Tryb działania",
+        "state": {
+          "off": "Wyłączony",
+          "auto": "Auto",
+          "compressor": "Sprężarka",
+          "auxiliary": "Podgrzewacz pomocniczy",
+          "hot_water": "CWU"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Tryb CWU",
+        "state": {
+          "comfort": "Komfortowy",
+          "economy": "Ekonomiczny",
+          "away": "Nieobecność"
+        }
+      },
+      "circuit_mode": {
+        "name": "Tryb obiegu",
+        "state": {
+          "off": "Wyłączony",
+          "curve": "Krzywa",
+          "constant": "Stała"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Odśwież nazwy"
+      },
+      "rediscover": {
+        "name": "Wykryj rejestry ponownie"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Tryb tylko do odczytu jest włączony: zapis do pompy ciepła jest zablokowany."
+    },
+    "invalid_value": {
+      "message": "Wartość odrzucona: {detail}"
+    },
+    "write_failed": {
+      "message": "Chmura Thermia nie zaakceptowała zmiany: {detail}"
+    },
+    "unknown_register": {
+      "message": "Nie ma takiego rejestru: {register}"
+    },
+    "service_register": {
+      "message": "Ten rejestr jest na poziomie instalatora i nie można go zmienić: {register}"
+    },
+    "not_writable": {
+      "message": "Tego rejestru nie można zmienić: {register}"
+    },
+    "no_installation": {
+      "message": "Nieznana instalacja dla tego wpisu."
+    },
+    "action_failed": {
+      "message": "Żądanie do chmury Thermia nie powiodło się: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Thermia Cloud",
+        "description": "Co chcesz zmienić?",
+        "menu_options": {
+          "general": "Ogólne",
+          "registers": "Instalacje i rejestry",
+          "names": "Nazwy i język"
+        }
+      },
+      "general": {
+        "title": "Ogólne",
+        "description": "Tryb tylko do odczytu blokuje każdy zapis do pompy ciepła (encje i usługi). Interwał aktualizacji zaczyna obowiązywać po zapisaniu.",
+        "data": {
+          "scan_interval": "Interwał aktualizacji (sekundy)",
+          "read_only": "Tryb tylko do odczytu",
+          "timeout": "Limit czasu żądania (sekundy)",
+          "debug_attributes": "Dodaj surowe wartości rejestrów jako atrybuty"
+        },
+        "data_description": {
+          "scan_interval": "Jak często chmura jest odpytywana o nowe wartości (10–600 sekund).",
+          "read_only": "Gdy włączony, nic nie można zapisać do pompy ciepła.",
+          "timeout": "Jak długo czekać na jedną odpowiedź z chmury.",
+          "debug_attributes": "Dodaje identyfikatory rejestrów i surowe wartości do atrybutów encji."
+        }
+      },
+      "registers": {
+        "title": "Instalacje i rejestry",
+        "description": "Zmiany są stosowane po ponownym załadowaniu integracji.",
+        "data": {
+          "installations": "Instalacje",
+          "show_hidden": "Pokaż rejestry ukryte przez Thermia",
+          "expose_unknown": "Udostępnij nieznane rejestry (jako wyłączone encje)"
+        },
+        "data_description": {
+          "installations": "Których instalacji z konta używać.",
+          "show_hidden": "Tworzy encje nawet wtedy, gdy własne reguły Thermia je ukrywają.",
+          "expose_unknown": "Tworzy wyłączone encje dla rejestrów, których ta integracja nie zna."
+        }
+      },
+      "names": {
+        "title": "Nazwy i język",
+        "description": "Nazwy encji używają naszych własnych krótkich nazw tam, gdzie je mamy (angielski, czeski), a w pozostałych przypadkach tekstów Thermia. Użyj przycisku *Odśwież nazwy* na urządzeniu, aby pobrać najnowsze teksty.",
+        "data": {
+          "label_language": "Język etykiet"
+        },
+        "data_description": {
+          "label_language": "Język nazw encji. Automatyczny podąża za językiem Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Integracja nie działa w tej chwili. Spróbuj ponownie po jej załadowaniu.",
+      "cannot_connect": "Nie można połączyć się z chmurą Thermia. Spróbuj ponownie później."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Ustaw rejestr",
+      "description": "Zapisuje wartość do dowolnego rejestru, także takiego bez encji. Obowiązują te same zasady co dla encji: tryb tylko do odczytu, walidacja względem limitów chmury, odrzucanie rejestrów na poziomie instalatora.",
+      "fields": {
+        "device_id": {
+          "name": "Pompa ciepła",
+          "description": "Pompa ciepła (urządzenie instalacji)."
+        },
+        "group": {
+          "name": "Grupa",
+          "description": "Grupa rejestrów, na przykład REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Rejestr",
+          "description": "Nazwa lub indeks rejestru."
+        },
+        "value": {
+          "name": "Wartość",
+          "description": "Wartość do zapisania."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatyczny (język Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia prosi o zaakceptowanie nowych warunków",
+      "description": "Zaloguj się raz na online.thermia.se na konto używane tutaj i zaakceptuj zaktualizowane warunki. Integracja ponawia próbę automatycznie."
+    },
+    "register_vanished": {
+      "title": "Brakujące rejestry w chmurze Thermia",
+      "description": "Te rejestry nie są zwracane przez chmurę od kilku dni: {registers}. Ich encje pozostają niedostępne. Użyj *Wykryj rejestry ponownie*, jeśli zmieniła się konfiguracja pompy ciepła, lub usuń encje."
+    },
+    "discovery_empty": {
+      "title": "Chmura Thermia nie zwróciła żadnych rejestrów",
+      "description": "Nie znaleziono żadnego rejestru dla tej pompy ciepła. Sprawdź, czy jest online w aplikacji Thermia, a następnie naciśnij *Wykryj rejestry ponownie*."
+    }
+  }
+}

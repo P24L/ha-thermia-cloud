@@ -127,6 +127,11 @@ class LabelResolver:
         self._curated_fallback = curated_fallback or {}  # English: used before en-US cloud text
         self._refreshed = {**(refreshed or {}), **overrides.get(self._culture, {})}
         base = self._culture.split("-")[0]
+        # A language the cloud has no texts for resolves to en-US; for such users our own English
+        # names are better than Thermia's terse English ones.
+        self._english_fallback = language.split("-")[0].split("_")[0].lower() != "en" and (
+            self._culture == FALLBACK_CULTURE
+        )
         self._same_language = [
             c for c in sorted(bundled) if c != self._culture and c.split("-")[0] == base
         ]
@@ -138,8 +143,13 @@ class LabelResolver:
     def label(self, key: str, translation_key: str | None = None) -> str:
         if translation_key and translation_key in self._curated:
             return self._curated[translation_key]
-        sources = [self._refreshed, self._bundled.get(self._culture, {})]
-        sources += [self._bundled[c] for c in self._same_language]
+        if self._english_fallback:
+            sources: list[Mapping[str, str]] = []
+            if translation_key and translation_key in self._curated_fallback:
+                return self._curated_fallback[translation_key]
+        else:
+            sources = [self._refreshed, self._bundled.get(self._culture, {})]
+            sources += [self._bundled[c] for c in self._same_language]
         for source in sources:
             text = source.get(key)
             if text:

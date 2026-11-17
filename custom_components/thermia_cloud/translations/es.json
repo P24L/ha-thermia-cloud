@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Inicia sesión con tu cuenta de Thermia Online / MyThermia.\n\nEsta es una integración no oficial, sin vinculación con Thermia ni Danfoss.",
+        "data": {
+          "username": "Correo electrónico",
+          "password": "Contraseña"
+        },
+        "data_description": {
+          "username": "La dirección de correo electrónico de tu cuenta de Thermia Online / MyThermia.",
+          "password": "La contraseña de esa cuenta. Se guarda en Home Assistant para volver a iniciar sesión cuando caduque la sesión guardada."
+        }
+      },
+      "installations": {
+        "title": "Instalaciones",
+        "description": "Elige qué bombas de calor añadir. Puedes cambiarlo más tarde en las opciones.",
+        "data": {
+          "installations": "Instalaciones"
+        },
+        "data_description": {
+          "installations": "Bombas de calor de esta cuenta que se van a añadir."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Iniciar sesión de nuevo",
+        "description": "La nube de Thermia ha rechazado la contraseña guardada de {username}. Introduce la contraseña actual.",
+        "data": {
+          "password": "Contraseña"
+        },
+        "data_description": {
+          "password": "La contraseña actual de esta cuenta."
+        }
+      },
+      "reconfigure": {
+        "title": "Cuenta",
+        "description": "Cambia el correo electrónico o la contraseña. Debe ser la misma cuenta de Thermia.",
+        "data": {
+          "username": "Correo electrónico",
+          "password": "Contraseña"
+        },
+        "data_description": {
+          "username": "La dirección de correo electrónico de la misma cuenta de Thermia.",
+          "password": "La contraseña actual."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Se ha rechazado el correo electrónico o la contraseña.",
+      "cannot_connect": "No se pudo conectar con la nube de Thermia. Inténtalo de nuevo más tarde.",
+      "policy_acceptance_required": "Inicia sesión una vez en online.thermia.se y acepta las condiciones actualizadas; después vuelve a intentarlo.",
+      "unknown": "Error inesperado. Consulta el registro de Home Assistant."
+    },
+    "abort": {
+      "already_configured": "Esta cuenta de Thermia ya está configurada.",
+      "no_installations": "No hay ninguna bomba de calor vinculada a esta cuenta.",
+      "wrong_account": "Esta es una cuenta de Thermia distinta de la configurada.",
+      "reauth_successful": "Sesión iniciada de nuevo.",
+      "reconfigure_successful": "Cuenta actualizada."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Circuito mezclado 1"
+    },
+    "device_circuit_2": {
+      "name": "Circuito mezclado 2"
+    },
+    "device_pool": {
+      "name": "Piscina"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Temperatura del agua caliente"
+      },
+      "outdoor_temperature": {
+        "name": "Temperatura exterior"
+      },
+      "supply_temperature": {
+        "name": "Temperatura de suministro"
+      },
+      "desired_supply_temperature": {
+        "name": "Temperatura de suministro deseada"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Temperatura de suministro del sistema deseada"
+      },
+      "indoor_temperature": {
+        "name": "Temperatura interior"
+      },
+      "circuit_supply_temperature": {
+        "name": "Temperatura de suministro"
+      },
+      "hours_compressor": {
+        "name": "Horas de funcionamiento del compresor"
+      },
+      "hours_heating": {
+        "name": "Horas de funcionamiento de la calefacción"
+      },
+      "hours_hot_water": {
+        "name": "Horas de funcionamiento del agua caliente"
+      },
+      "hours_aux_1": {
+        "name": "Horas de funcionamiento del calefactor auxiliar 1"
+      },
+      "hours_aux_2": {
+        "name": "Horas de funcionamiento del calefactor auxiliar 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Curva de calefacción"
+      },
+      "heating_curve_min": {
+        "name": "Mínimo de la curva de calefacción"
+      },
+      "heating_curve_max": {
+        "name": "Máximo de la curva de calefacción"
+      },
+      "heating_curve_main": {
+        "name": "Curva de calefacción (circuito principal)"
+      },
+      "heating_curve_min_main": {
+        "name": "Mínimo de la curva de calefacción (circuito principal)"
+      },
+      "heating_curve_max_main": {
+        "name": "Máximo de la curva de calefacción (circuito principal)"
+      },
+      "heating_stop": {
+        "name": "Temperatura de parada de la calefacción"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Agua caliente"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Modo de funcionamiento",
+        "state": {
+          "off": "Apagado",
+          "auto": "Auto",
+          "compressor": "Compresor",
+          "auxiliary": "Calefactor auxiliar",
+          "hot_water": "Agua caliente"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Modo del agua caliente",
+        "state": {
+          "comfort": "Confort",
+          "economy": "Económico",
+          "away": "Ausente"
+        }
+      },
+      "circuit_mode": {
+        "name": "Modo del circuito",
+        "state": {
+          "off": "Apagado",
+          "curve": "Curva",
+          "constant": "Constante"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Actualizar nombres"
+      },
+      "rediscover": {
+        "name": "Redescubrir registros"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "El modo de solo lectura está activado: se bloquea la escritura en la bomba de calor."
+    },
+    "invalid_value": {
+      "message": "Valor rechazado: {detail}"
+    },
+    "write_failed": {
+      "message": "La nube de Thermia no aceptó el cambio: {detail}"
+    },
+    "unknown_register": {
+      "message": "No existe ese registro: {register}"
+    },
+    "service_register": {
+      "message": "Este registro es de nivel de instalador y no se puede cambiar: {register}"
+    },
+    "not_writable": {
+      "message": "No se puede cambiar este registro: {register}"
+    },
+    "no_installation": {
+      "message": "Instalación desconocida para esta entrada."
+    },
+    "action_failed": {
+      "message": "Falló la solicitud a la nube de Thermia: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Thermia Cloud",
+        "description": "¿Qué quieres cambiar?",
+        "menu_options": {
+          "general": "General",
+          "registers": "Instalaciones y registros",
+          "names": "Nombres e idioma"
+        }
+      },
+      "general": {
+        "title": "General",
+        "description": "El modo de solo lectura bloquea toda escritura en la bomba de calor (entidades y servicios). El intervalo de actualización se aplica tras guardar.",
+        "data": {
+          "scan_interval": "Intervalo de actualización (segundos)",
+          "read_only": "Modo de solo lectura",
+          "timeout": "Tiempo de espera de las solicitudes (segundos)",
+          "debug_attributes": "Añadir los valores sin procesar de los registros como atributos"
+        },
+        "data_description": {
+          "scan_interval": "Con qué frecuencia se piden valores nuevos a la nube (10–600 segundos).",
+          "read_only": "Si está activado, no se puede escribir nada en la bomba de calor.",
+          "timeout": "Cuánto esperar una respuesta de la nube.",
+          "debug_attributes": "Añade los identificadores de registro y los valores sin procesar a los atributos de la entidad."
+        }
+      },
+      "registers": {
+        "title": "Instalaciones y registros",
+        "description": "Los cambios se aplican al recargar la integración.",
+        "data": {
+          "installations": "Instalaciones",
+          "show_hidden": "Mostrar registros ocultos por Thermia",
+          "expose_unknown": "Exponer registros desconocidos (como entidades deshabilitadas)"
+        },
+        "data_description": {
+          "installations": "Qué instalaciones de la cuenta se usarán.",
+          "show_hidden": "Crea entidades aunque las reglas propias de Thermia las oculten.",
+          "expose_unknown": "Crea entidades deshabilitadas para los registros que esta integración no conoce."
+        }
+      },
+      "names": {
+        "title": "Nombres e idioma",
+        "description": "Los nombres de las entidades usan nuestros propios nombres cortos cuando los tenemos (inglés, checo) y, si no, los textos de Thermia. Usa el botón *Actualizar nombres* del dispositivo para descargar los textos más recientes.",
+        "data": {
+          "label_language": "Idioma de las etiquetas"
+        },
+        "data_description": {
+          "label_language": "Idioma de los nombres de las entidades. Automático sigue el idioma de Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "La integración no se está ejecutando ahora. Inténtalo de nuevo cuando se haya cargado.",
+      "cannot_connect": "No se pudo conectar con la nube de Thermia. Inténtalo de nuevo más tarde."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Establecer registro",
+      "description": "Escribe un valor en cualquier registro, incluidos los que no tienen entidad. Se aplican las mismas reglas que a las entidades: modo de solo lectura, validación según los límites de la nube y rechazo de los registros de nivel de instalador.",
+      "fields": {
+        "device_id": {
+          "name": "Bomba de calor",
+          "description": "La bomba de calor (dispositivo de la instalación)."
+        },
+        "group": {
+          "name": "Grupo",
+          "description": "Grupo de registros, por ejemplo REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Registro",
+          "description": "Nombre o índice del registro."
+        },
+        "value": {
+          "name": "Valor",
+          "description": "El valor que se va a escribir."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automático (idioma de Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia te pide que aceptes nuevas condiciones",
+      "description": "Inicia sesión una vez en online.thermia.se con la cuenta usada aquí y acepta las condiciones actualizadas. La integración lo reintenta automáticamente."
+    },
+    "register_vanished": {
+      "title": "Registros ausentes en la nube de Thermia",
+      "description": "La nube no ha devuelto estos registros desde hace días: {registers}. Sus entidades siguen no disponibles. Usa *Redescubrir registros* si cambió la configuración de la bomba de calor, o elimina las entidades."
+    },
+    "discovery_empty": {
+      "title": "La nube de Thermia no devolvió ningún registro",
+      "description": "No se encontró ningún registro para esta bomba de calor. Comprueba que está en línea en la aplicación de Thermia y pulsa *Redescubrir registros*."
+    }
+  }
+}

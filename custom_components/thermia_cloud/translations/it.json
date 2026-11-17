@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Accedi con il tuo account Thermia Online / MyThermia.\n\nQuesta è un'integrazione non ufficiale, non affiliata a Thermia o Danfoss.",
+        "data": {
+          "username": "E-mail",
+          "password": "Password"
+        },
+        "data_description": {
+          "username": "L'indirizzo e-mail del tuo account Thermia Online / MyThermia.",
+          "password": "La password di questo account. Viene salvata in Home Assistant per accedere di nuovo quando la sessione salvata scade."
+        }
+      },
+      "installations": {
+        "title": "Impianti",
+        "description": "Scegli quali pompe di calore aggiungere. Potrai modificarlo in seguito nelle opzioni.",
+        "data": {
+          "installations": "Impianti"
+        },
+        "data_description": {
+          "installations": "Pompe di calore di questo account da aggiungere."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Accedi di nuovo",
+        "description": "Il cloud Thermia ha rifiutato la password salvata per {username}. Inserisci la password attuale.",
+        "data": {
+          "password": "Password"
+        },
+        "data_description": {
+          "password": "La password attuale di questo account."
+        }
+      },
+      "reconfigure": {
+        "title": "Account",
+        "description": "Modifica l'e-mail o la password. Deve essere lo stesso account Thermia.",
+        "data": {
+          "username": "E-mail",
+          "password": "Password"
+        },
+        "data_description": {
+          "username": "L'indirizzo e-mail dello stesso account Thermia.",
+          "password": "La password attuale."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-mail o password rifiutata.",
+      "cannot_connect": "Impossibile raggiungere il cloud Thermia. Riprova più tardi.",
+      "policy_acceptance_required": "Accedi una volta a online.thermia.se e accetta i termini aggiornati, poi riprova.",
+      "unknown": "Errore imprevisto. Consulta il log di Home Assistant."
+    },
+    "abort": {
+      "already_configured": "Questo account Thermia è già configurato.",
+      "no_installations": "Nessuna pompa di calore è collegata a questo account.",
+      "wrong_account": "Questo è un account Thermia diverso da quello configurato.",
+      "reauth_successful": "Accesso effettuato di nuovo.",
+      "reconfigure_successful": "Account aggiornato."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Circuito miscelato 1"
+    },
+    "device_circuit_2": {
+      "name": "Circuito miscelato 2"
+    },
+    "device_pool": {
+      "name": "Piscina"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Temperatura acqua calda"
+      },
+      "outdoor_temperature": {
+        "name": "Temperatura esterna"
+      },
+      "supply_temperature": {
+        "name": "Temperatura di mandata"
+      },
+      "desired_supply_temperature": {
+        "name": "Temperatura di mandata desiderata"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Temperatura di mandata impianto desiderata"
+      },
+      "indoor_temperature": {
+        "name": "Temperatura interna"
+      },
+      "circuit_supply_temperature": {
+        "name": "Temperatura di mandata"
+      },
+      "hours_compressor": {
+        "name": "Ore di funzionamento compressore"
+      },
+      "hours_heating": {
+        "name": "Ore di funzionamento riscaldamento"
+      },
+      "hours_hot_water": {
+        "name": "Ore di funzionamento acqua calda"
+      },
+      "hours_aux_1": {
+        "name": "Ore di funzionamento riscaldatore ausiliario 1"
+      },
+      "hours_aux_2": {
+        "name": "Ore di funzionamento riscaldatore ausiliario 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Curva di riscaldamento"
+      },
+      "heating_curve_min": {
+        "name": "Minimo curva di riscaldamento"
+      },
+      "heating_curve_max": {
+        "name": "Massimo curva di riscaldamento"
+      },
+      "heating_curve_main": {
+        "name": "Curva di riscaldamento (circuito principale)"
+      },
+      "heating_curve_min_main": {
+        "name": "Minimo curva di riscaldamento (circuito principale)"
+      },
+      "heating_curve_max_main": {
+        "name": "Massimo curva di riscaldamento (circuito principale)"
+      },
+      "heating_stop": {
+        "name": "Temperatura di arresto riscaldamento"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Acqua calda"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Modalità di funzionamento",
+        "state": {
+          "off": "Off",
+          "auto": "Auto",
+          "compressor": "Compressore",
+          "auxiliary": "Riscaldatore ausiliario",
+          "hot_water": "Acqua calda"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Modalità acqua calda",
+        "state": {
+          "comfort": "Comfort",
+          "economy": "Economy",
+          "away": "Assenza"
+        }
+      },
+      "circuit_mode": {
+        "name": "Modalità circuito",
+        "state": {
+          "off": "Off",
+          "curve": "Curva",
+          "constant": "Costante"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Aggiorna nomi"
+      },
+      "rediscover": {
+        "name": "Rileva di nuovo i registri"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "La modalità di sola lettura è attiva: la scrittura sulla pompa di calore è bloccata."
+    },
+    "invalid_value": {
+      "message": "Valore rifiutato: {detail}"
+    },
+    "write_failed": {
+      "message": "Il cloud Thermia non ha accettato la modifica: {detail}"
+    },
+    "unknown_register": {
+      "message": "Registro inesistente: {register}"
+    },
+    "service_register": {
+      "message": "Questo registro è di livello installatore e non può essere modificato: {register}"
+    },
+    "not_writable": {
+      "message": "Questo registro non può essere modificato: {register}"
+    },
+    "no_installation": {
+      "message": "Impianto sconosciuto per questa voce."
+    },
+    "action_failed": {
+      "message": "La richiesta al cloud Thermia non è riuscita: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni di Thermia Cloud",
+        "description": "Cosa vuoi modificare?",
+        "menu_options": {
+          "general": "Generali",
+          "registers": "Impianti e registri",
+          "names": "Nomi e lingua"
+        }
+      },
+      "general": {
+        "title": "Generali",
+        "description": "La modalità di sola lettura blocca ogni scrittura sulla pompa di calore (entità e servizi). L'intervallo di aggiornamento ha effetto dopo il salvataggio.",
+        "data": {
+          "scan_interval": "Intervallo di aggiornamento (secondi)",
+          "read_only": "Modalità di sola lettura",
+          "timeout": "Timeout delle richieste (secondi)",
+          "debug_attributes": "Aggiungi i valori grezzi dei registri come attributi"
+        },
+        "data_description": {
+          "scan_interval": "Ogni quanto il cloud viene interrogato per nuovi valori (10–600 secondi).",
+          "read_only": "Se attiva, non è possibile scrivere nulla sulla pompa di calore.",
+          "timeout": "Quanto attendere una risposta dal cloud.",
+          "debug_attributes": "Aggiunge gli ID dei registri e i valori grezzi agli attributi dell'entità."
+        }
+      },
+      "registers": {
+        "title": "Impianti e registri",
+        "description": "Le modifiche vengono applicate ricaricando l'integrazione.",
+        "data": {
+          "installations": "Impianti",
+          "show_hidden": "Mostra i registri nascosti da Thermia",
+          "expose_unknown": "Esponi i registri sconosciuti (come entità disabilitate)"
+        },
+        "data_description": {
+          "installations": "Quali impianti dell'account utilizzare.",
+          "show_hidden": "Crea le entità anche quando le regole di Thermia le nascondono.",
+          "expose_unknown": "Crea entità disabilitate per i registri che questa integrazione non conosce."
+        }
+      },
+      "names": {
+        "title": "Nomi e lingua",
+        "description": "I nomi delle entità usano i nostri nomi brevi dove disponibili (inglese, ceco) e altrimenti i testi di Thermia. Usa il pulsante *Aggiorna nomi* sul dispositivo per scaricare i testi più recenti.",
+        "data": {
+          "label_language": "Lingua delle etichette"
+        },
+        "data_description": {
+          "label_language": "Lingua dei nomi delle entità. Automatica segue la lingua di Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "L'integrazione al momento non è in esecuzione. Riprova quando sarà stata caricata.",
+      "cannot_connect": "Impossibile raggiungere il cloud Thermia. Riprova più tardi."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Imposta registro",
+      "description": "Scrive un valore in qualsiasi registro, anche in quelli senza entità. Valgono le stesse regole delle entità: modalità di sola lettura, validazione in base ai limiti del cloud, rifiuto dei registri di livello installatore.",
+      "fields": {
+        "device_id": {
+          "name": "Pompa di calore",
+          "description": "La pompa di calore (dispositivo dell'impianto)."
+        },
+        "group": {
+          "name": "Gruppo",
+          "description": "Gruppo di registri, ad esempio REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Registro",
+          "description": "Nome o indice del registro."
+        },
+        "value": {
+          "name": "Valore",
+          "description": "Il valore da scrivere."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatica (lingua di Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia ti chiede di accettare nuovi termini",
+      "description": "Accedi una volta a online.thermia.se con l'account usato qui e accetta i termini aggiornati. L'integrazione riprova automaticamente."
+    },
+    "register_vanished": {
+      "title": "Registri mancanti nel cloud Thermia",
+      "description": "Questi registri non vengono restituiti dal cloud da giorni: {registers}. Le relative entità restano non disponibili. Usa *Rileva di nuovo i registri* se la configurazione della pompa di calore è cambiata, oppure rimuovi le entità."
+    },
+    "discovery_empty": {
+      "title": "Il cloud Thermia non ha restituito alcun registro",
+      "description": "Nessun registro trovato per questa pompa di calore. Verifica che sia online nell'app Thermia, poi premi *Rileva di nuovo i registri*."
+    }
+  }
+}

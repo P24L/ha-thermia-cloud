@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Prijavite se s svojim računom Thermia Online / MyThermia.\n\nGre za neuradno integracijo, ki ni povezana s podjetjema Thermia ali Danfoss.",
+        "data": {
+          "username": "E-pošta",
+          "password": "Geslo"
+        },
+        "data_description": {
+          "username": "E-poštni naslov vašega računa Thermia Online / MyThermia.",
+          "password": "Geslo tega računa. Shranjeno je v Home Assistantu, da se lahko ponovno prijavi, ko shranjena seja poteče."
+        }
+      },
+      "installations": {
+        "title": "Namestitve",
+        "description": "Izberite, katere toplotne črpalke želite dodati. To lahko pozneje spremenite v možnostih.",
+        "data": {
+          "installations": "Namestitve"
+        },
+        "data_description": {
+          "installations": "Toplotne črpalke tega računa, ki jih želite dodati."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Ponovna prijava",
+        "description": "Oblak Thermia je zavrnil shranjeno geslo za {username}. Vnesite trenutno geslo.",
+        "data": {
+          "password": "Geslo"
+        },
+        "data_description": {
+          "password": "Trenutno geslo tega računa."
+        }
+      },
+      "reconfigure": {
+        "title": "Račun",
+        "description": "Spremenite e-poštni naslov ali geslo. Račun Thermia mora ostati isti.",
+        "data": {
+          "username": "E-pošta",
+          "password": "Geslo"
+        },
+        "data_description": {
+          "username": "E-poštni naslov istega računa Thermia.",
+          "password": "Trenutno geslo."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-pošta ali geslo je bilo zavrnjeno.",
+      "cannot_connect": "Povezava z oblakom Thermia ni uspela. Poskusite znova pozneje.",
+      "policy_acceptance_required": "Enkrat se prijavite na online.thermia.se in sprejmite posodobljene pogoje, nato poskusite znova.",
+      "unknown": "Nepričakovana napaka. Oglejte si dnevnik Home Assistanta."
+    },
+    "abort": {
+      "already_configured": "Ta račun Thermia je že nastavljen.",
+      "no_installations": "S tem računom ni povezana nobena toplotna črpalka.",
+      "wrong_account": "To je drug račun Thermia, kot je nastavljen.",
+      "reauth_successful": "Ponovna prijava je uspela.",
+      "reconfigure_successful": "Račun je posodobljen."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Mešalni krog 1"
+    },
+    "device_circuit_2": {
+      "name": "Mešalni krog 2"
+    },
+    "device_pool": {
+      "name": "Bazen"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Temperatura tople vode"
+      },
+      "outdoor_temperature": {
+        "name": "Zunanja temperatura"
+      },
+      "supply_temperature": {
+        "name": "Temperatura dovoda"
+      },
+      "desired_supply_temperature": {
+        "name": "Želena temperatura dovoda"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Želena temperatura dovoda sistema"
+      },
+      "indoor_temperature": {
+        "name": "Temperatura prostora"
+      },
+      "circuit_supply_temperature": {
+        "name": "Temperatura dovoda"
+      },
+      "hours_compressor": {
+        "name": "Ure delovanja kompresorja"
+      },
+      "hours_heating": {
+        "name": "Ure delovanja ogrevanja"
+      },
+      "hours_hot_water": {
+        "name": "Ure delovanja tople vode"
+      },
+      "hours_aux_1": {
+        "name": "Ure delovanja pomožnega grelca 1"
+      },
+      "hours_aux_2": {
+        "name": "Ure delovanja pomožnega grelca 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Krivulja ogrevanja"
+      },
+      "heating_curve_min": {
+        "name": "Minimum krivulje ogrevanja"
+      },
+      "heating_curve_max": {
+        "name": "Maksimum krivulje ogrevanja"
+      },
+      "heating_curve_main": {
+        "name": "Krivulja ogrevanja (glavni krog)"
+      },
+      "heating_curve_min_main": {
+        "name": "Minimum krivulje ogrevanja (glavni krog)"
+      },
+      "heating_curve_max_main": {
+        "name": "Maksimum krivulje ogrevanja (glavni krog)"
+      },
+      "heating_stop": {
+        "name": "Temperatura izklopa ogrevanja"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Topla voda"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Način delovanja",
+        "state": {
+          "off": "Izključeno",
+          "auto": "Samodejno",
+          "compressor": "Kompresor",
+          "auxiliary": "Pomožni grelec",
+          "hot_water": "Topla voda"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Način tople vode",
+        "state": {
+          "comfort": "Udobje",
+          "economy": "Varčno",
+          "away": "Odsoten"
+        }
+      },
+      "circuit_mode": {
+        "name": "Način kroga",
+        "state": {
+          "off": "Izključeno",
+          "curve": "Krivulja",
+          "constant": "Konstantno"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Osveži imena"
+      },
+      "rediscover": {
+        "name": "Ponovno odkrij registre"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Način samo za branje je vklopljen: pisanje v toplotno črpalko je blokirano."
+    },
+    "invalid_value": {
+      "message": "Vrednost zavrnjena: {detail}"
+    },
+    "write_failed": {
+      "message": "Oblak Thermia ni sprejel spremembe: {detail}"
+    },
+    "unknown_register": {
+      "message": "Tak register ne obstaja: {register}"
+    },
+    "service_register": {
+      "message": "Ta register je na ravni serviserja in ga ni mogoče spremeniti: {register}"
+    },
+    "not_writable": {
+      "message": "Tega registra ni mogoče spremeniti: {register}"
+    },
+    "no_installation": {
+      "message": "Neznana namestitev za ta vnos."
+    },
+    "action_failed": {
+      "message": "Zahteva do oblaka Thermia ni uspela: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Thermia Cloud",
+        "description": "Kaj želite spremeniti?",
+        "menu_options": {
+          "general": "Splošno",
+          "registers": "Namestitve in registri",
+          "names": "Imena in jezik"
+        }
+      },
+      "general": {
+        "title": "Splošno",
+        "description": "Način samo za branje blokira vsako pisanje v toplotno črpalko (entitete in storitve). Interval posodabljanja začne veljati po shranjevanju.",
+        "data": {
+          "scan_interval": "Interval posodabljanja (sekunde)",
+          "read_only": "Način samo za branje",
+          "timeout": "Časovna omejitev zahteve (sekunde)",
+          "debug_attributes": "Dodaj surove vrednosti registrov kot atribute"
+        },
+        "data_description": {
+          "scan_interval": "Kako pogosto se v oblaku zahtevajo nove vrednosti (10–600 sekund).",
+          "read_only": "Če je vklopljeno, v toplotno črpalko ni mogoče ničesar zapisati.",
+          "timeout": "Kako dolgo čakati na en odgovor oblaka.",
+          "debug_attributes": "Atributom entitete doda ID-je registrov in surove vrednosti."
+        }
+      },
+      "registers": {
+        "title": "Namestitve in registri",
+        "description": "Spremembe se uveljavijo s ponovnim nalaganjem integracije.",
+        "data": {
+          "installations": "Namestitve",
+          "show_hidden": "Pokaži registre, ki jih skrije Thermia",
+          "expose_unknown": "Izpostavi neznane registre (kot onemogočene entitete)"
+        },
+        "data_description": {
+          "installations": "Katere namestitve računa uporabiti.",
+          "show_hidden": "Ustvari entitete, tudi če jih pravila podjetja Thermia skrivajo.",
+          "expose_unknown": "Ustvari onemogočene entitete za registre, za katere ta integracija nima vnosa."
+        }
+      },
+      "names": {
+        "title": "Imena in jezik",
+        "description": "Imena entitet uporabljajo naša lastna kratka imena, kjer obstajajo (angleščina, češčina), sicer pa besedila podjetja Thermia. Najnovejša besedila prenesete z gumbom *Osveži imena* na napravi.",
+        "data": {
+          "label_language": "Jezik oznak"
+        },
+        "data_description": {
+          "label_language": "Jezik imen entitet. Samodejno sledi jeziku Home Assistanta."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Integracija trenutno ne deluje. Poskusite znova, ko bo naložena.",
+      "cannot_connect": "Povezava z oblakom Thermia ni uspela. Poskusite znova pozneje."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Nastavi register",
+      "description": "Zapiše vrednost v poljuben register, tudi v tiste brez entitete. Veljajo enaka pravila kot za entitete: način samo za branje, preverjanje glede na omejitve oblaka, registri na ravni serviserja so zavrnjeni.",
+      "fields": {
+        "device_id": {
+          "name": "Toplotna črpalka",
+          "description": "Toplotna črpalka (naprava namestitve)."
+        },
+        "group": {
+          "name": "Skupina",
+          "description": "Skupina registrov, na primer REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Ime ali indeks registra."
+        },
+        "value": {
+          "name": "Vrednost",
+          "description": "Vrednost za zapis."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Samodejno (jezik Home Assistanta)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia vas prosi, da sprejmete nove pogoje",
+      "description": "Enkrat se prijavite na online.thermia.se z računom, uporabljenim tukaj, in sprejmite posodobljene pogoje. Integracija samodejno poskusi znova."
+    },
+    "register_vanished": {
+      "title": "Registri manjkajo v oblaku Thermia",
+      "description": "Oblak teh registrov že več dni ni vrnil: {registers}. Njihove entitete ostanejo nedostopne. Uporabite *Ponovno odkrij registre*, če se je konfiguracija toplotne črpalke spremenila, ali odstranite entitete."
+    },
+    "discovery_empty": {
+      "title": "Oblak Thermia ni vrnil nobenega registra",
+      "description": "Za to toplotno črpalko ni bil najden noben register. Preverite, ali je povezana v aplikaciji Thermia, nato pritisnite *Ponovno odkrij registre*."
+    }
+  }
+}

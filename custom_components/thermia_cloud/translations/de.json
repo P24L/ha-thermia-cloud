@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Melde dich mit deinem Thermia-Online- / MyThermia-Konto an.\n\nDies ist eine inoffizielle Integration, die nicht mit Thermia oder Danfoss verbunden ist.",
+        "data": {
+          "username": "E-Mail",
+          "password": "Passwort"
+        },
+        "data_description": {
+          "username": "Die E-Mail-Adresse deines Thermia-Online- / MyThermia-Kontos.",
+          "password": "Das Passwort dieses Kontos. Es wird in Home Assistant gespeichert, um sich erneut anzumelden, wenn die gespeicherte Sitzung abläuft."
+        }
+      },
+      "installations": {
+        "title": "Anlagen",
+        "description": "Wähle, welche Wärmepumpen hinzugefügt werden sollen. Du kannst das später in den Optionen ändern.",
+        "data": {
+          "installations": "Anlagen"
+        },
+        "data_description": {
+          "installations": "Wärmepumpen dieses Kontos, die hinzugefügt werden sollen."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Erneut anmelden",
+        "description": "Die Thermia-Cloud hat das gespeicherte Passwort für {username} abgelehnt. Gib das aktuelle Passwort ein.",
+        "data": {
+          "password": "Passwort"
+        },
+        "data_description": {
+          "password": "Das aktuelle Passwort dieses Kontos."
+        }
+      },
+      "reconfigure": {
+        "title": "Konto",
+        "description": "E-Mail oder Passwort ändern. Es muss dasselbe Thermia-Konto sein.",
+        "data": {
+          "username": "E-Mail",
+          "password": "Passwort"
+        },
+        "data_description": {
+          "username": "Die E-Mail-Adresse desselben Thermia-Kontos.",
+          "password": "Das aktuelle Passwort."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-Mail oder Passwort wurde abgelehnt.",
+      "cannot_connect": "Die Thermia-Cloud ist nicht erreichbar. Versuche es später erneut.",
+      "policy_acceptance_required": "Melde dich einmal auf online.thermia.se an und akzeptiere die aktualisierten Bedingungen. Versuche es dann erneut.",
+      "unknown": "Unerwarteter Fehler. Siehe das Home-Assistant-Protokoll."
+    },
+    "abort": {
+      "already_configured": "Dieses Thermia-Konto ist bereits eingerichtet.",
+      "no_installations": "Mit diesem Konto ist keine Wärmepumpe verknüpft.",
+      "wrong_account": "Dies ist ein anderes Thermia-Konto als das eingerichtete.",
+      "reauth_successful": "Erneut angemeldet.",
+      "reconfigure_successful": "Konto aktualisiert."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Mischerkreis 1"
+    },
+    "device_circuit_2": {
+      "name": "Mischerkreis 2"
+    },
+    "device_pool": {
+      "name": "Pool"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Warmwassertemperatur"
+      },
+      "outdoor_temperature": {
+        "name": "Außentemperatur"
+      },
+      "supply_temperature": {
+        "name": "Vorlauftemperatur"
+      },
+      "desired_supply_temperature": {
+        "name": "Soll-Vorlauftemperatur"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Soll-Systemvorlauftemperatur"
+      },
+      "indoor_temperature": {
+        "name": "Innentemperatur"
+      },
+      "circuit_supply_temperature": {
+        "name": "Vorlauftemperatur"
+      },
+      "hours_compressor": {
+        "name": "Betriebsstunden Kompressor"
+      },
+      "hours_heating": {
+        "name": "Betriebsstunden Heizung"
+      },
+      "hours_hot_water": {
+        "name": "Betriebsstunden Warmwasser"
+      },
+      "hours_aux_1": {
+        "name": "Betriebsstunden Zusatzheizung 1"
+      },
+      "hours_aux_2": {
+        "name": "Betriebsstunden Zusatzheizung 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Heizkurve"
+      },
+      "heating_curve_min": {
+        "name": "Heizkurve Minimum"
+      },
+      "heating_curve_max": {
+        "name": "Heizkurve Maximum"
+      },
+      "heating_curve_main": {
+        "name": "Heizkurve (Hauptkreis)"
+      },
+      "heating_curve_min_main": {
+        "name": "Heizkurve Minimum (Hauptkreis)"
+      },
+      "heating_curve_max_main": {
+        "name": "Heizkurve Maximum (Hauptkreis)"
+      },
+      "heating_stop": {
+        "name": "Heizstopp-Temperatur"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Warmwasser"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Betriebsmodus",
+        "state": {
+          "off": "Aus",
+          "auto": "Auto",
+          "compressor": "Kompressor",
+          "auxiliary": "Zusatzheizung",
+          "hot_water": "Warmwasser"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Warmwassermodus",
+        "state": {
+          "comfort": "Komfort",
+          "economy": "Sparbetrieb",
+          "away": "Abwesend"
+        }
+      },
+      "circuit_mode": {
+        "name": "Kreismodus",
+        "state": {
+          "off": "Aus",
+          "curve": "Kurve",
+          "constant": "Konstant"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Namen aktualisieren"
+      },
+      "rediscover": {
+        "name": "Register neu erkennen"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Schreibgeschützter Modus ist aktiv: Schreiben auf die Wärmepumpe ist blockiert."
+    },
+    "invalid_value": {
+      "message": "Wert abgelehnt: {detail}"
+    },
+    "write_failed": {
+      "message": "Die Thermia-Cloud hat die Änderung nicht akzeptiert: {detail}"
+    },
+    "unknown_register": {
+      "message": "Unbekanntes Register: {register}"
+    },
+    "service_register": {
+      "message": "Dieses Register ist nur für Installateure vorgesehen und kann nicht geändert werden: {register}"
+    },
+    "not_writable": {
+      "message": "Dieses Register kann nicht geändert werden: {register}"
+    },
+    "no_installation": {
+      "message": "Unbekannte Anlage für diesen Eintrag."
+    },
+    "action_failed": {
+      "message": "Die Anfrage an die Thermia-Cloud ist fehlgeschlagen: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Thermia-Cloud-Optionen",
+        "description": "Was möchtest du ändern?",
+        "menu_options": {
+          "general": "Allgemein",
+          "registers": "Anlagen & Register",
+          "names": "Namen & Sprache"
+        }
+      },
+      "general": {
+        "title": "Allgemein",
+        "description": "Der schreibgeschützte Modus blockiert jedes Schreiben auf die Wärmepumpe (Entitäten und Dienste). Das Aktualisierungsintervall gilt nach dem Speichern.",
+        "data": {
+          "scan_interval": "Aktualisierungsintervall (Sekunden)",
+          "read_only": "Schreibgeschützter Modus",
+          "timeout": "Zeitlimit für Anfragen (Sekunden)",
+          "debug_attributes": "Rohwerte der Register als Attribute hinzufügen"
+        },
+        "data_description": {
+          "scan_interval": "Wie oft die Cloud nach neuen Werten gefragt wird (10–600 Sekunden).",
+          "read_only": "Wenn aktiv, kann nichts auf die Wärmepumpe geschrieben werden.",
+          "timeout": "Wie lange auf eine Antwort der Cloud gewartet wird.",
+          "debug_attributes": "Fügt den Entitätsattributen Register-IDs und Rohwerte hinzu."
+        }
+      },
+      "registers": {
+        "title": "Anlagen & Register",
+        "description": "Änderungen werden durch Neuladen der Integration übernommen.",
+        "data": {
+          "installations": "Anlagen",
+          "show_hidden": "Von Thermia ausgeblendete Register anzeigen",
+          "expose_unknown": "Unbekannte Register bereitstellen (als deaktivierte Entitäten)"
+        },
+        "data_description": {
+          "installations": "Welche Anlagen des Kontos verwendet werden.",
+          "show_hidden": "Entitäten auch dann erstellen, wenn Thermias eigene Regeln sie ausblenden.",
+          "expose_unknown": "Deaktivierte Entitäten für Register erstellen, zu denen diese Integration keinen Eintrag hat."
+        }
+      },
+      "names": {
+        "title": "Namen & Sprache",
+        "description": "Entitätsnamen verwenden unsere eigenen kurzen Namen, wo vorhanden (Englisch, Tschechisch), sonst die Texte von Thermia. Mit der Schaltfläche *Namen aktualisieren* am Gerät lädst du die neuesten Texte herunter.",
+        "data": {
+          "label_language": "Sprache der Bezeichnungen"
+        },
+        "data_description": {
+          "label_language": "Sprache der Entitätsnamen. Automatisch folgt der Sprache von Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Die Integration läuft derzeit nicht. Versuche es erneut, sobald sie geladen ist.",
+      "cannot_connect": "Die Thermia-Cloud ist nicht erreichbar. Versuche es später erneut."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Register setzen",
+      "description": "Schreibt einen Wert in ein beliebiges Register, auch in solche ohne Entität. Es gelten dieselben Regeln wie für Entitäten: schreibgeschützter Modus, Prüfung gegen die Grenzwerte der Cloud, Register für Installateure werden abgelehnt.",
+      "fields": {
+        "device_id": {
+          "name": "Wärmepumpe",
+          "description": "Die Wärmepumpe (Anlagengerät)."
+        },
+        "group": {
+          "name": "Gruppe",
+          "description": "Registergruppe, zum Beispiel REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Registername oder Index."
+        },
+        "value": {
+          "name": "Wert",
+          "description": "Der zu schreibende Wert."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatisch (Sprache von Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia bittet dich, neue Bedingungen zu akzeptieren",
+      "description": "Melde dich einmal auf online.thermia.se mit dem hier verwendeten Konto an und akzeptiere die aktualisierten Bedingungen. Die Integration versucht es automatisch erneut."
+    },
+    "register_vanished": {
+      "title": "Register fehlen in der Thermia-Cloud",
+      "description": "Diese Register wurden seit Tagen nicht mehr von der Cloud geliefert: {registers}. Ihre Entitäten bleiben nicht verfügbar. Nutze *Register neu erkennen*, falls sich die Konfiguration der Wärmepumpe geändert hat, oder entferne die Entitäten."
+    },
+    "discovery_empty": {
+      "title": "Die Thermia-Cloud hat keine Register geliefert",
+      "description": "Für diese Wärmepumpe wurde kein Register gefunden. Prüfe, ob sie in der Thermia-App online ist, und drücke dann *Register neu erkennen*."
+    }
+  }
+}

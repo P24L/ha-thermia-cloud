@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Kirjaudu sisään Thermia Online / MyThermia -tililläsi.\n\nTämä on epävirallinen integraatio, joka ei liity Thermiaan tai Danfossiin.",
+        "data": {
+          "username": "Sähköposti",
+          "password": "Salasana"
+        },
+        "data_description": {
+          "username": "Thermia Online / MyThermia -tilisi sähköpostiosoite.",
+          "password": "Tilin salasana. Se tallennetaan Home Assistantiin, jotta kirjautuminen onnistuu uudelleen, kun tallennettu istunto vanhenee."
+        }
+      },
+      "installations": {
+        "title": "Laitokset",
+        "description": "Valitse, mitkä lämpöpumput lisätään. Voit muuttaa tätä myöhemmin asetuksissa.",
+        "data": {
+          "installations": "Laitokset"
+        },
+        "data_description": {
+          "installations": "Tämän tilin lämpöpumput, jotka lisätään."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Kirjaudu uudelleen",
+        "description": "Thermia-pilvi hylkäsi käyttäjän {username} tallennetun salasanan. Anna nykyinen salasana.",
+        "data": {
+          "password": "Salasana"
+        },
+        "data_description": {
+          "password": "Tämän tilin nykyinen salasana."
+        }
+      },
+      "reconfigure": {
+        "title": "Tili",
+        "description": "Vaihda sähköpostiosoite tai salasana. Sen on oltava sama Thermia-tili.",
+        "data": {
+          "username": "Sähköposti",
+          "password": "Salasana"
+        },
+        "data_description": {
+          "username": "Saman Thermia-tilin sähköpostiosoite.",
+          "password": "Nykyinen salasana."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Sähköpostiosoite tai salasana hylättiin.",
+      "cannot_connect": "Thermia-pilveen ei saatu yhteyttä. Yritä myöhemmin uudelleen.",
+      "policy_acceptance_required": "Kirjaudu kerran osoitteessa online.thermia.se ja hyväksy päivitetyt ehdot. Yritä sitten uudelleen.",
+      "unknown": "Odottamaton virhe. Katso Home Assistantin loki."
+    },
+    "abort": {
+      "already_configured": "Tämä Thermia-tili on jo määritetty.",
+      "no_installations": "Tähän tiliin ei ole liitetty lämpöpumppua.",
+      "wrong_account": "Tämä on eri Thermia-tili kuin käyttöön otettu tili.",
+      "reauth_successful": "Kirjautuminen onnistui uudelleen.",
+      "reconfigure_successful": "Tili päivitetty."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Shunttiryhmä 1"
+    },
+    "device_circuit_2": {
+      "name": "Shunttiryhmä 2"
+    },
+    "device_pool": {
+      "name": "Allas"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Käyttöveden lämpötila"
+      },
+      "outdoor_temperature": {
+        "name": "Ulkolämpötila"
+      },
+      "supply_temperature": {
+        "name": "Menolämpötila"
+      },
+      "desired_supply_temperature": {
+        "name": "Haluttu menolämpötila"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Haluttu järjestelmän menolämpötila"
+      },
+      "indoor_temperature": {
+        "name": "Sisälämpötila"
+      },
+      "circuit_supply_temperature": {
+        "name": "Menolämpötila"
+      },
+      "hours_compressor": {
+        "name": "Kompressorin käyttötunnit"
+      },
+      "hours_heating": {
+        "name": "Lämmityksen käyttötunnit"
+      },
+      "hours_hot_water": {
+        "name": "Käyttöveden käyttötunnit"
+      },
+      "hours_aux_1": {
+        "name": "Lisälämmitin 1, käyttötunnit"
+      },
+      "hours_aux_2": {
+        "name": "Lisälämmitin 2, käyttötunnit"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Lämpökäyrä"
+      },
+      "heating_curve_min": {
+        "name": "Lämpökäyrä, minimi"
+      },
+      "heating_curve_max": {
+        "name": "Lämpökäyrä, maksimi"
+      },
+      "heating_curve_main": {
+        "name": "Lämpökäyrä (pääpiiri)"
+      },
+      "heating_curve_min_main": {
+        "name": "Lämpökäyrä, minimi (pääpiiri)"
+      },
+      "heating_curve_max_main": {
+        "name": "Lämpökäyrä, maksimi (pääpiiri)"
+      },
+      "heating_stop": {
+        "name": "Lämmityksen pysäytyslämpötila"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Käyttövesi"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Käyttötila",
+        "state": {
+          "off": "Pois",
+          "auto": "Auto",
+          "compressor": "Kompressori",
+          "auxiliary": "Lisälämmitin",
+          "hot_water": "Käyttövesi"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Käyttöveden tila",
+        "state": {
+          "comfort": "Mukavuus",
+          "economy": "Säästö",
+          "away": "Poissa"
+        }
+      },
+      "circuit_mode": {
+        "name": "Piirin tila",
+        "state": {
+          "off": "Pois",
+          "curve": "Käyrä",
+          "constant": "Vakio"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Päivitä nimet"
+      },
+      "rediscover": {
+        "name": "Etsi rekisterit uudelleen"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Vain luku -tila on päällä: lämpöpumppuun kirjoittaminen on estetty."
+    },
+    "invalid_value": {
+      "message": "Arvo hylättiin: {detail}"
+    },
+    "write_failed": {
+      "message": "Thermia-pilvi ei hyväksynyt muutosta: {detail}"
+    },
+    "unknown_register": {
+      "message": "Rekisteriä ei ole: {register}"
+    },
+    "service_register": {
+      "message": "Tämä rekisteri on asentajatasoinen, eikä sitä voi muuttaa: {register}"
+    },
+    "not_writable": {
+      "message": "Tätä rekisteriä ei voi muuttaa: {register}"
+    },
+    "no_installation": {
+      "message": "Tuntematon laitos tälle kohteelle."
+    },
+    "action_failed": {
+      "message": "Pyyntö Thermia-pilveen epäonnistui: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Thermia Cloud -asetukset",
+        "description": "Mitä haluat muuttaa?",
+        "menu_options": {
+          "general": "Yleiset",
+          "registers": "Laitokset ja rekisterit",
+          "names": "Nimet ja kieli"
+        }
+      },
+      "general": {
+        "title": "Yleiset",
+        "description": "Vain luku -tila estää kaiken kirjoittamisen lämpöpumppuun (entiteetit ja palvelut). Päivitysväli tulee voimaan tallennuksen jälkeen.",
+        "data": {
+          "scan_interval": "Päivitysväli (sekuntia)",
+          "read_only": "Vain luku -tila",
+          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
+          "debug_attributes": "Lisää rekisterien raaka-arvot attribuutteina"
+        },
+        "data_description": {
+          "scan_interval": "Kuinka usein pilveltä kysytään uusia arvoja (10–600 sekuntia).",
+          "read_only": "Kun tämä on päällä, lämpöpumppuun ei voi kirjoittaa mitään.",
+          "timeout": "Kuinka kauan odotetaan yhtä vastausta pilveltä.",
+          "debug_attributes": "Lisää rekisteritunnukset ja raaka-arvot entiteetin attribuutteihin."
+        }
+      },
+      "registers": {
+        "title": "Laitokset ja rekisterit",
+        "description": "Muutokset otetaan käyttöön lataamalla integraatio uudelleen.",
+        "data": {
+          "installations": "Laitokset",
+          "show_hidden": "Näytä rekisterit, jotka Thermia piilottaa",
+          "expose_unknown": "Näytä tuntemattomat rekisterit (käytöstä poistettuina entiteetteinä)"
+        },
+        "data_description": {
+          "installations": "Mitä tilin laitoksia käytetään.",
+          "show_hidden": "Luo entiteetit, vaikka Thermian omat säännöt piilottaisivat ne.",
+          "expose_unknown": "Luo käytöstä poistetut entiteetit rekistereille, joille integraatiolla ei ole omaa kuvausta."
+        }
+      },
+      "names": {
+        "title": "Nimet ja kieli",
+        "description": "Entiteettien nimissä käytetään omia lyhyitä nimiämme, kun ne ovat saatavilla (englanti, tšekki), ja muuten Thermian tekstejä. Lataa uusimmat tekstit laitteen *Päivitä nimet* -painikkeella.",
+        "data": {
+          "label_language": "Nimien kieli"
+        },
+        "data_description": {
+          "label_language": "Entiteettien nimien kieli. Automaattinen noudattaa Home Assistantin kieltä."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Integraatio ei ole juuri nyt käynnissä. Yritä uudelleen, kun se on latautunut.",
+      "cannot_connect": "Thermia-pilveen ei saatu yhteyttä. Yritä myöhemmin uudelleen."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Aseta rekisteri",
+      "description": "Kirjoita arvo mihin tahansa rekisteriin, myös sellaiseen, jolla ei ole entiteettiä. Samat säännöt kuin entiteeteillä pätevät: vain luku -tila, validointi pilven rajoja vasten, ja asentajatasoiset rekisterit hylätään.",
+      "fields": {
+        "device_id": {
+          "name": "Lämpöpumppu",
+          "description": "Lämpöpumppu (laitoksen laite)."
+        },
+        "group": {
+          "name": "Ryhmä",
+          "description": "Rekisteriryhmä, esimerkiksi REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Rekisteri",
+          "description": "Rekisterin nimi tai indeksi."
+        },
+        "value": {
+          "name": "Arvo",
+          "description": "Kirjoitettava arvo."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automaattinen (Home Assistantin kieli)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia pyytää hyväksymään uudet ehdot",
+      "description": "Kirjaudu kerran osoitteessa online.thermia.se tässä käytetyllä tilillä ja hyväksy päivitetyt ehdot. Integraatio yrittää automaattisesti uudelleen."
+    },
+    "register_vanished": {
+      "title": "Rekisterit puuttuvat Thermia-pilvestä",
+      "description": "Pilvi ei ole palauttanut näitä rekistereitä päiviin: {registers}. Niiden entiteetit pysyvät ei-saatavilla. Käytä *Etsi rekisterit uudelleen* -painiketta, jos lämpöpumpun kokoonpano on muuttunut, tai poista entiteetit."
+    },
+    "discovery_empty": {
+      "title": "Thermia-pilvi ei palauttanut rekistereitä",
+      "description": "Tälle lämpöpumpulle ei löytynyt rekistereitä. Tarkista, että se on verkossa Thermia-sovelluksessa, ja paina sitten *Etsi rekisterit uudelleen*."
+    }
+  }
+}

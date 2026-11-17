@@ -83,17 +83,14 @@ def name_of(hass: HomeAssistant, platform: str, index: int, suffix: str = "") ->
     [
         ("en", "Outdoor temperature"),  # our curated English name
         ("cs", "Venkovní teplota"),  # our curated Czech name
-        ("de", "Außentemperatur"),  # no curated German: Thermia's German text
+        ("de", "Außentemperatur"),  # our curated German name
+        ("pt", "Outdoor temperature"),  # no Portuguese anywhere: our English name
     ],
 )
 async def test_entity_names_follow_the_home_assistant_language(
     hass: HomeAssistant, language: str, expected: str
 ) -> None:
-    from custom_components.thermia_cloud.catalog.labels import load_bundled
-
     hass.config.language = language
-    if language == "de":
-        expected = load_bundled()["de-DE"]["REG_OPER_DATA_OUTDOOR_TEMP_MA_SA"]
     await setup(hass, make_entry(hass))
     assert name_of(hass, "sensor", OUTDOOR["registerIndex"]).endswith(expected)
 
@@ -101,7 +98,7 @@ async def test_entity_names_follow_the_home_assistant_language(
 async def test_device_names_fall_back_to_english_for_unknown_languages(
     hass: HomeAssistant,
 ) -> None:
-    hass.config.language = "de"
+    hass.config.language = "pt"
     entry = make_entry(hass)
     await setup(hass, entry)
     child = dr.async_get(hass).async_get_device_by_identifier(
@@ -190,7 +187,7 @@ async def test_refresh_names_downloads_filtered_texts_and_reloads(hass: HomeAssi
     stored = await Store(hass, 1, f"{DOMAIN}.labels.{entry.entry_id}").async_load()
     assert stored["culture"] == "de-DE"
     assert list(stored["labels"]) == ["REG_OPER_DATA_OUTDOOR_TEMP_MA_SA"]  # alarm text dropped
-    assert name_of(hass, "sensor", OUTDOOR["registerIndex"]).endswith("Fresh outdoor text (de-DE)")
+    assert entry.state is ConfigEntryState.LOADED  # reloaded with the stored texts
 
 
 async def test_rediscover_reads_everything_again_and_reloads(

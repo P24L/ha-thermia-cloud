@@ -25,14 +25,62 @@ def test_catalog_translation_keys_exist(language: str) -> None:
             assert device.translation_key in data["device"], device.key
 
 
-def test_both_languages_have_the_same_keys() -> None:
-    def keys(node: object, prefix: str = "") -> set[str]:
-        if isinstance(node, dict):
-            return {k for key, v in node.items() for k in keys(v, f"{prefix}/{key}")}
-        return {prefix}
+def _keys(node: object, prefix: str = "") -> set[str]:
+    if isinstance(node, dict):
+        return {k for key, v in node.items() for k in _keys(v, f"{prefix}/{key}")}
+    return {prefix}
 
-    en, cs = (json.loads((TRANSLATIONS / f"{lang}.json").read_text()) for lang in LANGUAGES)
-    assert keys(en) == keys(cs)
+
+def _strings(node: object, prefix: str = "") -> dict[str, str]:
+    if isinstance(node, dict):
+        return {
+            k: v
+            for key, child in node.items()
+            for k, v in _strings(child, f"{prefix}/{key}").items()
+        }
+    return {prefix: str(node)}
+
+
+ALL_FILES = sorted(TRANSLATIONS.glob("*.json"))
+
+
+def test_every_curated_language_is_complete() -> None:
+    assert {p.stem for p in ALL_FILES} >= {"en", "cs"}
+    en = json.loads((TRANSLATIONS / "en.json").read_text())
+    for path in ALL_FILES:
+        assert _keys(json.loads(path.read_text())) == _keys(en), path.name
+
+
+@pytest.mark.parametrize("path", ALL_FILES, ids=lambda p: p.stem)
+def test_placeholders_survive_translation(path: Path) -> None:
+    import re
+
+    pattern = re.compile(r"\{[a-z_]+\}")
+    en = _strings(json.loads((TRANSLATIONS / "en.json").read_text()))
+    for key, text in _strings(json.loads(path.read_text())).items():
+        assert sorted(pattern.findall(text)) == sorted(pattern.findall(en[key])), (path.name, key)
+
+
+OVERRIDES = sorted((Path(TRANSLATIONS).parent / "catalog" / "i18n" / "overrides").glob("*.json"))
+
+
+@pytest.mark.parametrize("path", OVERRIDES, ids=lambda p: p.stem)
+def test_label_overrides_are_sane(path: Path) -> None:
+    import re
+
+    base = Path(TRANSLATIONS).parent / "catalog" / "i18n"
+    english = json.loads((base / "en-US.json").read_text())
+    overrides = json.loads(path.read_text())
+    bracket = re.compile(r"\[[^\]]+\]\s*$")
+    for key, text in overrides.items():
+        assert key in english, f"{key} is not a known Thermia key"
+        assert (isinstance(text, str) and text.strip() and text != english[key]) or text == english[
+            key
+        ]
+        # a unit bracket must be kept exactly as in the English text
+        en_unit = bracket.search(english[key])
+        if en_unit:
+            assert text.rstrip().endswith(en_unit.group(0).strip()), (key, text)
 
 
 def test_every_writable_catalog_entry_states_its_risk() -> None:

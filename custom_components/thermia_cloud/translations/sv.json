@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Logga in med ditt Thermia Online / MyThermia-konto.\n\nDetta är en inofficiell integration som inte är kopplad till Thermia eller Danfoss.",
+        "data": {
+          "username": "E-post",
+          "password": "Lösenord"
+        },
+        "data_description": {
+          "username": "E-postadressen till ditt Thermia Online / MyThermia-konto.",
+          "password": "Lösenordet till kontot. Det sparas i Home Assistant för att kunna logga in igen när den sparade sessionen går ut."
+        }
+      },
+      "installations": {
+        "title": "Anläggningar",
+        "description": "Välj vilka värmepumpar som ska läggas till. Du kan ändra detta senare i alternativen.",
+        "data": {
+          "installations": "Anläggningar"
+        },
+        "data_description": {
+          "installations": "Värmepumpar på det här kontot som ska läggas till."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Logga in igen",
+        "description": "Thermia-molnet avvisade det sparade lösenordet för {username}. Ange det aktuella lösenordet.",
+        "data": {
+          "password": "Lösenord"
+        },
+        "data_description": {
+          "password": "Det aktuella lösenordet för det här kontot."
+        }
+      },
+      "reconfigure": {
+        "title": "Konto",
+        "description": "Ändra e-postadress eller lösenord. Det måste vara samma Thermia-konto.",
+        "data": {
+          "username": "E-post",
+          "password": "Lösenord"
+        },
+        "data_description": {
+          "username": "E-postadressen till samma Thermia-konto.",
+          "password": "Det aktuella lösenordet."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-postadressen eller lösenordet avvisades.",
+      "cannot_connect": "Det gick inte att nå Thermia-molnet. Försök igen senare.",
+      "policy_acceptance_required": "Logga in en gång på online.thermia.se och godkänn de uppdaterade villkoren, och försök sedan igen.",
+      "unknown": "Oväntat fel. Se loggen i Home Assistant."
+    },
+    "abort": {
+      "already_configured": "Det här Thermia-kontot är redan konfigurerat.",
+      "no_installations": "Ingen värmepump är kopplad till det här kontot.",
+      "wrong_account": "Det här är ett annat Thermia-konto än det som är konfigurerat.",
+      "reauth_successful": "Inloggningen lyckades.",
+      "reconfigure_successful": "Kontot har uppdaterats."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Shuntgrupp 1"
+    },
+    "device_circuit_2": {
+      "name": "Shuntgrupp 2"
+    },
+    "device_pool": {
+      "name": "Pool"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Varmvattentemperatur"
+      },
+      "outdoor_temperature": {
+        "name": "Utetemperatur"
+      },
+      "supply_temperature": {
+        "name": "Framledningstemperatur"
+      },
+      "desired_supply_temperature": {
+        "name": "Önskad framledningstemperatur"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Önskad systemframledningstemperatur"
+      },
+      "indoor_temperature": {
+        "name": "Innetemperatur"
+      },
+      "circuit_supply_temperature": {
+        "name": "Framledningstemperatur"
+      },
+      "hours_compressor": {
+        "name": "Kompressorns drifttid"
+      },
+      "hours_heating": {
+        "name": "Värmedrifttid"
+      },
+      "hours_hot_water": {
+        "name": "Varmvattendrifttid"
+      },
+      "hours_aux_1": {
+        "name": "Tillsats 1 drifttid"
+      },
+      "hours_aux_2": {
+        "name": "Tillsats 2 drifttid"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Värmekurva"
+      },
+      "heating_curve_min": {
+        "name": "Värmekurva min"
+      },
+      "heating_curve_max": {
+        "name": "Värmekurva max"
+      },
+      "heating_curve_main": {
+        "name": "Värmekurva (huvudkrets)"
+      },
+      "heating_curve_min_main": {
+        "name": "Värmekurva min (huvudkrets)"
+      },
+      "heating_curve_max_main": {
+        "name": "Värmekurva max (huvudkrets)"
+      },
+      "heating_stop": {
+        "name": "Värmestopp"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Varmvatten"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Driftläge",
+        "state": {
+          "off": "Av",
+          "auto": "Auto",
+          "compressor": "Kompressor",
+          "auxiliary": "Tillsats",
+          "hot_water": "Varmvatten"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Varmvattenläge",
+        "state": {
+          "comfort": "Komfort",
+          "economy": "Ekonomi",
+          "away": "Borta"
+        }
+      },
+      "circuit_mode": {
+        "name": "Kretsläge",
+        "state": {
+          "off": "Av",
+          "curve": "Kurva",
+          "constant": "Konstant"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Uppdatera namn"
+      },
+      "rediscover": {
+        "name": "Sök register igen"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Skrivskyddat läge är på: skrivning till värmepumpen är blockerad."
+    },
+    "invalid_value": {
+      "message": "Värdet avvisades: {detail}"
+    },
+    "write_failed": {
+      "message": "Thermia-molnet accepterade inte ändringen: {detail}"
+    },
+    "unknown_register": {
+      "message": "Registret finns inte: {register}"
+    },
+    "service_register": {
+      "message": "Det här registret är på installatörsnivå och kan inte ändras: {register}"
+    },
+    "not_writable": {
+      "message": "Det här registret kan inte ändras: {register}"
+    },
+    "no_installation": {
+      "message": "Okänd anläggning för den här posten."
+    },
+    "action_failed": {
+      "message": "Begäran till Thermia-molnet misslyckades: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Thermia Cloud-alternativ",
+        "description": "Vad vill du ändra?",
+        "menu_options": {
+          "general": "Allmänt",
+          "registers": "Anläggningar och register",
+          "names": "Namn och språk"
+        }
+      },
+      "general": {
+        "title": "Allmänt",
+        "description": "Skrivskyddat läge blockerar all skrivning till värmepumpen (entiteter och tjänster). Uppdateringsintervallet börjar gälla efter att du sparat.",
+        "data": {
+          "scan_interval": "Uppdateringsintervall (sekunder)",
+          "read_only": "Skrivskyddat läge",
+          "timeout": "Tidsgräns för förfrågan (sekunder)",
+          "debug_attributes": "Lägg till råa registervärden som attribut"
+        },
+        "data_description": {
+          "scan_interval": "Hur ofta molnet efterfrågas om nya värden (10–600 sekunder).",
+          "read_only": "När det är på kan inget skrivas till värmepumpen.",
+          "timeout": "Hur länge man väntar på ett svar från molnet.",
+          "debug_attributes": "Lägger till register-id och råvärden i entitetens attribut."
+        }
+      },
+      "registers": {
+        "title": "Anläggningar och register",
+        "description": "Ändringar tillämpas genom att integrationen läses in på nytt.",
+        "data": {
+          "installations": "Anläggningar",
+          "show_hidden": "Visa register som Thermia döljer",
+          "expose_unknown": "Visa okända register (som inaktiverade entiteter)"
+        },
+        "data_description": {
+          "installations": "Vilka anläggningar på kontot som ska användas.",
+          "show_hidden": "Skapa entiteter även när Thermias egna regler döljer dem.",
+          "expose_unknown": "Skapa inaktiverade entiteter för register som integrationen saknar uppgifter om."
+        }
+      },
+      "names": {
+        "title": "Namn och språk",
+        "description": "Entitetsnamn använder våra egna korta namn där vi har dem (engelska, tjeckiska) och annars Thermias texter. Använd knappen *Uppdatera namn* på enheten för att hämta de senaste texterna.",
+        "data": {
+          "label_language": "Etikettspråk"
+        },
+        "data_description": {
+          "label_language": "Språk för entitetsnamn. Automatiskt följer Home Assistants språk."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Integrationen körs inte just nu. Försök igen när den har lästs in.",
+      "cannot_connect": "Det gick inte att nå Thermia-molnet. Försök igen senare."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Ställ in register",
+      "description": "Skriv ett värde till valfritt register, även sådana utan entitet. Samma regler som för entiteter gäller: skrivskyddat läge, validering mot molnets gränser, och register på installatörsnivå nekas.",
+      "fields": {
+        "device_id": {
+          "name": "Värmepump",
+          "description": "Värmepumpen (anläggningsenheten)."
+        },
+        "group": {
+          "name": "Grupp",
+          "description": "Registergrupp, till exempel REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Registrets namn eller index."
+        },
+        "value": {
+          "name": "Värde",
+          "description": "Värdet som ska skrivas."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatiskt (Home Assistants språk)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia ber dig godkänna nya villkor",
+      "description": "Logga in en gång på online.thermia.se med kontot som används här och godkänn de uppdaterade villkoren. Integrationen försöker igen automatiskt."
+    },
+    "register_vanished": {
+      "title": "Register saknas i Thermia-molnet",
+      "description": "Molnet har inte returnerat dessa register på flera dagar: {registers}. Deras entiteter förblir otillgängliga. Använd *Sök register igen* om värmepumpens konfiguration har ändrats, eller ta bort entiteterna."
+    },
+    "discovery_empty": {
+      "title": "Thermia-molnet returnerade inga register",
+      "description": "Inga register hittades för den här värmepumpen. Kontrollera att den är online i Thermia-appen och tryck sedan på *Sök register igen*."
+    }
+  }
+}

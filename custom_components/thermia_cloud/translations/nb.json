@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Logg inn med Thermia Online / MyThermia-kontoen din.\n\nDette er en uoffisiell integrasjon som ikke er tilknyttet Thermia eller Danfoss.",
+        "data": {
+          "username": "E-post",
+          "password": "Passord"
+        },
+        "data_description": {
+          "username": "E-postadressen til Thermia Online / MyThermia-kontoen din.",
+          "password": "Passordet til kontoen. Det lagres i Home Assistant for å kunne logge inn på nytt når den lagrede økten utløper."
+        }
+      },
+      "installations": {
+        "title": "Anlegg",
+        "description": "Velg hvilke varmepumper som skal legges til. Du kan endre dette senere i innstillingene.",
+        "data": {
+          "installations": "Anlegg"
+        },
+        "data_description": {
+          "installations": "Varmepumper på denne kontoen som skal legges til."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Logg inn på nytt",
+        "description": "Thermia-skyen avviste det lagrede passordet for {username}. Skriv inn gjeldende passord.",
+        "data": {
+          "password": "Passord"
+        },
+        "data_description": {
+          "password": "Gjeldende passord for denne kontoen."
+        }
+      },
+      "reconfigure": {
+        "title": "Konto",
+        "description": "Endre e-postadresse eller passord. Det må være samme Thermia-konto.",
+        "data": {
+          "username": "E-post",
+          "password": "Passord"
+        },
+        "data_description": {
+          "username": "E-postadressen til den samme Thermia-kontoen.",
+          "password": "Gjeldende passord."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-postadressen eller passordet ble avvist.",
+      "cannot_connect": "Fikk ikke kontakt med Thermia-skyen. Prøv igjen senere.",
+      "policy_acceptance_required": "Logg inn én gang på online.thermia.se og godta de oppdaterte vilkårene, og prøv deretter igjen.",
+      "unknown": "Uventet feil. Se loggen i Home Assistant."
+    },
+    "abort": {
+      "already_configured": "Denne Thermia-kontoen er allerede konfigurert.",
+      "no_installations": "Ingen varmepumpe er knyttet til denne kontoen.",
+      "wrong_account": "Dette er en annen Thermia-konto enn den som er satt opp.",
+      "reauth_successful": "Pålogging vellykket.",
+      "reconfigure_successful": "Kontoen er oppdatert."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Shuntgruppe 1"
+    },
+    "device_circuit_2": {
+      "name": "Shuntgruppe 2"
+    },
+    "device_pool": {
+      "name": "Pool"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Varmtvannstemperatur"
+      },
+      "outdoor_temperature": {
+        "name": "Utetemperatur"
+      },
+      "supply_temperature": {
+        "name": "Turtemperatur"
+      },
+      "desired_supply_temperature": {
+        "name": "Ønsket turtemperatur"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Ønsket systemturtemperatur"
+      },
+      "indoor_temperature": {
+        "name": "Innetemperatur"
+      },
+      "circuit_supply_temperature": {
+        "name": "Turtemperatur"
+      },
+      "hours_compressor": {
+        "name": "Driftstimer kompressor"
+      },
+      "hours_heating": {
+        "name": "Driftstimer varme"
+      },
+      "hours_hot_water": {
+        "name": "Driftstimer varmtvann"
+      },
+      "hours_aux_1": {
+        "name": "Driftstimer tilskuddsvarme 1"
+      },
+      "hours_aux_2": {
+        "name": "Driftstimer tilskuddsvarme 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Varmekurve"
+      },
+      "heating_curve_min": {
+        "name": "Varmekurve minimum"
+      },
+      "heating_curve_max": {
+        "name": "Varmekurve maksimum"
+      },
+      "heating_curve_main": {
+        "name": "Varmekurve (hovedkrets)"
+      },
+      "heating_curve_min_main": {
+        "name": "Varmekurve minimum (hovedkrets)"
+      },
+      "heating_curve_max_main": {
+        "name": "Varmekurve maksimum (hovedkrets)"
+      },
+      "heating_stop": {
+        "name": "Varmestopp"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Varmtvann"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Driftsmodus",
+        "state": {
+          "off": "Av",
+          "auto": "Auto",
+          "compressor": "Kompressor",
+          "auxiliary": "Tilskuddsvarme",
+          "hot_water": "Varmtvann"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Varmtvannsmodus",
+        "state": {
+          "comfort": "Komfort",
+          "economy": "Økonomi",
+          "away": "Borte"
+        }
+      },
+      "circuit_mode": {
+        "name": "Kretsmodus",
+        "state": {
+          "off": "Av",
+          "curve": "Kurve",
+          "constant": "Konstant"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Oppdater navn"
+      },
+      "rediscover": {
+        "name": "Finn registre på nytt"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Skrivebeskyttet modus er på: skriving til varmepumpen er blokkert."
+    },
+    "invalid_value": {
+      "message": "Verdien ble avvist: {detail}"
+    },
+    "write_failed": {
+      "message": "Thermia-skyen godtok ikke endringen: {detail}"
+    },
+    "unknown_register": {
+      "message": "Registeret finnes ikke: {register}"
+    },
+    "service_register": {
+      "message": "Dette registeret er på installatørnivå og kan ikke endres: {register}"
+    },
+    "not_writable": {
+      "message": "Dette registeret kan ikke endres: {register}"
+    },
+    "no_installation": {
+      "message": "Ukjent anlegg for denne oppføringen."
+    },
+    "action_failed": {
+      "message": "Forespørselen til Thermia-skyen mislyktes: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Innstillinger for Thermia Cloud",
+        "description": "Hva vil du endre?",
+        "menu_options": {
+          "general": "Generelt",
+          "registers": "Anlegg og registre",
+          "names": "Navn og språk"
+        }
+      },
+      "general": {
+        "title": "Generelt",
+        "description": "Skrivebeskyttet modus blokkerer all skriving til varmepumpen (entiteter og tjenester). Oppdateringsintervallet trer i kraft etter lagring.",
+        "data": {
+          "scan_interval": "Oppdateringsintervall (sekunder)",
+          "read_only": "Skrivebeskyttet modus",
+          "timeout": "Tidsavbrudd for forespørsel (sekunder)",
+          "debug_attributes": "Legg til rå registerverdier som attributter"
+        },
+        "data_description": {
+          "scan_interval": "Hvor ofte skyen spørres om nye verdier (10–600 sekunder).",
+          "read_only": "Når den er på, kan ingenting skrives til varmepumpen.",
+          "timeout": "Hvor lenge det ventes på ett svar fra skyen.",
+          "debug_attributes": "Legger til register-ID-er og rå verdier i entitetens attributter."
+        }
+      },
+      "registers": {
+        "title": "Anlegg og registre",
+        "description": "Endringer tas i bruk ved å laste integrasjonen på nytt.",
+        "data": {
+          "installations": "Anlegg",
+          "show_hidden": "Vis registre som Thermia skjuler",
+          "expose_unknown": "Vis ukjente registre (som deaktiverte entiteter)"
+        },
+        "data_description": {
+          "installations": "Hvilke anlegg på kontoen som skal brukes.",
+          "show_hidden": "Opprett entiteter selv om Thermias egne regler skjuler dem.",
+          "expose_unknown": "Opprett deaktiverte entiteter for registre som integrasjonen ikke har noen oppføring for."
+        }
+      },
+      "names": {
+        "title": "Navn og språk",
+        "description": "Entitetsnavn bruker våre egne korte navn der vi har dem (engelsk, tsjekkisk) og ellers Thermias tekster. Bruk knappen *Oppdater navn* på enheten for å hente de nyeste tekstene.",
+        "data": {
+          "label_language": "Språk for etiketter"
+        },
+        "data_description": {
+          "label_language": "Språk for entitetsnavn. Automatisk følger språket i Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Integrasjonen kjører ikke akkurat nå. Prøv igjen når den er lastet.",
+      "cannot_connect": "Fikk ikke kontakt med Thermia-skyen. Prøv igjen senere."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Sett register",
+      "description": "Skriv en verdi til et hvilket som helst register, også de uten entitet. De samme reglene som for entiteter gjelder: skrivebeskyttet modus, validering mot skyens grenser, og registre på installatørnivå avvises.",
+      "fields": {
+        "device_id": {
+          "name": "Varmepumpe",
+          "description": "Varmepumpen (anleggsenheten)."
+        },
+        "group": {
+          "name": "Gruppe",
+          "description": "Registergruppe, for eksempel REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Registerets navn eller indeks."
+        },
+        "value": {
+          "name": "Verdi",
+          "description": "Verdien som skal skrives."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatisk (språket i Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia ber deg godta nye vilkår",
+      "description": "Logg inn én gang på online.thermia.se med kontoen som brukes her, og godta de oppdaterte vilkårene. Integrasjonen prøver på nytt automatisk."
+    },
+    "register_vanished": {
+      "title": "Registre mangler i Thermia-skyen",
+      "description": "Skyen har ikke returnert disse registrene på flere dager: {registers}. Entitetene deres forblir utilgjengelige. Bruk *Finn registre på nytt* hvis varmepumpens konfigurasjon er endret, eller fjern entitetene."
+    },
+    "discovery_empty": {
+      "title": "Thermia-skyen returnerte ingen registre",
+      "description": "Ingen registre ble funnet for denne varmepumpen. Sjekk at den er pålogget i Thermia-appen, og trykk deretter på *Finn registre på nytt*."
+    }
+  }
+}

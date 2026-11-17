@@ -179,6 +179,17 @@ Edge cases seen in the live data (cs-CZ):
 - Literal value names ("Comfort") are shown as is.
 - Several registers share one cloud label ("Teplá voda" ×4): curated names plus the planner's collision pass (`ARCHITECTURE.md` §4.3).
 
+### 5.2a Corrections of Thermia's texts (`i18n/overrides/`)
+
+The bundled snapshots are verbatim copies of the cloud's texts and are never edited. Thermia's
+texts have gaps (a quarter of each culture is still English) and a few mistakes, so corrections
+live in `i18n/overrides/<culture>.json` (`{KEY: text}`) and win over the snapshot **and** over a
+refreshed copy. They were produced machine-assisted (one pass per language, with the Czech ones
+reviewed by the maintainer); native-speaker fixes are welcome as pull requests.
+`scripts/clean_overrides.py` normalizes them (drops unknown keys, restores the English unit
+bracket); `tests/catalog/test_translations.py` guards the format. The curated UI/entity names in
+`translations/<language>.json` exist for all 15 languages Thermia offers.
+
 ### 5.3 Refresh on demand
 
 - Button **Refresh names** (device page, diagnostic category). **No automatic/weekly refresh.**

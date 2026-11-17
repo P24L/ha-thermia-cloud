@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Connectez-vous avec votre compte Thermia Online / MyThermia.\n\nIl s'agit d'une intégration non officielle, sans lien avec Thermia ni Danfoss.",
+        "data": {
+          "username": "E-mail",
+          "password": "Mot de passe"
+        },
+        "data_description": {
+          "username": "L'adresse e-mail de votre compte Thermia Online / MyThermia.",
+          "password": "Le mot de passe de ce compte. Il est conservé dans Home Assistant pour se reconnecter lorsque la session enregistrée expire."
+        }
+      },
+      "installations": {
+        "title": "Installations",
+        "description": "Choisissez les pompes à chaleur à ajouter. Vous pourrez le modifier plus tard dans les options.",
+        "data": {
+          "installations": "Installations"
+        },
+        "data_description": {
+          "installations": "Pompes à chaleur de ce compte à ajouter."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Se reconnecter",
+        "description": "Le cloud Thermia a refusé le mot de passe enregistré pour {username}. Saisissez le mot de passe actuel.",
+        "data": {
+          "password": "Mot de passe"
+        },
+        "data_description": {
+          "password": "Le mot de passe actuel de ce compte."
+        }
+      },
+      "reconfigure": {
+        "title": "Compte",
+        "description": "Modifiez l'e-mail ou le mot de passe. Il doit s'agir du même compte Thermia.",
+        "data": {
+          "username": "E-mail",
+          "password": "Mot de passe"
+        },
+        "data_description": {
+          "username": "L'adresse e-mail du même compte Thermia.",
+          "password": "Le mot de passe actuel."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "L'e-mail ou le mot de passe a été refusé.",
+      "cannot_connect": "Impossible de joindre le cloud Thermia. Réessayez plus tard.",
+      "policy_acceptance_required": "Connectez-vous une fois sur online.thermia.se et acceptez les conditions mises à jour, puis réessayez.",
+      "unknown": "Erreur inattendue. Consultez le journal de Home Assistant."
+    },
+    "abort": {
+      "already_configured": "Ce compte Thermia est déjà configuré.",
+      "no_installations": "Aucune pompe à chaleur n'est liée à ce compte.",
+      "wrong_account": "Ce compte Thermia est différent de celui qui est configuré.",
+      "reauth_successful": "Reconnexion réussie.",
+      "reconfigure_successful": "Compte mis à jour."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Circuit mélangé 1"
+    },
+    "device_circuit_2": {
+      "name": "Circuit mélangé 2"
+    },
+    "device_pool": {
+      "name": "Piscine"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Température ECS"
+      },
+      "outdoor_temperature": {
+        "name": "Température extérieure"
+      },
+      "supply_temperature": {
+        "name": "Température de départ"
+      },
+      "desired_supply_temperature": {
+        "name": "Température de départ souhaitée"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Température de départ circuit souhaitée"
+      },
+      "indoor_temperature": {
+        "name": "Température intérieure"
+      },
+      "circuit_supply_temperature": {
+        "name": "Température de départ"
+      },
+      "hours_compressor": {
+        "name": "Heures de fonctionnement du compresseur"
+      },
+      "hours_heating": {
+        "name": "Heures de fonctionnement du chauffage"
+      },
+      "hours_hot_water": {
+        "name": "Heures de fonctionnement de l'ECS"
+      },
+      "hours_aux_1": {
+        "name": "Heures de fonctionnement du chauffage d'appoint 1"
+      },
+      "hours_aux_2": {
+        "name": "Heures de fonctionnement du chauffage d'appoint 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Courbe de chauffe"
+      },
+      "heating_curve_min": {
+        "name": "Courbe de chauffe minimum"
+      },
+      "heating_curve_max": {
+        "name": "Courbe de chauffe maximum"
+      },
+      "heating_curve_main": {
+        "name": "Courbe de chauffe (circuit principal)"
+      },
+      "heating_curve_min_main": {
+        "name": "Courbe de chauffe minimum (circuit principal)"
+      },
+      "heating_curve_max_main": {
+        "name": "Courbe de chauffe maximum (circuit principal)"
+      },
+      "heating_stop": {
+        "name": "Température d'arrêt du chauffage"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "ECS"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Mode de fonctionnement",
+        "state": {
+          "off": "Arrêt",
+          "auto": "Auto",
+          "compressor": "Compresseur",
+          "auxiliary": "Chauffage d'appoint",
+          "hot_water": "ECS"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Mode ECS",
+        "state": {
+          "comfort": "Confort",
+          "economy": "Éco",
+          "away": "Absent"
+        }
+      },
+      "circuit_mode": {
+        "name": "Mode du circuit",
+        "state": {
+          "off": "Arrêt",
+          "curve": "Courbe",
+          "constant": "Constante"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Actualiser les noms"
+      },
+      "rediscover": {
+        "name": "Redécouvrir les registres"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Le mode lecture seule est activé : l'écriture vers la pompe à chaleur est bloquée."
+    },
+    "invalid_value": {
+      "message": "Valeur refusée : {detail}"
+    },
+    "write_failed": {
+      "message": "Le cloud Thermia n'a pas accepté la modification : {detail}"
+    },
+    "unknown_register": {
+      "message": "Registre inconnu : {register}"
+    },
+    "service_register": {
+      "message": "Ce registre est réservé à l'installateur et ne peut pas être modifié : {register}"
+    },
+    "not_writable": {
+      "message": "Ce registre ne peut pas être modifié : {register}"
+    },
+    "no_installation": {
+      "message": "Installation inconnue pour cette entrée."
+    },
+    "action_failed": {
+      "message": "La requête vers le cloud Thermia a échoué : {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options de Thermia Cloud",
+        "description": "Que souhaitez-vous modifier ?",
+        "menu_options": {
+          "general": "Général",
+          "registers": "Installations et registres",
+          "names": "Noms et langue"
+        }
+      },
+      "general": {
+        "title": "Général",
+        "description": "Le mode lecture seule bloque toute écriture vers la pompe à chaleur (entités et services). L'intervalle de mise à jour prend effet après l'enregistrement.",
+        "data": {
+          "scan_interval": "Intervalle de mise à jour (secondes)",
+          "read_only": "Mode lecture seule",
+          "timeout": "Délai d'attente des requêtes (secondes)",
+          "debug_attributes": "Ajouter les valeurs brutes des registres comme attributs"
+        },
+        "data_description": {
+          "scan_interval": "Fréquence à laquelle le cloud est interrogé pour obtenir de nouvelles valeurs (10 à 600 secondes).",
+          "read_only": "Si activé, rien ne peut être écrit vers la pompe à chaleur.",
+          "timeout": "Durée d'attente d'une réponse du cloud.",
+          "debug_attributes": "Ajoute les identifiants de registre et les valeurs brutes aux attributs des entités."
+        }
+      },
+      "registers": {
+        "title": "Installations et registres",
+        "description": "Les modifications sont appliquées en rechargeant l'intégration.",
+        "data": {
+          "installations": "Installations",
+          "show_hidden": "Afficher les registres masqués par Thermia",
+          "expose_unknown": "Exposer les registres inconnus (comme entités désactivées)"
+        },
+        "data_description": {
+          "installations": "Quelles installations du compte utiliser.",
+          "show_hidden": "Crée des entités même lorsque les règles propres à Thermia les masquent.",
+          "expose_unknown": "Crée des entités désactivées pour les registres que cette intégration ne connaît pas."
+        }
+      },
+      "names": {
+        "title": "Noms et langue",
+        "description": "Les noms des entités utilisent nos propres noms courts lorsqu'ils existent (anglais, tchèque) et sinon les textes de Thermia. Utilisez le bouton *Actualiser les noms* de l'appareil pour télécharger les derniers textes.",
+        "data": {
+          "label_language": "Langue des libellés"
+        },
+        "data_description": {
+          "label_language": "Langue des noms d'entités. Automatique suit la langue de Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "L'intégration n'est pas en cours d'exécution. Réessayez une fois qu'elle est chargée.",
+      "cannot_connect": "Impossible de joindre le cloud Thermia. Réessayez plus tard."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Définir un registre",
+      "description": "Écrit une valeur dans n'importe quel registre, y compris ceux sans entité. Les mêmes règles que pour les entités s'appliquent : mode lecture seule, validation selon les limites du cloud, registres réservés à l'installateur refusés.",
+      "fields": {
+        "device_id": {
+          "name": "Pompe à chaleur",
+          "description": "La pompe à chaleur (appareil de l'installation)."
+        },
+        "group": {
+          "name": "Groupe",
+          "description": "Groupe de registres, par exemple REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Registre",
+          "description": "Nom ou index du registre."
+        },
+        "value": {
+          "name": "Valeur",
+          "description": "La valeur à écrire."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatique (langue de Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia vous demande d'accepter de nouvelles conditions",
+      "description": "Connectez-vous une fois sur online.thermia.se avec le compte utilisé ici et acceptez les conditions mises à jour. L'intégration réessaie automatiquement."
+    },
+    "register_vanished": {
+      "title": "Registres manquants dans le cloud Thermia",
+      "description": "Ces registres ne sont plus renvoyés par le cloud depuis plusieurs jours : {registers}. Leurs entités restent indisponibles. Utilisez *Redécouvrir les registres* si la configuration de la pompe à chaleur a changé, ou supprimez les entités."
+    },
+    "discovery_empty": {
+      "title": "Le cloud Thermia n'a renvoyé aucun registre",
+      "description": "Aucun registre n'a été trouvé pour cette pompe à chaleur. Vérifiez qu'elle est en ligne dans l'application Thermia, puis appuyez sur *Redécouvrir les registres*."
+    }
+  }
+}

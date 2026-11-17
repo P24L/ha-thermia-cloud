@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Meld je aan met je Thermia Online- / MyThermia-account.\n\nDit is een onofficiële integratie, niet gelieerd aan Thermia of Danfoss.",
+        "data": {
+          "username": "E-mailadres",
+          "password": "Wachtwoord"
+        },
+        "data_description": {
+          "username": "Het e-mailadres van je Thermia Online- / MyThermia-account.",
+          "password": "Het wachtwoord van dit account. Het wordt in Home Assistant bewaard om opnieuw aan te melden wanneer de opgeslagen sessie verloopt."
+        }
+      },
+      "installations": {
+        "title": "Installaties",
+        "description": "Kies welke warmtepompen je wilt toevoegen. Je kunt dit later wijzigen in de opties.",
+        "data": {
+          "installations": "Installaties"
+        },
+        "data_description": {
+          "installations": "Warmtepompen van dit account die worden toegevoegd."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Opnieuw aanmelden",
+        "description": "De Thermia-cloud heeft het opgeslagen wachtwoord voor {username} geweigerd. Voer het huidige wachtwoord in.",
+        "data": {
+          "password": "Wachtwoord"
+        },
+        "data_description": {
+          "password": "Het huidige wachtwoord van dit account."
+        }
+      },
+      "reconfigure": {
+        "title": "Account",
+        "description": "Wijzig het e-mailadres of wachtwoord. Het moet hetzelfde Thermia-account zijn.",
+        "data": {
+          "username": "E-mailadres",
+          "password": "Wachtwoord"
+        },
+        "data_description": {
+          "username": "Het e-mailadres van hetzelfde Thermia-account.",
+          "password": "Het huidige wachtwoord."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Het e-mailadres of wachtwoord is geweigerd.",
+      "cannot_connect": "De Thermia-cloud is niet bereikbaar. Probeer het later opnieuw.",
+      "policy_acceptance_required": "Meld je één keer aan op online.thermia.se en accepteer de bijgewerkte voorwaarden. Probeer het daarna opnieuw.",
+      "unknown": "Onverwachte fout. Zie het Home Assistant-logboek."
+    },
+    "abort": {
+      "already_configured": "Dit Thermia-account is al ingesteld.",
+      "no_installations": "Er is geen warmtepomp aan dit account gekoppeld.",
+      "wrong_account": "Dit is een ander Thermia-account dan het ingestelde.",
+      "reauth_successful": "Opnieuw aangemeld.",
+      "reconfigure_successful": "Account bijgewerkt."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Mengcircuit 1"
+    },
+    "device_circuit_2": {
+      "name": "Mengcircuit 2"
+    },
+    "device_pool": {
+      "name": "Zwembad"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Warmwatertemperatuur"
+      },
+      "outdoor_temperature": {
+        "name": "Buitentemperatuur"
+      },
+      "supply_temperature": {
+        "name": "Aanvoertemperatuur"
+      },
+      "desired_supply_temperature": {
+        "name": "Gewenste aanvoertemperatuur"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Gewenste systeemaanvoertemperatuur"
+      },
+      "indoor_temperature": {
+        "name": "Binnentemperatuur"
+      },
+      "circuit_supply_temperature": {
+        "name": "Aanvoertemperatuur"
+      },
+      "hours_compressor": {
+        "name": "Draaiuren compressor"
+      },
+      "hours_heating": {
+        "name": "Draaiuren verwarming"
+      },
+      "hours_hot_water": {
+        "name": "Draaiuren warm water"
+      },
+      "hours_aux_1": {
+        "name": "Draaiuren bijverwarming 1"
+      },
+      "hours_aux_2": {
+        "name": "Draaiuren bijverwarming 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Stooklijn"
+      },
+      "heating_curve_min": {
+        "name": "Stooklijn minimum"
+      },
+      "heating_curve_max": {
+        "name": "Stooklijn maximum"
+      },
+      "heating_curve_main": {
+        "name": "Stooklijn (hoofdcircuit)"
+      },
+      "heating_curve_min_main": {
+        "name": "Stooklijn minimum (hoofdcircuit)"
+      },
+      "heating_curve_max_main": {
+        "name": "Stooklijn maximum (hoofdcircuit)"
+      },
+      "heating_stop": {
+        "name": "Verwarmingsstop-temperatuur"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Warm water"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Bedrijfsmodus",
+        "state": {
+          "off": "Uit",
+          "auto": "Auto",
+          "compressor": "Compressor",
+          "auxiliary": "Bijverwarming",
+          "hot_water": "Warm water"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Warmwatermodus",
+        "state": {
+          "comfort": "Comfort",
+          "economy": "Eco",
+          "away": "Afwezig"
+        }
+      },
+      "circuit_mode": {
+        "name": "Circuitmodus",
+        "state": {
+          "off": "Uit",
+          "curve": "Curve",
+          "constant": "Constant"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Namen vernieuwen"
+      },
+      "rediscover": {
+        "name": "Registers opnieuw detecteren"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Alleen-lezenmodus is actief: schrijven naar de warmtepomp is geblokkeerd."
+    },
+    "invalid_value": {
+      "message": "Waarde geweigerd: {detail}"
+    },
+    "write_failed": {
+      "message": "De Thermia-cloud heeft de wijziging niet geaccepteerd: {detail}"
+    },
+    "unknown_register": {
+      "message": "Onbekend register: {register}"
+    },
+    "service_register": {
+      "message": "Dit register is alleen voor installateurs en kan niet worden gewijzigd: {register}"
+    },
+    "not_writable": {
+      "message": "Dit register kan niet worden gewijzigd: {register}"
+    },
+    "no_installation": {
+      "message": "Onbekende installatie voor deze invoer."
+    },
+    "action_failed": {
+      "message": "Het verzoek aan de Thermia-cloud is mislukt: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Thermia Cloud-opties",
+        "description": "Wat wil je wijzigen?",
+        "menu_options": {
+          "general": "Algemeen",
+          "registers": "Installaties & registers",
+          "names": "Namen & taal"
+        }
+      },
+      "general": {
+        "title": "Algemeen",
+        "description": "De alleen-lezenmodus blokkeert elke schrijfactie naar de warmtepomp (entiteiten en diensten). Het updateinterval gaat in na opslaan.",
+        "data": {
+          "scan_interval": "Updateinterval (seconden)",
+          "read_only": "Alleen-lezenmodus",
+          "timeout": "Time-out voor verzoeken (seconden)",
+          "debug_attributes": "Ruwe registerwaarden als attributen toevoegen"
+        },
+        "data_description": {
+          "scan_interval": "Hoe vaak de cloud om nieuwe waarden wordt gevraagd (10–600 seconden).",
+          "read_only": "Indien ingeschakeld kan er niets naar de warmtepomp worden geschreven.",
+          "timeout": "Hoe lang wordt gewacht op één antwoord van de cloud.",
+          "debug_attributes": "Voegt register-id's en ruwe waarden toe aan de entiteitsattributen."
+        }
+      },
+      "registers": {
+        "title": "Installaties & registers",
+        "description": "Wijzigingen worden toegepast door de integratie opnieuw te laden.",
+        "data": {
+          "installations": "Installaties",
+          "show_hidden": "Door Thermia verborgen registers tonen",
+          "expose_unknown": "Onbekende registers beschikbaar maken (als uitgeschakelde entiteiten)"
+        },
+        "data_description": {
+          "installations": "Welke installaties van het account worden gebruikt.",
+          "show_hidden": "Entiteiten ook aanmaken als de eigen regels van Thermia ze verbergen.",
+          "expose_unknown": "Uitgeschakelde entiteiten aanmaken voor registers waarvoor deze integratie geen invoer heeft."
+        }
+      },
+      "names": {
+        "title": "Namen & taal",
+        "description": "Entiteitsnamen gebruiken onze eigen korte namen waar beschikbaar (Engels, Tsjechisch) en anders de teksten van Thermia. Gebruik de knop *Namen vernieuwen* op het apparaat om de nieuwste teksten te downloaden.",
+        "data": {
+          "label_language": "Taal van de labels"
+        },
+        "data_description": {
+          "label_language": "Taal van de entiteitsnamen. Automatisch volgt de taal van Home Assistant."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "De integratie draait op dit moment niet. Probeer het opnieuw zodra deze is geladen.",
+      "cannot_connect": "De Thermia-cloud is niet bereikbaar. Probeer het later opnieuw."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Register instellen",
+      "description": "Schrijf een waarde naar een willekeurig register, ook als er geen entiteit voor is. Dezelfde regels als voor entiteiten gelden: alleen-lezenmodus, validatie tegen de limieten van de cloud, registers voor installateurs worden geweigerd.",
+      "fields": {
+        "device_id": {
+          "name": "Warmtepomp",
+          "description": "De warmtepomp (installatieapparaat)."
+        },
+        "group": {
+          "name": "Groep",
+          "description": "Registergroep, bijvoorbeeld REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Registernaam of index."
+        },
+        "value": {
+          "name": "Waarde",
+          "description": "De waarde die wordt geschreven."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatisch (taal van Home Assistant)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia vraagt je nieuwe voorwaarden te accepteren",
+      "description": "Meld je één keer aan op online.thermia.se met het hier gebruikte account en accepteer de bijgewerkte voorwaarden. De integratie probeert het automatisch opnieuw."
+    },
+    "register_vanished": {
+      "title": "Registers ontbreken in de Thermia-cloud",
+      "description": "Deze registers zijn al dagen niet door de cloud geleverd: {registers}. Hun entiteiten blijven niet beschikbaar. Gebruik *Registers opnieuw detecteren* als de configuratie van de warmtepomp is gewijzigd, of verwijder de entiteiten."
+    },
+    "discovery_empty": {
+      "title": "De Thermia-cloud heeft geen registers teruggegeven",
+      "description": "Er is geen register gevonden voor deze warmtepomp. Controleer of hij online is in de Thermia-app en druk dan op *Registers opnieuw detecteren*."
+    }
+  }
+}

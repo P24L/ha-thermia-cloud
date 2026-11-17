@@ -1,0 +1,306 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Thermia Cloud",
+        "description": "Logi sisse oma Thermia Online / MyThermia kontoga.\n\nTegemist on mitteametliku integratsiooniga, mis ei ole seotud Thermia ega Danfossiga.",
+        "data": {
+          "username": "E-post",
+          "password": "Parool"
+        },
+        "data_description": {
+          "username": "Sinu Thermia Online / MyThermia konto e-posti aadress.",
+          "password": "Selle konto parool. See salvestatakse Home Assistantis, et saaksid uuesti sisse logida, kui salvestatud seanss aegub."
+        }
+      },
+      "installations": {
+        "title": "Paigaldised",
+        "description": "Vali, millised soojuspumbad lisada. Seda saab hiljem suvandites muuta.",
+        "data": {
+          "installations": "Paigaldised"
+        },
+        "data_description": {
+          "installations": "Selle konto soojuspumbad, mida lisada."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Logi uuesti sisse",
+        "description": "Thermia pilv lükkas kasutaja {username} salvestatud parooli tagasi. Sisesta praegune parool.",
+        "data": {
+          "password": "Parool"
+        },
+        "data_description": {
+          "password": "Selle konto praegune parool."
+        }
+      },
+      "reconfigure": {
+        "title": "Konto",
+        "description": "Muuda e-posti aadressi või parooli. See peab olema sama Thermia konto.",
+        "data": {
+          "username": "E-post",
+          "password": "Parool"
+        },
+        "data_description": {
+          "username": "Sama Thermia konto e-posti aadress.",
+          "password": "Praegune parool."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "E-posti aadress või parool lükati tagasi.",
+      "cannot_connect": "Thermia pilvega ei õnnestunud ühendust luua. Proovi hiljem uuesti.",
+      "policy_acceptance_required": "Logi korraks sisse aadressil online.thermia.se ja nõustu uuendatud tingimustega, seejärel proovi uuesti.",
+      "unknown": "Ootamatu viga. Vaata Home Assistanti logi."
+    },
+    "abort": {
+      "already_configured": "See Thermia konto on juba seadistatud.",
+      "no_installations": "Sellele kontole ei ole ühtegi soojuspumpa seotud.",
+      "wrong_account": "See on teine Thermia konto kui see, mis on seadistatud.",
+      "reauth_successful": "Sisselogimine õnnestus uuesti.",
+      "reconfigure_successful": "Konto on uuendatud."
+    }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Segistikontuur 1"
+    },
+    "device_circuit_2": {
+      "name": "Segistikontuur 2"
+    },
+    "device_pool": {
+      "name": "Bassein"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Kuuma vee temperatuur"
+      },
+      "outdoor_temperature": {
+        "name": "Välistemperatuur"
+      },
+      "supply_temperature": {
+        "name": "Pealevoolu temperatuur"
+      },
+      "desired_supply_temperature": {
+        "name": "Soovitud pealevoolu temperatuur"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Soovitud süsteemi pealevoolu temperatuur"
+      },
+      "indoor_temperature": {
+        "name": "Sisetemperatuur"
+      },
+      "circuit_supply_temperature": {
+        "name": "Pealevoolu temperatuur"
+      },
+      "hours_compressor": {
+        "name": "Kompressori töötunnid"
+      },
+      "hours_heating": {
+        "name": "Kütte töötunnid"
+      },
+      "hours_hot_water": {
+        "name": "Kuuma vee töötunnid"
+      },
+      "hours_aux_1": {
+        "name": "Lisaküttekeha 1 töötunnid"
+      },
+      "hours_aux_2": {
+        "name": "Lisaküttekeha 2 töötunnid"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Küttekõver"
+      },
+      "heating_curve_min": {
+        "name": "Küttekõvera miinimum"
+      },
+      "heating_curve_max": {
+        "name": "Küttekõvera maksimum"
+      },
+      "heating_curve_main": {
+        "name": "Küttekõver (põhikontuur)"
+      },
+      "heating_curve_min_main": {
+        "name": "Küttekõvera miinimum (põhikontuur)"
+      },
+      "heating_curve_max_main": {
+        "name": "Küttekõvera maksimum (põhikontuur)"
+      },
+      "heating_stop": {
+        "name": "Kütte seiskamistemperatuur"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Kuum vesi"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Töörežiim",
+        "state": {
+          "off": "Väljas",
+          "auto": "Auto",
+          "compressor": "Kompressor",
+          "auxiliary": "Lisaküte",
+          "hot_water": "Kuum vesi"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Kuuma vee režiim",
+        "state": {
+          "comfort": "Mugavus",
+          "economy": "Säästu",
+          "away": "Eemal"
+        }
+      },
+      "circuit_mode": {
+        "name": "Kontuuri režiim",
+        "state": {
+          "off": "Väljas",
+          "curve": "Kõver",
+          "constant": "Konstantne"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Värskenda nimed"
+      },
+      "rediscover": {
+        "name": "Tuvasta registrid uuesti"
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Kirjutuskaitse režiim on sees: soojuspumbale kirjutamine on blokeeritud."
+    },
+    "invalid_value": {
+      "message": "Väärtus lükati tagasi: {detail}"
+    },
+    "write_failed": {
+      "message": "Thermia pilv ei võtnud muudatust vastu: {detail}"
+    },
+    "unknown_register": {
+      "message": "Sellist registrit ei ole: {register}"
+    },
+    "service_register": {
+      "message": "See register on paigaldaja tasemel ja seda ei saa muuta: {register}"
+    },
+    "not_writable": {
+      "message": "Seda registrit ei saa muuta: {register}"
+    },
+    "no_installation": {
+      "message": "Selle kirje paigaldis on tundmatu."
+    },
+    "action_failed": {
+      "message": "Päring Thermia pilve ebaõnnestus: {detail}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Thermia Cloud suvandid",
+        "description": "Mida soovid muuta?",
+        "menu_options": {
+          "general": "Üldist",
+          "registers": "Paigaldised ja registrid",
+          "names": "Nimed ja keel"
+        }
+      },
+      "general": {
+        "title": "Üldist",
+        "description": "Kirjutuskaitse režiim blokeerib kõik kirjutamised soojuspumbale (olemid ja teenused). Uuendusintervall jõustub pärast salvestamist.",
+        "data": {
+          "scan_interval": "Uuendusintervall (sekundit)",
+          "read_only": "Kirjutuskaitse režiim",
+          "timeout": "Päringu ajalimiit (sekundit)",
+          "debug_attributes": "Lisa registrite toorväärtused atribuutidena"
+        },
+        "data_description": {
+          "scan_interval": "Kui tihti pilvelt uusi väärtusi küsitakse (10–600 sekundit).",
+          "read_only": "Kui see on sees, ei saa soojuspumbale midagi kirjutada.",
+          "timeout": "Kui kaua ühte pilve vastust oodata.",
+          "debug_attributes": "Lisab registrite ID-d ja toorväärtused olemi atribuutidele."
+        }
+      },
+      "registers": {
+        "title": "Paigaldised ja registrid",
+        "description": "Muudatused rakendatakse integratsiooni taaslaadimisega.",
+        "data": {
+          "installations": "Paigaldised",
+          "show_hidden": "Näita Thermia peidetud registreid",
+          "expose_unknown": "Ava tundmatud registrid (keelatud olemitena)"
+        },
+        "data_description": {
+          "installations": "Millist konto paigaldist kasutada.",
+          "show_hidden": "Loo olemid ka siis, kui Thermia enda reeglid need peidavad.",
+          "expose_unknown": "Loo keelatud olemid registritele, mille kohta sellel integratsioonil kirjet ei ole."
+        }
+      },
+      "names": {
+        "title": "Nimed ja keel",
+        "description": "Olemite nimedes kasutatakse meie enda lühikesi nimesid, kus need on olemas (inglise, tšehhi), ja muidu Thermia tekste. Uusimate tekstide allalaadimiseks kasuta seadme juures nuppu *Värskenda nimed*.",
+        "data": {
+          "label_language": "Siltide keel"
+        },
+        "data_description": {
+          "label_language": "Olemite nimede keel. Automaatne järgib Home Assistanti keelt."
+        }
+      }
+    },
+    "abort": {
+      "entry_not_loaded": "Integratsioon ei tööta praegu. Proovi uuesti, kui see on laaditud.",
+      "cannot_connect": "Thermia pilvega ei õnnestunud ühendust luua. Proovi hiljem uuesti."
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Määra register",
+      "description": "Kirjuta väärtus mis tahes registrisse, sealhulgas neisse, millel olemit pole. Kehtivad samad reeglid mis olemitel: kirjutuskaitse režiim, kontroll pilve piiride vastu, paigaldaja taseme registreid ei muudeta.",
+      "fields": {
+        "device_id": {
+          "name": "Soojuspump",
+          "description": "Soojuspump (paigaldise seade)."
+        },
+        "group": {
+          "name": "Rühm",
+          "description": "Registrirühm, näiteks REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Registri nimi või indeks."
+        },
+        "value": {
+          "name": "Väärtus",
+          "description": "Kirjutatav väärtus."
+        }
+      }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automaatne (Home Assistanti keel)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia palub nõustuda uute tingimustega",
+      "description": "Logi korraks sisse aadressil online.thermia.se siin kasutatava kontoga ja nõustu uuendatud tingimustega. Integratsioon proovib automaatselt uuesti."
+    },
+    "register_vanished": {
+      "title": "Registrid puuduvad Thermia pilves",
+      "description": "Pilv ei ole neid registreid mitme päeva jooksul tagastanud: {registers}. Nende olemid jäävad kättesaamatuks. Kasuta nuppu *Tuvasta registrid uuesti*, kui soojuspumba seadistus muutus, või eemalda need olemid."
+    },
+    "discovery_empty": {
+      "title": "Thermia pilv ei tagastanud ühtegi registrit",
+      "description": "Selle soojuspumba kohta ei leitud ühtegi registrit. Kontrolli, et see on Thermia rakenduses võrgus, seejärel vajuta *Tuvasta registrid uuesti*."
+    }
+  }
+}
