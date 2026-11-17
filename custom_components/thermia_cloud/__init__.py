@@ -303,6 +303,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                 lambda p: labels.label(p.label_key, p.translation_key),
                 lambda p: labels.label(p.group_name),
             )
+            _enable_integration_disabled(hass, installation.id, plan.entities)
             coordinator.set_plans(plan.entities, _needed_groups(hass, plan.entities, discovery))
             _register_devices(device_registry, entry, installation, catalog, plan.entities, labels)
             runtimes.append(
@@ -349,6 +350,27 @@ async def _has_indoor_sensor(api: ThermiaApi, installation_id: int) -> bool | No
 
 def installation_owns(discovery: Discovery, register_id: int) -> bool:
     return any(spec.register_id == register_id for spec in discovery.specs)
+
+
+def _enable_integration_disabled(
+    hass: HomeAssistant, installation_id: int, plans: tuple[EntityPlan, ...]
+) -> None:
+    """Enable entities the integration disabled earlier but the plan now enables.
+
+    Home Assistant remembers the default an entity was created with and never re-reads it, so an
+    entity created before the catalog knew it (or before it was switched on) would stay off for
+    good. Only ``disabled_by = integration`` is touched: an entity the user disabled stays off.
+    """
+    registry = er.async_get(hass)
+    for plan in plans:
+        if not plan.default_enabled:
+            continue
+        entity_id = registry.async_get_entity_id(
+            plan.platform, DOMAIN, f"{installation_id}_{plan.key}"
+        )
+        entity = registry.async_get(entity_id) if entity_id else None
+        if entity is not None and entity.disabled_by is er.RegistryEntryDisabler.INTEGRATION:
+            registry.async_update_entity(entity_id, disabled_by=None)
 
 
 def _needed_groups(

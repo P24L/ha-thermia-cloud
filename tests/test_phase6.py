@@ -417,3 +417,40 @@ async def test_indoor_entity_exists_with_a_sensor_or_unknown_status(
     api.has_indoor_sensor = None  # status unreadable / key missing: do not hide anything
     await setup(hass, make_entry(hass))
     assert er.async_get(hass).async_get_entity_id("sensor", DOMAIN, f"{INSTALLATION_ID}_{indoor}")
+
+
+# -- entities disabled earlier by the integration -------------------------------------------------
+
+
+def _preregister(hass: HomeAssistant, entry: MockConfigEntry, register_index: int, by) -> str:  # type: ignore[no-untyped-def]
+    return (
+        er.async_get(hass)
+        .async_get_or_create(
+            "sensor",
+            DOMAIN,
+            f"{INSTALLATION_ID}_{register_index}",
+            config_entry=entry,
+            disabled_by=by,
+        )
+        .entity_id
+    )
+
+
+async def test_integration_disabled_entities_are_enabled_when_the_plan_enables_them(
+    hass: HomeAssistant,
+) -> None:
+    entry = make_entry(hass)
+    imm1 = register("REG_OPER_TIME_IMM1", "REG_GROUP_OPERATIONAL_TIME")["registerIndex"]
+    eid = _preregister(hass, entry, imm1, er.RegistryEntryDisabler.INTEGRATION)  # catalog was older
+    await setup(hass, entry)
+    assert er.async_get(hass).async_get(eid).disabled_by is None
+    assert hass.states.get(eid).state == "138.0"
+
+
+async def test_entities_the_user_disabled_stay_disabled(hass: HomeAssistant) -> None:
+    entry = make_entry(hass)
+    imm1 = register("REG_OPER_TIME_IMM1", "REG_GROUP_OPERATIONAL_TIME")["registerIndex"]
+    eid = _preregister(hass, entry, imm1, er.RegistryEntryDisabler.USER)
+    await setup(hass, entry)
+    assert er.async_get(hass).async_get(eid).disabled_by is er.RegistryEntryDisabler.USER
+    assert hass.states.get(eid) is None
