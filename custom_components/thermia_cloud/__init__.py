@@ -162,10 +162,17 @@ async def _load_discovery(
 
 
 async def async_rediscover(
-    hass: HomeAssistant, entry: ThermiaConfigEntry, installation_id: int
+    hass: HomeAssistant,
+    entry: ThermiaConfigEntry,
+    installation_id: int,
+    api: ThermiaApi | None = None,
 ) -> None:
-    """*Rediscover registers* button: read everything again, then reload the entry."""
-    fresh = await discover(entry.runtime_data.api, installation_id)
+    """Read everything again and reload the entry (button, or automatic on register drift).
+
+    ``api`` is passed explicitly when the entry is still being set up (``runtime_data`` is not
+    there yet): the first poll can already notice that the cached register set is outdated.
+    """
+    fresh = await discover(api or entry.runtime_data.api, installation_id)
     store = _discovery_store(hass, entry)
     cache = await store.async_load() or {}
     cache[str(installation_id)] = fresh.to_json()
@@ -174,13 +181,13 @@ async def async_rediscover(
 
 
 def _drift_handler(
-    hass: HomeAssistant, entry: ThermiaConfigEntry, installation_id: int
+    hass: HomeAssistant, entry: ThermiaConfigEntry, installation_id: int, api: ThermiaApi
 ) -> Callable[[], None]:
     """Callback for the coordinator: rediscover in the background (never inside a poll)."""
 
     async def rediscover() -> None:
         try:
-            await async_rediscover(hass, entry, installation_id)
+            await async_rediscover(hass, entry, installation_id, api)
         except ThermiaError as err:
             _LOGGER.warning("Automatic rediscovery failed: %s", err)
 
@@ -274,7 +281,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                 if "last_drift" in missing_raw
                 else None,
             )
-            coordinator.on_drift = _drift_handler(hass, entry, installation.id)
+            coordinator.on_drift = _drift_handler(hass, entry, installation.id, api)
             await coordinator.async_config_entry_first_refresh()
             assert coordinator.data is not None
             registers = [

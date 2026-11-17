@@ -167,3 +167,18 @@ async def test_a_later_change_is_rediscovered_after_the_pause(
         async_fire_time_changed(hass)
         await hass.async_block_till_done()
     assert api.calls.count("get_history_registers") == after_first + 1
+
+
+async def test_outdated_cache_is_noticed_by_the_first_poll_of_a_setup(
+    hass: HomeAssistant, api: FakeApi, caplog: pytest.LogCaptureFixture
+) -> None:
+    """E.g. a restart after a mode change: the cached register set is stale from the start."""
+    entry = await setup(hass)
+    api.extra = [new_register()]  # appeared while Home Assistant was not running
+    before = api.calls.count("get_history_registers")
+    caplog.clear()
+    await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert not [r for r in caplog.records if r.levelname == "ERROR"]
+    assert api.calls.count("get_history_registers") == before + 1
+    assert entity_for(hass, "number", NEW_ID)
