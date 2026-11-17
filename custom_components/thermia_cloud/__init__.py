@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from typing import Any
 
@@ -293,7 +293,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                 registers,
                 catalog,
                 history={h.register_index: h for h in discovery.history},
-                options=options,
+                options=replace(
+                    options, has_indoor_sensor=await _has_indoor_sensor(api, installation.id)
+                ),
                 now=datetime.now(),
             )
             names = resolve_name_collisions(
@@ -331,6 +333,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
     entry.runtime_data = ThermiaRuntime(auth, api, catalog, labels, runtimes)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
+
+
+async def _has_indoor_sensor(api: ThermiaApi, installation_id: int) -> bool | None:
+    """``hasIndoorTempSensor`` of the installation status; ``None`` when it cannot be read."""
+    try:
+        status = await api.get_status(installation_id)
+    except AuthError:
+        raise
+    except ThermiaError:
+        return None
+    value = status.get("hasIndoorTempSensor")
+    return value if isinstance(value, bool) else None
 
 
 def installation_owns(discovery: Discovery, register_id: int) -> bool:

@@ -23,6 +23,7 @@ from ..client.visibility import (
 from .schema import Catalog, CatalogRegister, Kind, Risk
 from .units import HOURS_MODIFIER, TEMPERATURE_MODIFIERS, resolve_unit
 
+INDOOR_TEMPERATURE_REGISTER = "REG_INDOOR_TEMPERATURE"
 STATUS_FLAG_PRESENTATIONS = frozenset({"StatusFlags", "StatusFlagsTextInd", "MultipleStatusFlags"})
 SLIDER_MAX_STEPS = 100
 
@@ -43,6 +44,9 @@ def option_key(name: str) -> str:
 class PlannerOptions:
     show_hidden: bool = False  # create entities whose structural visibility is false
     expose_unknown: bool = True  # generic (disabled) entities for registers the catalog lacks
+    # From the installation status (``hasIndoorTempSensor``): False means the pump has no indoor
+    # sensor, so its indoor-temperature register only holds a stale leftover and gets no entity.
+    has_indoor_sensor: bool | None = None
     stale_after: timedelta = timedelta(days=30)
 
 
@@ -182,6 +186,9 @@ def build_plan(
     lookup = RegisterLookup((s.group_name, s.name, v.value) for s, v in registers)
 
     for spec, value in registers:
+        if spec.name == INDOOR_TEMPERATURE_REGISTER and options.has_indoor_sensor is False:
+            notes.append(PlanNote("no_indoor_sensor", spec.name))
+            continue
         entry = catalog.lookup(spec.group_name, spec.name)
         if entry is None and not options.expose_unknown:
             notes.append(PlanNote("unknown_register_hidden", spec.name, spec.group_name))

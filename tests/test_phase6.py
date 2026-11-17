@@ -398,3 +398,22 @@ async def test_status_flags_have_clear_unique_names(hass: HomeAssistant) -> None
         "Test installation 42 Ohřev teplé vody",
         "Test installation 42 Kompresor v provozu",
     } <= flags
+
+
+async def test_no_indoor_sensor_means_no_indoor_entity(hass: HomeAssistant, api: FakeApi) -> None:
+    indoor = register("REG_INDOOR_TEMPERATURE", "REG_GROUP_TEMPERATURES")["registerIndex"]
+    api.has_indoor_sensor = False  # status: hasIndoorTempSensor = false
+    await setup(hass, make_entry(hass))
+    assert (
+        er.async_get(hass).async_get_entity_id("sensor", DOMAIN, f"{INSTALLATION_ID}_{indoor}")
+        is None
+    )
+
+
+async def test_indoor_entity_exists_with_a_sensor_or_unknown_status(
+    hass: HomeAssistant, api: FakeApi
+) -> None:
+    indoor = register("REG_INDOOR_TEMPERATURE", "REG_GROUP_TEMPERATURES")["registerIndex"]
+    api.has_indoor_sensor = None  # status unreadable / key missing: do not hide anything
+    await setup(hass, make_entry(hass))
+    assert er.async_get(hass).async_get_entity_id("sensor", DOMAIN, f"{INSTALLATION_ID}_{indoor}")

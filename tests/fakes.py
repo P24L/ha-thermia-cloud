@@ -37,6 +37,7 @@ class FakeApi:
         self.hide: set[str] = set()  # register names the cloud stops returning
         self.overrides: dict[str, float] = {}  # register name -> value
         self.installation_ids = [INSTALLATION_ID]
+        self.has_indoor_sensor: bool | None = True  # from the installation status
         self.group_calls: list[str] = []  # groups read, in order
         self.writes: list[tuple[int, float]] = []  # (register id, value) the "cloud" accepted
         self.values: dict[int, float] = {}  # register id -> current value (after writes)
@@ -92,6 +93,14 @@ class FakeApi:
         self._check("get_history_registers")
         data = json.loads((FIXTURES / "history_registers.json").read_text())
         return [HistoryRegister.from_json(r) for r in data["registers"]]
+
+    async def get_status(self, installation_id: int) -> dict[str, Any]:
+        self._check("get_status")
+        return (
+            {}
+            if self.has_indoor_sensor is None
+            else {"hasIndoorTempSensor": self.has_indoor_sensor}
+        )
 
     async def get_localization(self, culture: str) -> dict[str, str]:
         self._check("get_localization")

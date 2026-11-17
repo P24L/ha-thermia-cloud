@@ -307,3 +307,13 @@ def test_a_suffix_that_repeats_the_name_is_replaced() -> None:
         lambda p: "Hot water" if p.group_name == "G_HOT" else "Status",
     )
     assert names["1"] == "Hot water (switch)" and names["2"] == "Hot water (Status)"
+
+
+def test_indoor_temperature_is_skipped_when_the_pump_has_no_indoor_sensor() -> None:
+    plan = build_plan(
+        load_registers(), load_catalog(), now=NOW, options=PlannerOptions(has_indoor_sensor=False)
+    )
+    assert by_name(plan, "REG_INDOOR_TEMPERATURE") == []
+    assert any(n.code == "no_indoor_sensor" for n in plan.notes)
+    unknown = build_plan(load_registers(), load_catalog(), now=NOW)
+    assert by_name(unknown, "REG_INDOOR_TEMPERATURE")  # status unknown: nothing is hidden

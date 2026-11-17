@@ -115,6 +115,8 @@ Keys are per name, not per group (`REG_OPERATIONMODE` has one label). Examples (
 
 - ✅ **Operation mode and hot water** (2026-11-17): `REG_OPERATIONMODE` value 4 (`HOT_WATER`) is returned with `visible: false` on this pump, so no "hot water only" mode is offered; the maintainer's newer app does it with the hot-water toggle. Observed with hot water ON and operation mode OFF: `COMP_STATUS_ITEC` = 0 (nothing running) at least in the first minutes.
 
+- ✅ `GET …/installationstatus/{id}/status` carries `hasIndoorTempSensor` (false on the maintainer's pump). The indoor-temperature register is still returned (a stale 2024 value), so the integration reads the flag at setup and skips `REG_INDOOR_TEMPERATURE` when it is `false`; unknown/unreadable status hides nothing.
+
 ## 9. Not yet explored
 
 Alarms/events payloads, calendar/schedule registers, data-history download, smart-tariff features, the newer `api-prod.thermia.com` API, other profile families (Genesis, Atlas, Diplomat, ATEC) — fixtures from community diagnostics will tell.
