@@ -7,6 +7,10 @@
         "data": {
           "username": "E-mail",
           "password": "Password"
+        },
+        "data_description": {
+          "username": "The e-mail address of your Thermia Online / MyThermia account.",
+          "password": "The password of that account. It is stored in Home Assistant to sign in again when the saved session expires."
         }
       },
       "installations": {
@@ -14,6 +18,9 @@
         "description": "Choose which heat pumps to add. You can change this later in the options.",
         "data": {
           "installations": "Installations"
+        },
+        "data_description": {
+          "installations": "Heat pumps of this account to add."
         }
       },
       "reauth_confirm": {
@@ -21,6 +28,9 @@
         "description": "The Thermia cloud rejected the saved password for {username}. Enter the current password.",
         "data": {
           "password": "Password"
+        },
+        "data_description": {
+          "password": "The current password of this account."
         }
       },
       "reconfigure": {
@@ -29,6 +39,10 @@
         "data": {
           "username": "E-mail",
           "password": "Password"
+        },
+        "data_description": {
+          "username": "The e-mail address of the same Thermia account.",
+          "password": "The current password."
         }
       }
     },
@@ -206,6 +220,12 @@
           "read_only": "Read-only mode",
           "timeout": "Request timeout (seconds)",
           "debug_attributes": "Add raw register values as attributes"
+        },
+        "data_description": {
+          "scan_interval": "How often the cloud is asked for new values (10–600 seconds).",
+          "read_only": "When on, nothing can be written to the heat pump.",
+          "timeout": "How long to wait for one answer from the cloud.",
+          "debug_attributes": "Adds register ids and raw values to the entity attributes."
         }
       },
       "registers": {
@@ -215,6 +235,11 @@
           "installations": "Installations",
           "show_hidden": "Show registers hidden by Thermia",
           "expose_unknown": "Expose unknown registers (as disabled entities)"
+        },
+        "data_description": {
+          "installations": "Which installations of the account to use.",
+          "show_hidden": "Create entities even when Thermia's own rules hide them.",
+          "expose_unknown": "Create disabled entities for registers this integration has no entry for."
         }
       },
       "names": {
@@ -222,6 +247,9 @@
         "description": "Entity names use our own short names where we have them (English, Czech) and Thermia's texts otherwise. Use the *Refresh names* button on the device to download the latest texts.",
         "data": {
           "label_language": "Label language"
+        },
+        "data_description": {
+          "label_language": "Language of entity names. Automatic follows the Home Assistant language."
         }
       }
     },

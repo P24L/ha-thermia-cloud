@@ -7,6 +7,10 @@
         "data": {
           "username": "E-mail",
           "password": "Heslo"
+        },
+        "data_description": {
+          "username": "E-mail účtu Thermia Online / MyThermia.",
+          "password": "Heslo k tomuto účtu. Je uloženo v Home Assistantu, aby se šlo znovu přihlásit, až uložené přihlášení vyprší."
         }
       },
       "installations": {
@@ -14,6 +18,9 @@
         "description": "Vyberte, která tepelná čerpadla přidat. Výběr můžete později změnit v možnostech.",
         "data": {
           "installations": "Instalace"
+        },
+        "data_description": {
+          "installations": "Tepelná čerpadla tohoto účtu, která se mají přidat."
         }
       },
       "reauth_confirm": {
@@ -21,6 +28,9 @@
         "description": "Cloud Thermia odmítl uložené heslo pro {username}. Zadejte aktuální heslo.",
         "data": {
           "password": "Heslo"
+        },
+        "data_description": {
+          "password": "Aktuální heslo k tomuto účtu."
         }
       },
       "reconfigure": {
@@ -29,6 +39,10 @@
         "data": {
           "username": "E-mail",
           "password": "Heslo"
+        },
+        "data_description": {
+          "username": "E-mail téhož účtu Thermia.",
+          "password": "Aktuální heslo."
         }
       }
     },
@@ -206,6 +220,12 @@
           "read_only": "Režim jen pro čtení",
           "timeout": "Časový limit požadavku (sekundy)",
           "debug_attributes": "Přidat surové hodnoty registrů jako atributy"
+        },
+        "data_description": {
+          "scan_interval": "Jak často se cloud ptá na nové hodnoty (10–600 sekund).",
+          "read_only": "Když je zapnuto, nelze do tepelného čerpadla nic zapsat.",
+          "timeout": "Jak dlouho čekat na jednu odpověď z cloudu.",
+          "debug_attributes": "Přidá ke atributům entit id registrů a surové hodnoty."
         }
       },
       "registers": {
@@ -215,6 +235,11 @@
           "installations": "Instalace",
           "show_hidden": "Zobrazit registry skryté Thermií",
           "expose_unknown": "Zpřístupnit neznámé registry (jako vypnuté entity)"
+        },
+        "data_description": {
+          "installations": "Které instalace účtu používat.",
+          "show_hidden": "Vytvořit entity i tehdy, když je pravidla Thermie skrývají.",
+          "expose_unknown": "Vytvořit vypnuté entity pro registry, které integrace nezná."
         }
       },
       "names": {
@@ -222,6 +247,9 @@
         "description": "Názvy entit používají naše krátké názvy, kde je máme (angličtina, čeština), jinak texty Thermie. Nejnovější texty stáhnete tlačítkem *Obnovit názvy* na zařízení.",
         "data": {
           "label_language": "Jazyk názvů"
+        },
+        "data_description": {
+          "label_language": "Jazyk názvů entit. Automaticky se řídí jazykem Home Assistantu."
         }
       }
     },
