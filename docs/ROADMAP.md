@@ -54,7 +54,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 3 — Visibility, catalog, planner, labels
 
-- [ ] P3.1 `client/visibility.py` — parser + evaluator; **structural vs value-based** split; unresolved reference = visible (recorded); same-group name resolution; table-driven tests from `history_registers.json`
+- [x] P3.1 `client/visibility.py` — parser + evaluator; **structural vs value-based** split; unresolved reference = visible (recorded); same-group name resolution; table-driven tests from `history_registers.json`
 - [ ] P3.2 `catalog/schema.py` + `loader.py` (YAML, executor): `GROUP/NAME` → `NAME` lookup (plain `NAME` rejected when the name occurs in several groups), per-register `device:`, `translation_key`, default device `main`
 - [ ] P3.3 `catalog/catalog.yaml` — initial content: the 26 iTec registers (incl. decisions: `REG_ACTIVATE_CIRC1` = select Curve/Constant, `risk: heating`; both `REG_OPERATIONMODE` as selects; `REG_OPER_DATA_DISTR_CIR1` on circuit 1; status flags enabled) + registers known from upstream (`REG_BRINE_*`, `REG_RETURN_LINE`, `REG_COOL_*`, pool, buffer tank, …)
 - [ ] P3.4 `planner.py` — pure `EntityPlan` builder (generic rules §4, *visible wins* for enums, risk flags, defaults, stale-register rule, name collision pass) + `syrupy` snapshot for the iTec fixture
