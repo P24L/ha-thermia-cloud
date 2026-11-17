@@ -1,6 +1,5 @@
 # pytest-homeassistant-custom-component pins the matching homeassistant release (DECISIONS D7)
 pytest-homeassistant-custom-component==0.13.375
-aioresponses
 syrupy
 ruff
 mypy

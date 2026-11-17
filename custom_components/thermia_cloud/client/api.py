@@ -1,0 +1,54 @@
+"""Read-side API of the Thermia Online cloud (writes follow in roadmap P2.8)."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from .http import ThermiaHttp
+from .models import (
+    Group,
+    Installation,
+    InstallationDetail,
+    RegisterSpec,
+    RegisterValue,
+)
+
+
+class ThermiaApi:
+    def __init__(self, http: ThermiaHttp) -> None:
+        self._http = http
+
+    async def list_installations(self) -> list[Installation]:
+        data = await self._http.request("GET", "/api/v1/installationsInfo")
+        return [Installation.from_json(item) for item in data.get("items", [])]
+
+    async def get_installation(self, installation_id: int) -> InstallationDetail:
+        data = await self._http.request("GET", f"/api/v1/installations/{installation_id}")
+        return InstallationDetail.from_json(data)
+
+    async def get_groups(self, profile_id: int) -> list[Group]:
+        data = await self._http.request("GET", f"/api/v1/installationprofiles/{profile_id}/groups")
+        return [Group.from_json(item) for item in data]
+
+    async def get_group_registers(
+        self, installation_id: int, group_name: str
+    ) -> list[tuple[RegisterSpec, RegisterValue]]:
+        """Registers of a group. An unavailable group is ``200 []``: an empty list, not an error."""
+        data: list[dict[str, Any]] = await self._http.request(
+            "GET", f"/api/v1/Registers/Installations/{installation_id}/Groups/{group_name}"
+        )
+        return [(RegisterSpec.from_json(item), RegisterValue.from_json(item)) for item in data]
+
+    async def get_status(self, installation_id: int) -> dict[str, Any]:
+        result: dict[str, Any] = await self._http.request(
+            "GET", f"/api/v1/installationstatus/{installation_id}/status"
+        )
+        return result
+
+    async def get_languages(self) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = await self._http.request("GET", "/api/v1/languages")
+        return result
+
+    async def get_localization(self, culture: str) -> dict[str, str]:
+        data = await self._http.request("GET", f"/api/v1/localization/{culture}")
+        return {item["key"]: item["value"] for item in data.get("resources", [])}

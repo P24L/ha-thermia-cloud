@@ -48,6 +48,8 @@ Observed behaviour:
 | Push | `wss://{apiBaseUrl host}/ws` | ⚠️ JSON-RPC 2.0 client exists in the web app (`Login{jwt}`, `Subscribe{installationId, registerIds}`, notification `valuesChanged{registerId, displayValue, minDisplayValue, maxDisplayValue, queueId, prioValue, prioUuid}`). Gated by `isWebSocketEnabled` (false) and `/ws` currently answers **404**. |
 | "New" API | `https://api-prod.thermia.com/api/prod/user` | ❓ Appears only in `authConfig`; gateway answers JSON 404 for every route we tried; not used by the web app. Needs mobile-app traffic capture to learn more. |
 
+Response shapes (2026-11-17, key names only): `installationsInfo` items carry `id`, `name`, `model`, `deviceId`, `serialNumber`, `macAddress`, `profile{}`, `status{}`, `retailerId`, `isOnline`, `lastOnline`, `retailerAccess`, `deviceConnectionType`, `firmwareVersion`, `owner`, `location{}`. `installations/{id}` adds `installationProfileId`, `timeZoneId`, `address{}`, `hotwater{status}`, `heating{status}`, `hasLinkUnit`. `authConfig.authorities.signIn` is a plain string. Register `timeStamp` has **no zone**; `timeZoneId` of the installation is the likely reference (❓ unverified).
+
 ## 4. Register specification (what the cloud tells us) ✅
 
 Per register in a group response:

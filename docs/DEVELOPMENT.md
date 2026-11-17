@@ -10,7 +10,7 @@ HA needs Python ≥ 3.14 — use `uv` to get its own interpreter, don't touch th
 cd ~/dev/ha-thermia-cloud
 uv venv --python 3.14
 source .venv/bin/activate
-uv pip install -r requirements_test.txt     # pytest-homeassistant-custom-component, ruff, mypy, syrupy, aioresponses
+uv pip install -r requirements_test.txt     # pytest-homeassistant-custom-component, ruff, mypy, syrupy
 pytest -q
 ```
 
@@ -22,7 +22,7 @@ Tooling: `ruff` (lint + format), `mypy --strict` for `client/` and `catalog/`, `
 
 | Layer | Tool | What |
 |---|---|---|
-| Client unit | `pytest` + `aioresponses` | auth flow against recorded HTML/JSON, 401 → re-auth → retry, 429/5xx backoff, typed errors, write validation, `ValueSource` fallbacks |
+| Client unit | `pytest` + local fake aiohttp server (`tests/client/conftest.py`; `aioresponses` 0.7.9 does not work with aiohttp 3.14) | auth flow against recorded HTML/JSON, 401 → re-auth → retry, 429/5xx backoff, typed errors, write validation, `ValueSource` fallbacks |
 | Visibility DSL | `pytest` (table-driven) | every condition seen in `history_registers.json` + malformed input |
 | Catalog | `pytest` | schema valid; every key used exists in some fixture or is flagged "family-only" |
 | Planner | `pytest` + `syrupy` snapshots | `tests/fixtures/itec_profile_1005/` → exact entity set (platform, key, unit, default_enabled, device) |
