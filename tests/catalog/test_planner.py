@@ -1,5 +1,4 @@
 import json
-import os
 from dataclasses import asdict, replace
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +22,8 @@ from custom_components.thermia_cloud.client.models import (
     RegisterSpec,
     RegisterValue,
 )
+
+from .golden import assert_golden
 
 FIXTURES = Path(__file__).parent.parent / "fixtures" / "itec_profile_1005"
 NOW = datetime(2026, 11, 17, 12, 0)
@@ -52,23 +53,6 @@ def by_name(plan, name: str, group: str | None = None) -> list[EntityPlan]:  # t
         for e in plan.entities
         if e.register_name == name and (group is None or e.group_name == group)
     ]
-
-
-GOLDEN = Path(__file__).parent / "golden"
-
-
-def assert_golden(name: str, data: object) -> None:
-    """Compare with ``golden/<name>.json``; run with ``UPDATE_GOLDEN=1`` to rewrite it.
-
-    Plain JSON instead of a snapshot library: readable in a pull request and the same on every
-    platform.
-    """
-    actual = json.dumps(data, indent=1, sort_keys=True, ensure_ascii=False, default=list) + "\n"
-    path = GOLDEN / f"{name}.json"
-    if os.environ.get("UPDATE_GOLDEN"):
-        path.parent.mkdir(exist_ok=True)
-        path.write_text(actual, encoding="utf-8")
-    assert path.read_text(encoding="utf-8") == actual, f"{name} changed (UPDATE_GOLDEN=1 to accept)"
 
 
 def test_itec_plan_matches_the_golden_file(plan) -> None:  # type: ignore[no-untyped-def]
@@ -407,3 +391,31 @@ def test_display_precision_is_capped_at_two_decimals() -> None:
     odd = _synthetic("REG_X_FRACTIONAL", presentation="Integer", isReadOnly=True, step=0.0167)
     [entity] = build_plan([odd], load_catalog(), now=NOW).entities
     assert entity.platform == "sensor" and entity.display_precision == 2
+
+
+def test_a_two_value_enum_is_a_switch_only_when_it_is_off_and_on() -> None:
+    def names(first: str, second: str) -> list[dict[str, object]]:
+        return [
+            {"name": first, "value": 0, "visible": True, "isReadonly": False, "confirmation": None},
+            {
+                "name": second,
+                "value": 1,
+                "visible": True,
+                "isReadonly": False,
+                "confirmation": None,
+            },
+        ]
+
+    def platform(pair: tuple[str, str]) -> str:
+        enum = _synthetic(
+            "REG_X_TWO",
+            presentation="Enumeration",
+            minValue=0.0,
+            maxValue=1.0,
+            valueNames=names(*pair),
+        )
+        return build_plan([enum], load_catalog(), now=NOW).entities[0].platform
+
+    assert platform(("REG_VALUE_STATUS_OFF", "REG_VALUE_STATUS_ON")) == "switch"
+    assert platform(("OFF", "ON")) == "switch"
+    assert platform(("REG_VALUE_LIGHT", "REG_VALUE_SYSTEM")) == "select"

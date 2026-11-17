@@ -16,3 +16,12 @@ Everything we wrote is distributed under **GPL-3.0-or-later** (see `LICENSE`).
 ## Third-party texts
 
 Label texts (register, group and value names) are downloaded from Thermia's cloud service (its localization endpoint) and redistributed as short UI labels in `custom_components/thermia_cloud/catalog/i18n/`. They remain the property of their owner. If you are the rights holder and object, please open an issue and they will be removed.
+
+## Community dumps used as test fixtures
+
+`tests/fixtures/community/` holds six anonymized dumps of other Thermia model families (ATEC,
+Diplomat, iTec from 2024, NCP). They come from the debug files of
+[`python-thermia-online-api`](https://github.com/klejejs/python-thermia-online-api) (GPL-3.0) and
+were converted with `scripts/import_debug_dump.py`. They were taken with the **older** Thermia
+app/cloud (before September 2026), so they show how other families look, not what the cloud
+returns today. Thank you to the people who shared them.

@@ -1,0 +1,33 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 106040,
+  "groupId": 6,
+  "groupItemId": 50626,
+  "groupItemOrder": 70551,
+  "groupName": "REG_GROUP_COOLING",
+  "groupOrder": 18500,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": false,
+  "maxValue": 30.0,
+  "minValue": 0.0,
+  "modifier": 0,
+  "presentation": "Slider",
+  "registerId": 106040,
+  "registerIndex": 78,
+  "registerName": "REG_SHUNT_COOLING",
+  "registerValue": 18.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-03-14T16:42:55.337",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": null
+ }
+]

@@ -1,0 +1,96 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 30828,
+  "groupId": 23,
+  "groupItemId": 16372,
+  "groupItemOrder": 13500,
+  "groupName": "REG_GROUP_HOT_WATER",
+  "groupOrder": 13500,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": false,
+  "maxValue": 1.0,
+  "minValue": 0.0,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "Enumeration",
+  "registerId": 30828,
+  "registerIndex": 1059,
+  "registerName": "REG_HOT_WATER_STATUS",
+  "registerValue": 1.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2023-12-14T10:27:01.697",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_OFF",
+    "value": 0,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_ON",
+    "value": 1,
+    "visible": true
+   }
+  ]
+ },
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 30847,
+  "groupId": 23,
+  "groupItemId": 16493,
+  "groupItemOrder": 13504,
+  "groupName": "REG_GROUP_HOT_WATER",
+  "groupOrder": 13500,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": false,
+  "maxValue": 1.0,
+  "minValue": 0.0,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "Enumeration",
+  "registerId": 30847,
+  "registerIndex": 926,
+  "registerName": "REG__HOT_WATER_BOOST",
+  "registerValue": 0.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2023-12-14T10:27:01.697",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_OFF",
+    "value": 0,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_ON",
+    "value": 1,
+    "visible": true
+   }
+  ]
+ }
+]

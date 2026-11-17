@@ -1,0 +1,177 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": false,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 6001,
+  "groupId": 2,
+  "groupItemId": 24782,
+  "groupItemOrder": 60010,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": true,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "StatusFlagsTextInd",
+  "registerId": 6001,
+  "registerIndex": 6001,
+  "registerName": "COMP_POWER_STATUS",
+  "registerValue": 0.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-10-13T16:44:36.3641213",
+  "trueText": null,
+  "unit": "0",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_STEP_3KW",
+    "value": 1,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_STEP_6KW",
+    "value": 2,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_STEP_9KW",
+    "value": 4,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_STEP_12KW",
+    "value": 8,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_STEP_15KW",
+    "value": 16,
+    "visible": false
+   }
+  ]
+ },
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": false,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 6002,
+  "groupId": 2,
+  "groupItemId": 24798,
+  "groupItemOrder": 60020,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": true,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "StatusFlagsTextInd",
+  "registerId": 6002,
+  "registerIndex": 6002,
+  "registerName": "COMP_STATUS",
+  "registerValue": 4.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-10-13T16:44:36.3641229",
+  "trueText": null,
+  "unit": "0",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_COMPR",
+    "value": 1,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_BRINEPUMP",
+    "value": 2,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_RADIATORPUMP",
+    "value": 4,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_COOLING",
+    "value": 8,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_HOT_WATER",
+    "value": 16,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_HEATING",
+    "value": 32,
+    "visible": true
+   }
+  ]
+ },
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 106017,
+  "groupId": 2,
+  "groupItemId": 24810,
+  "groupItemOrder": 60040,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 4,
+  "precision": null,
+  "presentation": "Integer",
+  "registerId": 106017,
+  "registerIndex": 25,
+  "registerName": "REG_INTEGRAL_LSD",
+  "registerValue": -80.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-10-13T16:43:45.434",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": null
+ }
+]

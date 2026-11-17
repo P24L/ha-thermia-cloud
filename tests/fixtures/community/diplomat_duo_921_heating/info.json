@@ -1,0 +1,15 @@
+{
+ "createdWhen": "2020-01-02T13:00:44.257",
+ "deviceConnectionType": "Dcm",
+ "hasLinkUnit": false,
+ "heating": {
+  "status": "normal"
+ },
+ "hotwater": {
+  "status": "normal"
+ },
+ "installationProfileId": 1001,
+ "isOnline": true,
+ "lastOnline": "2026-11-06T13:57:06.603",
+ "model": ""
+}

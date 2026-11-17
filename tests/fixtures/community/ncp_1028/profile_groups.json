@@ -1,0 +1,146 @@
+[
+ {
+  "id": 11,
+  "name": "UNDEFINED",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 12,
+  "name": "REG_GROUP_PASSIVE_COOLING",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 13,
+  "name": "REG_ANTI_LEGIONELLA",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 14,
+  "name": "REG_GROUP_OPERATIONAL_OPERATION",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 2,
+  "name": "REG_GROUP_OPERATIONAL_STATUS",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 3,
+  "name": "REG_GROUP_TEMPERATURES",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 10,
+  "name": "REG_GROUP_OPERATIONAL_TIME",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 7,
+  "name": "REG_GROUP_POOL",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 19,
+  "name": "REG_GROUP_HEATING_CURVE",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 18,
+  "name": "REG_GROUP_ROOM_SENSOR",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 9,
+  "name": "REG_GROUP_COMPRESSOR",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 15,
+  "name": "REG_GROUP_HEATING_CURVE1",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 20,
+  "name": "REG_GROUP_HEAT_PUMP",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 22,
+  "name": "REG_GROUP_HEATING_CURVE2",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 23,
+  "name": "REG_GROUP_HOT_WATER",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 24,
+  "name": "TWC",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 25,
+  "name": "REG_GROUP_DEFROSTS",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 26,
+  "name": "REG_GROUP_SMART_GRID",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 27,
+  "name": "REG_GROUP_IMMERSION_HEATER",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 17,
+  "name": "REG_GROUP_OPERATIONAL_DIAGNOSTICS",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 16,
+  "name": "REG_GROUP_SOFTWARE_VERSIONS",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 6,
+  "name": "REG_GROUP_COOLING",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 21,
+  "name": "REG_GROUP_IMMERSION_HEATER_AUX",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 28,
+  "name": "Clear",
+  "parentId": null,
+  "visibility": 1
+ }
+]

@@ -1,0 +1,23 @@
+{
+ "createdWhen": "2018-06-21T00:00:00",
+ "deviceConnectionType": "Dcm",
+ "hasLinkUnit": false,
+ "installationProfileId": 1002,
+ "isOnline": false,
+ "lastOnline": "2024-12-12T17:43:29.775",
+ "model": "",
+ "operationManualUrl": "https://thermia.com/products/thermia-online/",
+ "profile": {
+  "icon": 2,
+  "id": 1002,
+  "name": "DHP AQ",
+  "thermiaName": "ATEC"
+ },
+ "status": {
+  "activeAlarms": 0,
+  "activeCriticalAlarms": 0,
+  "unreadErrors": 0,
+  "unreadInfo": 20,
+  "unreadWarnings": 15
+ }
+}

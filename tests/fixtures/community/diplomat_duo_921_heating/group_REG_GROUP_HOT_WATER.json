@@ -1,0 +1,33 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 106048,
+  "groupId": 23,
+  "groupItemId": 25029,
+  "groupItemOrder": 60480,
+  "groupName": "REG_GROUP_HOT_WATER",
+  "groupOrder": 9500,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": false,
+  "maxValue": 90.0,
+  "minValue": 1.0,
+  "modifier": 0,
+  "presentation": "Slider",
+  "registerId": 106048,
+  "registerIndex": 71,
+  "registerName": "REG_SER_HOT_WATER_TOPH_INTER",
+  "registerValue": 7.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-03-14T16:42:54.256",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": null
+ }
+]

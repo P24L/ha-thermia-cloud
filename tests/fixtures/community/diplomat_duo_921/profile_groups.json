@@ -1,0 +1,74 @@
+[
+ {
+  "id": 14,
+  "name": "REG_GROUP_OPERATIONAL_OPERATION",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 2,
+  "name": "REG_GROUP_OPERATIONAL_STATUS",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 3,
+  "name": "REG_GROUP_TEMPERATURES",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 10,
+  "name": "REG_GROUP_OPERATIONAL_TIME",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 7,
+  "name": "REG_GROUP_POOL",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 19,
+  "name": "REG_GROUP_HEATING_CURVE",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 20,
+  "name": "REG_GROUP_HEAT_PUMP",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 23,
+  "name": "REG_GROUP_HOT_WATER",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 27,
+  "name": "REG_GROUP_IMMERSION_HEATER",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 16,
+  "name": "REG_GROUP_SOFTWARE_VERSIONS",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 52,
+  "name": "REG_GROUP_HEATING_CURVE_2",
+  "parentId": null,
+  "visibility": 1
+ },
+ {
+  "id": 42,
+  "name": "REG_GROUP_CALIBRATION",
+  "parentId": null,
+  "visibility": 1
+ }
+]

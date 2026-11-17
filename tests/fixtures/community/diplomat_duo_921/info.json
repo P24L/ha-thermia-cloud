@@ -1,0 +1,23 @@
+{
+ "createdWhen": "2020-01-02T13:00:44.257",
+ "deviceConnectionType": "Dcm",
+ "hasLinkUnit": false,
+ "installationProfileId": 1001,
+ "isOnline": true,
+ "lastOnline": "2024-10-13T16:44:16.407",
+ "model": "",
+ "operationManualUrl": "https://thermia.com/products/thermia-online/",
+ "profile": {
+  "icon": 1,
+  "id": 1001,
+  "name": "DHP H/L/C 921",
+  "thermiaName": "Diplomat / Diplomat Duo"
+ },
+ "status": {
+  "activeAlarms": 0,
+  "activeCriticalAlarms": 0,
+  "unreadErrors": 0,
+  "unreadInfo": 20,
+  "unreadWarnings": 20
+ }
+}

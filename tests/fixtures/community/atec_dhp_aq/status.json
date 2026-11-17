@@ -1,0 +1,28 @@
+{
+ "dcmVersion": "2.0.17",
+ "deviceConnectionType": "Dcm",
+ "hasIndoorTempSensor": false,
+ "heatingEffect": 20,
+ "heatingEffectRegisters": [
+  null,
+  107000
+ ],
+ "hotWaterRegistryName": "UI_TAP_WATER",
+ "hotWaterTemperature": 53.0,
+ "indoorTemperature": 20.0,
+ "isGaugeDifferenciated": false,
+ "isHeatingEffectSetByUser": false,
+ "isHotWaterActive": true,
+ "isOutdoorTempSensorFunctioning": true,
+ "isReducedHeatingEffectSetByUser": false,
+ "linkIntegrationStatus": false,
+ "outdoorTemperature": 3.0,
+ "programVersion": "3.1.1",
+ "reducedHeatingEffect": 18,
+ "reducedHeatingEffectRegisters": [
+  null,
+  107052
+ ],
+ "roomFactor": 2,
+ "tcVersion": null
+}

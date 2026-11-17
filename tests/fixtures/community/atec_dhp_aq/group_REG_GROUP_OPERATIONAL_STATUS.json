@@ -1,0 +1,116 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 107031,
+  "groupId": 2,
+  "groupItemId": 25108,
+  "groupItemOrder": 70000,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 4,
+  "precision": null,
+  "presentation": "Integer",
+  "registerId": 107031,
+  "registerIndex": 2120,
+  "registerName": "REG_INTEGRAL_LSD",
+  "registerValue": 8.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-12-12T17:01:03.175",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": null
+ },
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": false,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 7002,
+  "groupId": 2,
+  "groupItemId": 25151,
+  "groupItemOrder": 70020,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": true,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "StatusFlagsTextInd",
+  "registerId": 7002,
+  "registerIndex": 7002,
+  "registerName": "COMP_STATUS_ATEC",
+  "registerValue": 2.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-12-14T14:48:00.7195409",
+  "trueText": null,
+  "unit": "0",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_COMPR",
+    "value": 1,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_RADIATORPUMP",
+    "value": 2,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_COOLING",
+    "value": 4,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_HOT_WATER",
+    "value": 8,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_HEATING",
+    "value": 16,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_DEFROST",
+    "value": 32,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "COMP_VALUE_POOL",
+    "value": 64,
+    "visible": false
+   }
+  ]
+ }
+]

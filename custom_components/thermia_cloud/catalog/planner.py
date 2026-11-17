@@ -117,8 +117,9 @@ def _generic_platform(spec: RegisterSpec, notes: list[PlanNote]) -> str | None:
     if spec.presentation == "Enumeration":
         if spec.is_read_only:
             return "sensor"
-        values = {v.value for v in _visible_options(spec)}
-        return "switch" if values == {0, 1} else "select"
+        # a switch only for a real off/on pair; two named modes (e.g. LIGHT/SYSTEM) are a select
+        names = {v.value: option_key(v.name) for v in _visible_options(spec)}
+        return "switch" if names == {0: "off", 1: "on"} else "select"
     if spec.presentation in ("Integer", "Slider"):
         if spec.is_read_only:
             return "sensor"

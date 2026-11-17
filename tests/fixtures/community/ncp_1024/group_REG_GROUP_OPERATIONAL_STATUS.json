@@ -1,0 +1,173 @@
+[
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 30855,
+  "groupId": 2,
+  "groupItemId": 43,
+  "groupItemOrder": 10000,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": 5.0,
+  "minValue": 1.0,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "Enumeration",
+  "registerId": 30855,
+  "registerIndex": 151,
+  "registerName": "REG_OPERATIONMODE",
+  "registerValue": 3.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2023-12-14T10:27:01.697",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": true,
+    "name": "REG_VALUE_OPERATION_MODE_OFF",
+    "value": 1,
+    "visible": true
+   },
+   {
+    "confirmation": "UI_OPERATION_MODE_AUX_HEATER_ONLY_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_SERVICE",
+    "value": 2,
+    "visible": false
+   },
+   {
+    "confirmation": "UI_OPERATION_MODE_AUX_HEATER_ONLY_WARNING",
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_AUX_HEATER_ONLY",
+    "value": 2,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_AUTO",
+    "value": 3,
+    "visible": true
+   }
+  ]
+ },
+ {
+  "canBeShownInGraph": false,
+  "canBeShownInHistory": true,
+  "collapsible": false,
+  "disabledByLink": false,
+  "falseText": null,
+  "graphRegisterIndex": 32205,
+  "groupId": 2,
+  "groupItemId": 14606,
+  "groupItemOrder": 10002,
+  "groupName": "REG_GROUP_OPERATIONAL_STATUS",
+  "groupOrder": 10010,
+  "groupParentId": null,
+  "isComputedRegister": false,
+  "isInvisible": false,
+  "isReadOnly": true,
+  "maxValue": null,
+  "minValue": null,
+  "modifier": 0,
+  "precision": null,
+  "presentation": "MultipleStatusFlags",
+  "registerId": 32205,
+  "registerIndex": 1987,
+  "registerName": "REG_OPERATIONAL_STATUS_PRIORITY_BITMASK",
+  "registerValue": 8.0,
+  "step": 1.0,
+  "stringRegisterValue": null,
+  "timeStamp": "2024-02-24T08:06:59.161",
+  "trueText": null,
+  "unit": "NotSpecified",
+  "valueNames": [
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_MANUAL",
+    "value": 1,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_DEFROST",
+    "value": 2,
+    "visible": false
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_HOTWATER",
+    "value": 4,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_HEAT",
+    "value": 8,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_COOL",
+    "value": 16,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_POOL",
+    "value": 32,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_LEGIONELLA",
+    "value": 64,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_PASSIVE_COOL",
+    "value": 128,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_STANDBY",
+    "value": 512,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_STATUS_NO_DEMAND",
+    "value": 1024,
+    "visible": true
+   },
+   {
+    "confirmation": null,
+    "isReadonly": false,
+    "name": "REG_VALUE_OPERATION_MODE_OFF",
+    "value": 2048,
+    "visible": true
+   }
+  ]
+ }
+]
