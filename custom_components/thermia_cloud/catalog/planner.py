@@ -23,6 +23,7 @@ from ..client.visibility import (
 from .schema import Catalog, CatalogRegister, Kind, Risk
 from .units import HOURS_MODIFIER, TEMPERATURE_MODIFIERS, resolve_unit
 
+MAX_DISPLAY_DECIMALS = 2
 INDOOR_TEMPERATURE_REGISTER = "REG_INDOOR_TEMPERATURE"
 STATUS_FLAG_PRESENTATIONS = frozenset({"StatusFlags", "StatusFlagsTextInd", "MultipleStatusFlags"})
 SLIDER_MAX_STEPS = 100
@@ -133,7 +134,8 @@ def _decimals(step: float | None) -> int | None:
     if step is None or step <= 0:
         return None
     exponent = Decimal(str(step)).normalize().as_tuple().exponent
-    return max(0, -int(exponent)) if isinstance(exponent, int) else None
+    # a step like 0.0167 (1/60) must not give four displayed decimals
+    return min(MAX_DISPLAY_DECIMALS, max(0, -int(exponent))) if isinstance(exponent, int) else None
 
 
 def _choose_platform(

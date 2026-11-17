@@ -142,6 +142,9 @@
     "switch": {
       "hot_water": {
         "name": "Горячая вода"
+      },
+      "hot_water_boost": {
+        "name": "Ускоренный нагрев ГВС"
       }
     },
     "select": {

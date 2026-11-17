@@ -142,6 +142,9 @@
     "switch": {
       "hot_water": {
         "name": "ECS"
+      },
+      "hot_water_boost": {
+        "name": "Boost ECS"
       }
     },
     "select": {

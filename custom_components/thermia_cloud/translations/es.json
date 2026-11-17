@@ -142,6 +142,9 @@
     "switch": {
       "hot_water": {
         "name": "Agua caliente"
+      },
+      "hot_water_boost": {
+        "name": "Refuerzo de ACS"
       }
     },
     "select": {

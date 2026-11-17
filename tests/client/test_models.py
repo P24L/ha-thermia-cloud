@@ -40,3 +40,14 @@ def test_all_fixture_registers_parse() -> None:
             RegisterValue.from_json(raw)
             total += 1
     assert total == 26
+
+
+def test_model_comes_from_the_profile_when_the_account_gives_none() -> None:
+    from custom_components.thermia_cloud.client.models import Installation
+
+    item = {"id": 1, "name": "x", "model": "", "isOnline": True,
+            "profile": {"id": 1005, "name": "IQ", "thermiaName": "iTec"}}  # fmt: skip
+    installation = Installation.from_json(item)
+    assert (installation.model, installation.model_id) == ("iTec", "IQ")
+    assert Installation.from_json({**item, "model": "Own"}).model == "Own"  # an explicit model wins
+    assert Installation.from_json({"id": 2, "isOnline": False}).model == ""  # no profile at all

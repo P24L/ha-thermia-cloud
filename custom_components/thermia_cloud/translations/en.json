@@ -142,6 +142,9 @@
     "switch": {
       "hot_water": {
         "name": "Hot water"
+      },
+      "hot_water_boost": {
+        "name": "Hot water boost"
       }
     },
     "select": {

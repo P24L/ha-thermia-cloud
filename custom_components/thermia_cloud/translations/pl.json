@@ -142,6 +142,9 @@
     "switch": {
       "hot_water": {
         "name": "CWU"
+      },
+      "hot_water_boost": {
+        "name": "Boost CWU"
       }
     },
     "select": {

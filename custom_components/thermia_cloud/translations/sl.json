@@ -142,6 +142,9 @@
     "switch": {
       "hot_water": {
         "name": "Topla voda"
+      },
+      "hot_water_boost": {
+        "name": "Pospešeno ogrevanje tople vode"
       }
     },
     "select": {

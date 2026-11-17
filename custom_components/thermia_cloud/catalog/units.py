@@ -35,4 +35,7 @@ def strip_unit_bracket(label: str) -> str:
 
 
 def resolve_unit(catalog_unit: str | None, modifier: int, en_label: str | None) -> str | None:
-    return catalog_unit or MODIFIER_UNITS.get(modifier) or bracket_unit(en_label)
+    """``unit: ""`` in the catalog means *explicitly unitless* and beats the modifier hint."""
+    if catalog_unit is not None:
+        return catalog_unit or None
+    return MODIFIER_UNITS.get(modifier) or bracket_unit(en_label)

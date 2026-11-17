@@ -441,6 +441,7 @@ def _register_devices(
         identifiers={device_identifier(installation.id, "main")},
         manufacturer="Thermia",
         model=installation.model or None,
+        model_id=installation.model_id,
         name=installation.name or "Thermia heat pump",
         sw_version=installation.firmware_version,
     )

@@ -333,3 +333,77 @@ def test_indoor_temperature_is_skipped_when_the_pump_has_no_indoor_sensor() -> N
     assert any(n.code == "no_indoor_sensor" for n in plan.notes)
     unknown = build_plan(load_registers(), load_catalog(), now=NOW)
     assert by_name(unknown, "REG_INDOOR_TEMPERATURE")  # status unknown: nothing is hidden
+
+
+def _synthetic(name: str, **fields: object) -> tuple[RegisterSpec, RegisterValue]:
+    """A register in the style of the iTec fixture, with fields overridden."""
+    base = json.loads((FIXTURES / "group_REG_GROUP_HEATING_CURVE.json").read_text())[0]
+    raw = {
+        **base,
+        "registerName": name,
+        "registerId": 9_000_001,
+        "registerIndex": 9_000_001,
+        "timeStamp": "2026-11-17T11:00:00",
+        **fields,
+    }
+    return RegisterSpec.from_json(raw), RegisterValue.from_json(raw)
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "REG_HEATING_ROOM_FACTOR",
+        "REG_ROOM_FACTOR",
+        "REG_HEATING_CURVE_PLUS5",
+        "REG_HEATING_CURVE_0",
+        "REG_HEATING_CURVE_MINUS5",
+        "REG_CURVE_MINUS_5",
+    ],
+)
+def test_modifier_1_registers_that_are_not_temperatures_stay_unitless(name: str) -> None:
+    plan = build_plan(
+        [_synthetic(name, modifier=1, minValue=-5.0, maxValue=5.0)], load_catalog(), now=NOW
+    )
+    [entity] = plan.entities
+    assert entity.platform == "number" and entity.unit is None and entity.device_class is None
+    assert entity.risk == "heating" and not entity.default_enabled
+    # the same modifier on an unknown register still means degrees
+    [unknown] = build_plan(
+        [_synthetic("REG_X_UNKNOWN", modifier=1)], load_catalog(), now=NOW
+    ).entities
+    assert unknown.unit == "°C"
+
+
+@pytest.mark.parametrize("name", ["REG_HOT_WATER_BOOST", "REG__HOT_WATER_BOOST"])
+def test_hot_water_boost_is_a_switch_under_both_spellings(name: str) -> None:
+    boost = _synthetic(
+        name,
+        presentation="Enumeration",
+        minValue=0.0,
+        maxValue=1.0,
+        valueNames=[
+            {
+                "name": "REG_VALUE_STATUS_OFF",
+                "value": 0,
+                "visible": True,
+                "isReadonly": False,
+                "confirmation": None,
+            },
+            {
+                "name": "REG_VALUE_STATUS_ON",
+                "value": 1,
+                "visible": True,
+                "isReadonly": False,
+                "confirmation": None,
+            },
+        ],
+    )
+    [entity] = build_plan([boost], load_catalog(), now=NOW).entities
+    assert entity.platform == "switch" and entity.default_enabled
+    assert entity.translation_key == "hot_water_boost" and entity.risk == "none"
+
+
+def test_display_precision_is_capped_at_two_decimals() -> None:
+    odd = _synthetic("REG_X_FRACTIONAL", presentation="Integer", isReadOnly=True, step=0.0167)
+    [entity] = build_plan([odd], load_catalog(), now=NOW).entities
+    assert entity.platform == "sensor" and entity.display_precision == 2

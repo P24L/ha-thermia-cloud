@@ -123,6 +123,45 @@ registers:
     translation_key: hot_water_boost_interval
     state_dependent: true
 
+  # --- registers with modifier 1 that are NOT temperatures (seen in other families' dumps) ---
+  # `unit: ""` = explicitly unitless; without it the modifier hint would make them degrees
+  REG_HEATING_ROOM_FACTOR:
+    kind: number
+    unit: ""
+    risk: heating
+  REG_ROOM_FACTOR:
+    kind: number
+    unit: ""
+    risk: heating
+  REG_HEATING_CURVE_PLUS5:
+    kind: number
+    unit: ""
+    risk: heating
+  REG_HEATING_CURVE_0:
+    kind: number
+    unit: ""
+    risk: heating
+  REG_HEATING_CURVE_MINUS5:
+    kind: number
+    unit: ""
+    risk: heating
+  REG_CURVE_MINUS_5:
+    kind: number
+    unit: ""
+    risk: heating
+
+  # --- hot water boost (the cloud spelled it with a double underscore until firmware 17) ---
+  REG_HOT_WATER_BOOST:
+    kind: switch
+    risk: none
+    default_enabled: true
+    translation_key: hot_water_boost
+  REG__HOT_WATER_BOOST:
+    kind: switch
+    risk: none
+    default_enabled: true
+    translation_key: hot_water_boost
+
   # --- temperatures ---
   REG_OPER_DATA_OUTDOOR_TEMP_MA_SA:
     kind: sensor

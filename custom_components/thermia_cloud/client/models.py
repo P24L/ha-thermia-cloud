@@ -26,15 +26,19 @@ class Installation:
     is_online: bool
     firmware_version: str | None
     last_online: str | None
+    model_id: str | None = None  # the profile's own name, e.g. "IQ" for an iTec
     # Private: never shown in repr/logs.
     mac_address: str | None = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, d: Mapping[str, Any]) -> Installation:
+        profile = d.get("profile") or {}
         return cls(
             id=int(d["id"]),
             name=str(d.get("name") or ""),
-            model=str(d.get("model") or ""),
+            # ``model`` is empty on current accounts; the profile carries the product family
+            model=str(d.get("model") or profile.get("thermiaName") or ""),
+            model_id=profile.get("name") or None,
             is_online=bool(d.get("isOnline")),
             firmware_version=d.get("firmwareVersion"),
             last_online=d.get("lastOnline"),
