@@ -419,3 +419,40 @@ def test_a_two_value_enum_is_a_switch_only_when_it_is_off_and_on() -> None:
     assert platform(("REG_VALUE_STATUS_OFF", "REG_VALUE_STATUS_ON")) == "switch"
     assert platform(("OFF", "ON")) == "switch"
     assert platform(("REG_VALUE_LIGHT", "REG_VALUE_SYSTEM")) == "select"
+
+
+def _enum(name: str, values: list[tuple[int, str, bool, bool]], **fields: object):  # type: ignore[no-untyped-def]
+    """(value, name, visible, readonly) tuples -> a synthetic enumeration register."""
+    return _synthetic(
+        name,
+        presentation="Enumeration",
+        minValue=None,
+        maxValue=None,
+        valueNames=[
+            {"name": n, "value": v, "visible": vis, "isReadonly": ro, "confirmation": None}
+            for v, n, vis, ro in values
+        ],
+        **fields,
+    )
+
+
+def test_read_only_and_hidden_values_are_not_offered_as_choices() -> None:
+    mode = _enum(
+        "REG_X_MODE",
+        [
+            (0, "REG_VALUE_OPERATION_MODE_OFF", True, False),
+            (1, "REG_VALUE_OPERATION_MODE_AUTO", True, False),
+            (2, "REG_VALUE_OPERATION_MODE_SERVICE", True, True),  # readable, not selectable
+            (3, "REG_VALUE_OPERATION_MODE_HIDDEN", False, False),
+        ],
+    )
+    [entity] = build_plan([mode], load_catalog(), now=NOW).entities
+    assert entity.platform == "select"
+    assert [v for v, _ in entity.options] == [0, 1]
+
+
+def test_an_enum_with_nothing_selectable_is_shown_as_a_sensor() -> None:
+    locked = _enum("REG_X_LOCKED", [(0, "A", True, True), (1, "B", True, True)])
+    [entity] = build_plan([locked], load_catalog(), now=NOW).entities
+    assert entity.platform == "sensor" and not entity.writable
+    assert [v for v, _ in entity.options] == [0, 1]  # the state can still be shown

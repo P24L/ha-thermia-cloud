@@ -296,6 +296,14 @@ def build_plan(
             continue
 
         options_list = tuple((v.value, v.name) for v in _visible_options(spec))
+        if platform in ("select", "switch"):
+            # a value the cloud marks read-only (e.g. SERVICE) must not be offered as a choice
+            options_list = tuple(
+                (v.value, v.name) for v in _visible_options(spec) if not v.is_readonly
+            )
+            if not options_list:
+                platform = "sensor"  # nothing selectable: show the state only
+                options_list = tuple((v.value, v.name) for v in _visible_options(spec))
         plan_kwargs: dict[str, object] = {}
         if platform == "number":
             step = spec.step or 1.0

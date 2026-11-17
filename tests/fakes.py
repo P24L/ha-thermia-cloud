@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from custom_components.thermia_cloud.client.errors import RegisterWriteError
+from custom_components.thermia_cloud.client.errors import NetworkError, RegisterWriteError
 from custom_components.thermia_cloud.client.models import (
     Group,
     HistoryRegister,
@@ -38,6 +38,8 @@ class FakeApi:
         self.overrides: dict[str, float] = {}  # register name -> value
         self.installation_ids = [INSTALLATION_ID]
         self.has_indoor_sensor: bool | None = True  # from the installation status
+        self.fail_installations: set[int] = set()  # their register reads fail (offline gateway)
+        self.installation_name = "Test installation"
         self.constant_mode = False  # circuit 1 in Constant mode: different registers in its group
         self.group_calls: list[str] = []  # groups read, in order
         self.writes: list[tuple[int, float]] = []  # (register id, value) the "cloud" accepted
@@ -57,7 +59,9 @@ class FakeApi:
     async def list_installations(self) -> list[Installation]:
         self._check("list_installations")
         return [
-            Installation(i, f"Test installation {i}", "iTec", True, "1.0", "AA:BB:CC:00:00:01")
+            Installation(
+                i, f"{self.installation_name} {i}", "iTec", True, "1.0", "AA:BB:CC:00:00:01"
+            )
             for i in self.installation_ids
         ]
 
@@ -75,6 +79,8 @@ class FakeApi:
         self, installation_id: int, group_name: str
     ) -> list[tuple[RegisterSpec, RegisterValue]]:
         self._check("get_group_registers")
+        if installation_id in self.fail_installations:
+            raise NetworkError("gateway offline")
         self.group_calls.append(group_name)
         if self.constant_mode and group_name == "REG_GROUP_HEATING_CURVE_CIRC1":
             source = FIXTURES / "mode_constant_group_REG_GROUP_HEATING_CURVE_CIRC1.json"

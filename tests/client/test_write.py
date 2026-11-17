@@ -142,3 +142,13 @@ async def test_writes_to_one_installation_are_serialized(api: ThermiaApi, cloud:
     cloud.always("POST", WRITE, Reply(200, ""))
     await asyncio.gather(*(api.write_register(5, CURVE, 22 + i) for i in range(4)))
     assert peak == 1 and cloud.count("POST", WRITE) == 4
+
+
+async def test_the_write_body_uses_the_write_id_never_the_index(
+    api: ThermiaApi, cloud: FakeCloud
+) -> None:
+    cloud.on("POST", WRITE, Reply(200, ""))
+    await api.write_register(5, CURVE, 30)
+    [(_, _, body)] = [b for b in cloud.bodies if b[1] == WRITE]
+    assert set(body) == {"registerSpecificationId", "registerValue", "clientUuid"}
+    assert body["registerSpecificationId"] == CURVE.register_id != CURVE.register_index

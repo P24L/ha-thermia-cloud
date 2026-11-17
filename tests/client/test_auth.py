@@ -114,3 +114,38 @@ async def test_subject_is_read_from_the_access_token(
     await auth.close()
     assert auth.subject == "account-123"
     assert auth.refresh_token == "refresh-1"
+
+
+async def test_a_rejected_refresh_is_followed_by_one_login_and_then_gives_up(
+    config: ThermiaConfig, cloud: FakeCloud
+) -> None:
+    """invalid_grant on refresh, then a refused password: one attempt each, no retry loop."""
+    cloud.on("POST", TOKEN, Reply(400, {"error": "invalid_grant"}))
+    cloud.script_login(password_ok=False)
+    auth = ThermiaAuth(config, "u", "p", refresh_token="stale")
+    with pytest.raises(AuthError):
+        await auth.get_token()
+    await auth.close()
+    assert cloud.count("POST", TOKEN) == 1  # the refresh; the login never reached the token step
+    assert cloud.count("POST", f"{AUTH_PATH}/SelfAsserted") == 1
+
+
+async def test_a_401_with_a_failing_reauth_is_one_attempt(
+    config: ThermiaConfig, cloud: FakeCloud
+) -> None:
+    import aiohttp
+
+    from custom_components.thermia_cloud.client.http import ThermiaHttp
+
+    cloud.on("POST", TOKEN, cloud.token(access="a1", refresh="r1"))
+    cloud.always("GET", "/api/v1/x", Reply(401))
+    cloud.on("POST", TOKEN, Reply(400, {"error": "invalid_grant"}))
+    cloud.script_login(password_ok=False)
+    auth = ThermiaAuth(config, "u", "p", refresh_token="r0")
+    async with aiohttp.ClientSession() as session:
+        http = ThermiaHttp(session, auth, config.api_base_url)
+        with pytest.raises(AuthError):
+            await http.request("GET", "/api/v1/x")
+    await auth.close()
+    assert cloud.count("GET", "/api/v1/x") == 1
+    assert cloud.count("POST", f"{AUTH_PATH}/SelfAsserted") == 1

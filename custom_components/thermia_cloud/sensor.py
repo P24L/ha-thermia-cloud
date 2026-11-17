@@ -37,6 +37,7 @@ class ThermiaSensor(ThermiaEntity, SensorEntity):
             self._attr_suggested_display_precision = plan.display_precision
         if plan.options:
             self._attr_options = [option_key(name) for _, name in plan.options]
+        self._last_total: float | None = None
 
     @property
     def native_value(self) -> Any:
@@ -48,4 +49,11 @@ class ThermiaSensor(ThermiaEntity, SensorEntity):
         if self.plan.options:
             names = {v: option_key(n) for v, n in self.plan.options}
             return names.get(int(value))
+        if self.plan.state_class == "total_increasing" and isinstance(value, int | float):
+            # A counter that dips by a hair (cloud rounding) would make Home Assistant's
+            # statistics log a reset; only a drop of more than 10 % is passed on as a real one.
+            last = self._last_total
+            if last is not None and last * 0.9 <= value < last:
+                value = last
+            self._last_total = value
         return value
