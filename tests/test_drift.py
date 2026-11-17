@@ -149,3 +149,21 @@ async def test_one_odd_answer_does_not_rediscover(hass: HomeAssistant, api: Fake
     await poll(hass, 125)
     await poll(hass, 190)
     assert api.calls.count("get_history_registers") == before
+
+
+async def test_a_later_change_is_rediscovered_after_the_pause(
+    hass: HomeAssistant, api: FakeApi, freezer
+) -> None:
+    """Switching a circuit to Constant and back again: both changes must be picked up."""
+    await setup(hass)
+    api.extra = [new_register()]
+    await poll(hass, 61)  # the mode-only register appears
+    after_first = api.calls.count("get_history_registers")
+
+    api.extra = []  # ... and disappears again, 11 minutes later
+    freezer.tick(timedelta(minutes=11))
+    for _ in range(4):
+        freezer.tick(timedelta(seconds=61))
+        async_fire_time_changed(hass)
+        await hass.async_block_till_done()
+    assert api.calls.count("get_history_registers") == after_first + 1

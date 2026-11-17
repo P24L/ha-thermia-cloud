@@ -144,4 +144,6 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P10.5 Explore the `api-prod.thermia.com` API
 - [ ] P10.6 Document interplay with local projects (ESPHome iTec, Modbus Genesis) in README
 - [ ] P10.7 `WebSocketSource` (JSON-RPC push) if/when Thermia turns `isWebSocketEnabled` on; fall back to polling
+- [ ] P10.9 💬 **Discuss with the maintainer:** the policy of creating new/unknown entities *disabled* (D6) — it confused the maintainer in practice (a register that first appeared before its catalog entry stayed disabled after the entry was added, because Home Assistant remembers the user's/integration's choice). Options: enable unknown writable registers by default, re-enable entities the integration disabled when the catalog later says enabled, or show a notice. Decide before v0.1
+- [ ] P10.10 Remember the specs of mode-dependent registers (circuit *Curve* vs *Constant*) so the entities of the other mode stay in the plan as `unavailable` instead of being dropped and rediscovered; suppress the 7-day "vanished" Repair for catalog-marked mode-dependent registers
 - [ ] P10.8 "Unmapped registers" editor → `options.overrides` (cost estimate in `UI-DESIGN.md` §4); build only if users of other model families ask for it

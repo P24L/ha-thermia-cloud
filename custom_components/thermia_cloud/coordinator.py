@@ -26,7 +26,7 @@ from .repairs import sync_vanished
 
 _LOGGER = logging.getLogger(__name__)
 
-DRIFT_MIN_INTERVAL = timedelta(hours=1)  # at most one automatic rediscovery per hour
+DRIFT_MIN_INTERVAL = timedelta(minutes=10)  # at most one automatic rediscovery per 10 minutes
 DRIFT_MISSING_POLLS = 3  # polls in a row a planned register must be missing to count as drift
 
 FAST_POLL = timedelta(seconds=5)  # after a write, until the read-back matches
