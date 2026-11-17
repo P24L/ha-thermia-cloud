@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
@@ -39,6 +39,9 @@ class CoordinatorData:
 
     values: Mapping[int, RegisterValue]  # by register_id
     inactive: frozenset[int]  # register ids hidden by a runtime condition / disabled value
+    # register id -> value written and not confirmed yet. Part of the comparison on purpose:
+    # when a write is confirmed or given up, entities must re-render even if no register changed.
+    pending: Mapping[int, float] = field(default_factory=dict)
 
 
 class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
@@ -181,7 +184,9 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._groups = groups
         if self.data is not None:  # the first poll ran before there was a plan
             self.async_set_updated_data(
-                CoordinatorData(self.data.values, self._inactive(self.data.values))
+                CoordinatorData(
+                    self.data.values, self._inactive(self.data.values), self.data.pending
+                )
             )
 
     async def _async_update_data(self) -> CoordinatorData:
@@ -208,7 +213,9 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._track_vanished({p.register_id: p.register_name for p in missing_plans})
         self._check_drift(values, bool(missing_plans))
         self._settle_pending(values)
-        return CoordinatorData(values, self._inactive(values))
+        return CoordinatorData(
+            values, self._inactive(values), {i: p[0] for i, p in self.pending.items()}
+        )
 
     def _inactive(self, values: Mapping[int, RegisterValue]) -> frozenset[int]:
         lookup = RegisterLookup(

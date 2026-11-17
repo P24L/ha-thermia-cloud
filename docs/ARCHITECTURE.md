@@ -113,7 +113,7 @@ flowchart TD
 2. **Validate:** numbers against `min/max/step` (error, never a silent clamp); enumerations against the **visible `valueNames`** — *not* against `min/max`, which can be `null` (operation mode) or wrong (hot-water mode: `max=1` but the visible value `Away` is 2).
 3. **Serialize writes per installation** with an asyncio lock. There is **no debounce**: HA calls the action on release, and an action must report its own errors to the caller.
 4. `POST …/Registers`; non-200 → `RegisterWriteError` → `HomeAssistantError`.
-5. After the POST succeeds the action returns. A background task fast-polls until the read-back matches; meanwhile the entity shows the real value plus attribute `pending_value`. On timeout: if the installation is online, log one warning and keep showing the real value; if it is offline (`isOnline` false), log at info level — the cloud **queues** the write and applies it later. No exception after the action has returned.
+5. After the POST succeeds the action returns. A background task fast-polls until the read-back matches; meanwhile the entity **shows the written value** (optimistic, so a changed setting does not snap back) with the attribute `pending_value` marking it as unconfirmed; it falls back to the real value if the read-back does not arrive within 30 s. On timeout: if the installation is online, log one warning and keep showing the real value; if it is offline (`isOnline` false), log at info level — the cloud **queues** the write and applies it later. No exception after the action has returned.
 
 ## 4. Generic mapping rules (used when the catalog has no entry)
 

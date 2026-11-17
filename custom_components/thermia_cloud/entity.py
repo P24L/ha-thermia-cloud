@@ -41,6 +41,16 @@ class ThermiaEntity(CoordinatorEntity[ThermiaCoordinator]):
 
     @property
     def _value(self) -> Any:
+        """What the entity shows: the value just written while it awaits confirmation.
+
+        After the cloud accepted a write the register still reports the old value for a second
+        or several; showing it would make a changed setting snap back and forth. So the written
+        value is shown right away (``pending_value`` marks it as unconfirmed) and replaced by the
+        real one when it arrives, or after 30 s if it never shows up.
+        """
+        pending = self.coordinator.pending.get(self.plan.register_id)
+        if pending is not None:
+            return float(pending[0])
         data = self.coordinator.data
         entry = data.values.get(self.plan.register_id) if data else None
         return entry.value if entry else None

@@ -97,7 +97,8 @@ async def test_number_write_then_readback(hass: HomeAssistant, api: FakeApi) -> 
     await hass.async_block_till_done()
     assert api.writes == [(CURVE["registerId"], 30)]
     state = hass.states.get(number)
-    assert state.state == "22.0" and state.attributes["pending_value"] == 30  # real value + pending
+    # shown right away, marked as unconfirmed (the register itself still says 22)
+    assert state.state == "30.0" and state.attributes["pending_value"] == 30
     coordinator = entry.runtime_data.installations[0].coordinator
     assert coordinator.update_interval == timedelta(seconds=5)  # fast poll
 
@@ -281,6 +282,7 @@ async def test_unseen_write_is_given_up_after_30_seconds(
         await hass.async_block_till_done()
     assert not coordinator.pending
     assert coordinator.update_interval == timedelta(seconds=60)
+    assert hass.states.get(eid(hass, "number", CURVE)).state == "22.0"  # back to the real value
     assert sum("not seen in the cloud yet" in r.message for r in caplog.records) == 1
 
 
