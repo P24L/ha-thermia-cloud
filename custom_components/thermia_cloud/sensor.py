@@ -13,6 +13,8 @@ from . import ThermiaConfigEntry
 from .catalog.planner import option_key
 from .entity import ThermiaEntity
 
+PARALLEL_UPDATES = 0  # coordinator-based, no per-entity I/O
+
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: ThermiaConfigEntry, async_add_entities: AddEntitiesCallback

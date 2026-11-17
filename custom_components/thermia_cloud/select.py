@@ -11,6 +11,8 @@ from .catalog.planner import option_key
 from .entity import ThermiaEntity
 from .writer import async_write_register
 
+PARALLEL_UPDATES = 1  # writes are serialized
+
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: ThermiaConfigEntry, async_add_entities: AddEntitiesCallback

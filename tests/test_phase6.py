@@ -276,3 +276,102 @@ async def test_policy_acceptance_issue_is_raised_and_cleared(hass: HomeAssistant
 class _PolicyApi(FakeApi):
     async def list_installations(self):  # type: ignore[no-untyped-def]
         raise PolicyAcceptanceError("terms")
+
+
+# -- generic sensor kinds (not covered by the iTec catalog) ---------------------------
+
+BASE = register("REG_OPER_DATA_OUTDOOR_TEMP_MA_SA", "REG_GROUP_TEMPERATURES")
+
+
+def extra_register(register_id: int, name: str, **fields: object) -> dict:
+    return {**BASE, "registerId": register_id, "registerIndex": register_id, "registerName": name,
+            "isReadOnly": True, "modifier": 0, **fields}  # fmt: skip
+
+
+def _value_name(name: str, value: int, visible: bool) -> dict:
+    return {
+        "name": name,
+        "value": value,
+        "visible": visible,
+        "isReadonly": True,
+        "confirmation": None,
+    }
+
+
+async def test_generic_timestamp_enum_and_precision_sensors(
+    hass: HomeAssistant, api: FakeApi
+) -> None:
+    api.extra = [
+        extra_register(9990001, "REG_X_TIME", presentation="PosixTime", registerValue=1767225600.0),
+        extra_register(
+            9990002,
+            "REG_X_MODE",
+            presentation="Enumeration",
+            registerValue=2.0,
+            valueNames=[
+                {
+                    "name": "REG_VALUE_STATUS_OFF",
+                    "value": 0,
+                    "visible": False,
+                    "isReadonly": True,
+                    "confirmation": None,
+                },
+                {
+                    "name": "REG_VALUE_MODE_ECONOMY",
+                    "value": 2,
+                    "visible": True,
+                    "isReadonly": True,
+                    "confirmation": None,
+                },
+            ],
+        ),
+        extra_register(9990003, "REG_X_PRECISE", step=0.1, registerValue=1.5),
+    ]
+    entry = make_entry(hass)
+    await setup(hass, entry)
+    registry = er.async_get(hass)
+    for number in (9990001, 9990002, 9990003):
+        eid = registry.async_get_entity_id("sensor", DOMAIN, f"{INSTALLATION_ID}_{number}")
+        assert eid and registry.async_get(eid).disabled_by  # unknown registers start disabled
+        registry.async_update_entity(eid, disabled_by=None)
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=45))
+    await hass.async_block_till_done()
+
+    def state(number: int):  # type: ignore[no-untyped-def]
+        return hass.states.get(
+            registry.async_get_entity_id("sensor", DOMAIN, f"{INSTALLATION_ID}_{number}")
+        )
+
+    assert state(9990001).state == "2026-01-01T00:00:00+00:00"
+    assert state(9990002).state == "economy" and state(9990002).attributes["options"] == ["economy"]
+    assert state(9990003).state == "1.5"
+    assert (
+        registry.async_get(state(9990003).entity_id).options["sensor"][
+            "suggested_display_precision"
+        ]
+        == 1
+    )
+
+
+async def test_unknown_registers_can_be_left_out(hass: HomeAssistant, api: FakeApi) -> None:
+    api.extra = [extra_register(9990009, "REG_X_UNKNOWN")]
+    await setup(hass, make_entry(hass, **{CONF_EXPOSE_UNKNOWN: False}))
+    assert (
+        er.async_get(hass).async_get_entity_id("sensor", DOMAIN, f"{INSTALLATION_ID}_9990009")
+        is None
+    )
+
+
+async def test_registers_step_aborts_when_the_cloud_is_unreachable(
+    hass: HomeAssistant, api: FakeApi
+) -> None:
+    from custom_components.thermia_cloud.client.errors import NetworkError
+
+    entry = make_entry(hass)
+    await setup(hass, entry)
+    api.error = NetworkError("down")
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], {"next_step_id": "registers"}
+    )
+    assert result["type"] == "abort" and result["reason"] == "cannot_connect"

@@ -43,6 +43,9 @@ class FakeApi:
         self.apply_writes = True  # False: accepted but not visible yet (queued / offline device)
         self.write_error: Exception | None = None  # raised instead of accepting a write
         self._queued: list[tuple[int, float]] = []
+        self.extra: list[
+            dict[str, Any]
+        ] = []  # extra raw registers appended to the temperatures group
 
     def _check(self, name: str) -> None:
         self.calls.append(name)
@@ -72,6 +75,8 @@ class FakeApi:
         self._check("get_group_registers")
         self.group_calls.append(group_name)
         raw: list[dict[str, Any]] = json.loads((FIXTURES / f"group_{group_name}.json").read_text())
+        if group_name == "REG_GROUP_TEMPERATURES":
+            raw = [*raw, *self.extra]
         out = []
         for item in raw:
             if item["registerName"] in self.hide:
