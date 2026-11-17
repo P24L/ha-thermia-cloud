@@ -86,3 +86,15 @@ def test_device_and_category_resolution() -> None:
 def test_invalid_catalogs_are_rejected(text: str) -> None:
     with pytest.raises(CatalogError):
         parse_catalog(text)
+
+
+def test_core_flags_live_in_the_catalog() -> None:
+    entry = load_catalog().registers["COMP_STATUS_ITEC"]
+    assert entry.core_flags == (
+        "COMP_VALUE_COMPR",
+        "COMP_VALUE_HEATING",
+        "COMP_VALUE_HOT_WATER",
+        "COMP_VALUE_DEFROST",
+    )
+    # a register without the key has none
+    assert load_catalog().registers["REG_HEATING_HEAT_STOP"].core_flags == ()

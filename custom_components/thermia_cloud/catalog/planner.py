@@ -24,12 +24,6 @@ from .schema import Catalog, CatalogRegister, Kind, Risk
 from .units import HOURS_MODIFIER, TEMPERATURE_MODIFIERS, resolve_unit
 
 MAX_DISPLAY_DECIMALS = 2
-# Core status flags: the cloud shows e.g. "hot water" only while hot water is on (visibility
-# depends on the pump's state), so these are enabled whether or not they are visible right now.
-CORE_FLAGS = frozenset(
-    {"COMP_VALUE_COMPR", "COMP_VALUE_HEATING", "COMP_VALUE_HOT_WATER", "COMP_VALUE_DEFROST"}
-)
-INDOOR_TEMPERATURE_REGISTER = "REG_INDOOR_TEMPERATURE"
 STATUS_FLAG_PRESENTATIONS = frozenset({"StatusFlags", "StatusFlagsTextInd", "MultipleStatusFlags"})
 SLIDER_MAX_STEPS = 100
 
@@ -195,10 +189,10 @@ def build_plan(
     lookup = RegisterLookup((s.group_name, s.name, v.value) for s, v in registers)
 
     for spec, value in registers:
-        if spec.name == INDOOR_TEMPERATURE_REGISTER and options.has_indoor_sensor is False:
+        entry = catalog.lookup(spec.group_name, spec.name)
+        if entry is not None and entry.needs_indoor_sensor and options.has_indoor_sensor is False:
             notes.append(PlanNote("no_indoor_sensor", spec.name))
             continue
-        entry = catalog.lookup(spec.group_name, spec.name)
         if entry is None and not options.expose_unknown:
             notes.append(PlanNote("unknown_register_hidden", spec.name, spec.group_name))
             continue
@@ -282,7 +276,7 @@ def build_plan(
             flags = [(f, False) for f in visible] + [(f, True) for f in hidden.values()]
             for flag, is_hidden in flags:
                 flag_common = dict(common)
-                if is_hidden and flag.name not in CORE_FLAGS:
+                if is_hidden and flag.name not in (entry.core_flags if entry else ()):
                     flag_common.update(default_enabled=False, entity_category="diagnostic")
                 entities.append(
                     EntityPlan(

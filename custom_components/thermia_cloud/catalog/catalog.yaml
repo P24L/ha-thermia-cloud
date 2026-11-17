@@ -197,6 +197,7 @@ registers:
     device_class: temperature
     state_class: measurement
     default_enabled: true
+    needs_indoor_sensor: true
   REG_OPER_DATA_DISTR_CIR1:  # lives in the temperatures group but belongs to circuit 1
     kind: sensor
     translation_key: circuit_supply_temperature
@@ -244,9 +245,14 @@ registers:
     default_enabled: true  # when the electric aux heater runs: worth a history
 
   # --- status ---
-  COMP_STATUS_ITEC:  # bitmask: one binary sensor per visible flag
+  COMP_STATUS_ITEC:  # bitmask: one binary sensor per flag
     kind: binary_sensor
     default_enabled: true
+    core_flags:  # enabled even while the cloud hides them (hot water: hidden while it is off)
+      - COMP_VALUE_COMPR
+      - COMP_VALUE_HEATING
+      - COMP_VALUE_HOT_WATER
+      - COMP_VALUE_DEFROST
   COMP_HAS_LINK:  # hidden helper, meaning unknown (API-NOTES section 10)
     kind: skip
 

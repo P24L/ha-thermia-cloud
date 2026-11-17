@@ -129,6 +129,16 @@ hot-water mode and boost interval while hot water is on (`docs/API-NOTES.md` sec
 such a register is absent its entity stays, `unavailable`, with no warning log and no Repair
 issue. Registers without the flag that vanish are logged once and raise a Repair after 7 days.
 
+### 2b. `core_flags` and `needs_indoor_sensor`
+
+For a bitmask status register: names of flags that are enabled even while the cloud hides them.
+The cloud lists a flag only while it applies (e.g. *hot water* only while hot water is on), so a
+first installation made in the wrong moment would otherwise see it hidden. Every other hidden
+flag becomes a *disabled diagnostic* entity.
+
+`needs_indoor_sensor: true` (on `REG_INDOOR_TEMPERATURE`): no entity when the installation status
+says `hasIndoorTempSensor: false`.
+
 ## 3. `risk` flag
 
 | Value | Meaning | Effect |

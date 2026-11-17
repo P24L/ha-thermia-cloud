@@ -49,6 +49,13 @@ _REGISTER = {
     # The cloud only returns this register in some state (circuit mode, hot water on/off):
     # while it is absent its entity stays, unavailable, and no Repair issue is raised for it
     vol.Optional("state_dependent"): bool,
+    # Status registers only: flags that are enabled even while the cloud hides them (the cloud
+    # shows e.g. "hot water" only while hot water is on). Other hidden flags become disabled
+    # diagnostic entities.
+    vol.Optional("core_flags"): [str],
+    # No entity when the installation status says the pump has no indoor-temperature sensor
+    # (``hasIndoorTempSensor: false``): the register then only holds a stale leftover value
+    vol.Optional("needs_indoor_sensor"): bool,
 }
 
 CATALOG_SCHEMA = vol.Schema(
@@ -92,10 +99,12 @@ class CatalogRegister:
     device: str | None = None
     shared: bool = False
     state_dependent: bool = False
+    core_flags: tuple[str, ...] = ()
+    needs_indoor_sensor: bool = False
 
     @classmethod
     def from_validated(cls, key: str, data: dict[str, Any]) -> CatalogRegister:
-        return cls(key=key, **data)
+        return cls(key=key, **{**data, "core_flags": tuple(data.get("core_flags", ()))})
 
 
 @dataclass(frozen=True, slots=True)
