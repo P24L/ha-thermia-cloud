@@ -48,13 +48,132 @@
   },
   "device": {
     "device_circuit_1": {
-      "name": "Circuit 1"
+      "name": "Mixing circuit 1"
     },
     "device_circuit_2": {
-      "name": "Circuit 2"
+      "name": "Mixing circuit 2"
     },
     "device_pool": {
       "name": "Pool"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Hot water temperature"
+      },
+      "outdoor_temperature": {
+        "name": "Outdoor temperature"
+      },
+      "supply_temperature": {
+        "name": "Supply temperature"
+      },
+      "desired_supply_temperature": {
+        "name": "Desired supply temperature"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Desired system supply temperature"
+      },
+      "indoor_temperature": {
+        "name": "Indoor temperature"
+      },
+      "circuit_supply_temperature": {
+        "name": "Supply temperature"
+      },
+      "hours_compressor": {
+        "name": "Compressor operating hours"
+      },
+      "hours_heating": {
+        "name": "Heating operating hours"
+      },
+      "hours_hot_water": {
+        "name": "Hot water operating hours"
+      },
+      "hours_aux_1": {
+        "name": "Auxiliary heater 1 operating hours"
+      },
+      "hours_aux_2": {
+        "name": "Auxiliary heater 2 operating hours"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Heating curve"
+      },
+      "heating_curve_min": {
+        "name": "Heating curve minimum"
+      },
+      "heating_curve_max": {
+        "name": "Heating curve maximum"
+      },
+      "heating_curve_main": {
+        "name": "Heating curve (main circuit)"
+      },
+      "heating_curve_min_main": {
+        "name": "Heating curve minimum (main circuit)"
+      },
+      "heating_curve_max_main": {
+        "name": "Heating curve maximum (main circuit)"
+      },
+      "heating_stop": {
+        "name": "Heating stop temperature"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Hot water"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Operation mode",
+        "state": {
+          "off": "Off",
+          "auto": "Auto",
+          "compressor": "Compressor",
+          "auxiliary": "Auxiliary heater",
+          "hot_water": "Hot water"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Hot water mode",
+        "state": {
+          "comfort": "Comfort",
+          "economy": "Economy",
+          "away": "Away"
+        }
+      },
+      "circuit_mode": {
+        "name": "Circuit mode",
+        "state": {
+          "off": "Off",
+          "curve": "Curve",
+          "constant": "Constant"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Read-only mode is on: writing to the heat pump is blocked."
+    },
+    "invalid_value": {
+      "message": "Value rejected: {detail}"
+    },
+    "write_failed": {
+      "message": "The Thermia cloud did not accept the change: {detail}"
+    },
+    "unknown_register": {
+      "message": "No such register: {register}"
+    },
+    "service_register": {
+      "message": "This register is installer-level and cannot be changed: {register}"
+    },
+    "not_writable": {
+      "message": "This register cannot be changed: {register}"
+    },
+    "no_installation": {
+      "message": "Unknown installation for this entry."
     }
   }
 }

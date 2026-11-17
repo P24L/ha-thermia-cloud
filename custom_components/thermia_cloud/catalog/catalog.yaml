@@ -28,18 +28,43 @@ registers:
     shared: true
   REG_HEATING_HEAT_CURVE_MIN:
     kind: number
+    translation_key: heating_curve_min
     unit: "°C"
     device_class: temperature
     risk: heating
     shared: true
   REG_HEATING_HEAT_CURVE_MAX:
     kind: number
+    translation_key: heating_curve_max
     unit: "°C"
     device_class: temperature
     risk: heating
     shared: true
+  # main circuit (the heat pump device itself); the plain entries above serve circuit 1
+  REG_GROUP_HEATING_CURVE/REG_HEATING_HEAT_CURVE:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    icon: mdi:chart-bell-curve
+    default_enabled: true
+    risk: heating
+    translation_key: heating_curve_main
+  REG_GROUP_HEATING_CURVE/REG_HEATING_HEAT_CURVE_MIN:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+    translation_key: heating_curve_min_main
+  REG_GROUP_HEATING_CURVE/REG_HEATING_HEAT_CURVE_MAX:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+    translation_key: heating_curve_max_main
+
   REG_HEATING_HEAT_STOP:
     kind: number
+    translation_key: heating_stop
     unit: "°C"
     device_class: temperature
     risk: heating
@@ -60,13 +85,17 @@ registers:
     kind: select
     translation_key: hot_water_mode
     default_enabled: true
+    risk: none
 
   # --- hot water ---
   REG_HOT_WATER_STATUS:
     kind: switch
+    risk: none
+    translation_key: hot_water
     default_enabled: true
   REG_HOT_WATER_TEMPERATURE:
     kind: sensor
+    translation_key: hot_water_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
@@ -79,35 +108,41 @@ registers:
   # --- temperatures ---
   REG_OPER_DATA_OUTDOOR_TEMP_MA_SA:
     kind: sensor
+    translation_key: outdoor_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
     default_enabled: true
   REG_OPER_DATA_SUPPLY_MA_SA:
     kind: sensor
+    translation_key: supply_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
     default_enabled: true
   REG_DESIRED_SUPPLY_LINE_TEMP:
     kind: sensor
+    translation_key: desired_supply_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
     default_enabled: true
   REG_DESIRED_SYS_SUPPLY_LINE_TEMP:
     kind: sensor
+    translation_key: desired_system_supply_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
   REG_INDOOR_TEMPERATURE:
     kind: sensor
+    translation_key: indoor_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
     default_enabled: true
   REG_OPER_DATA_DISTR_CIR1:  # lives in the temperatures group but belongs to circuit 1
     kind: sensor
+    translation_key: circuit_supply_temperature
     unit: "°C"
     device_class: temperature
     state_class: measurement
@@ -117,29 +152,34 @@ registers:
   # --- operating hours (group REG_GROUP_OPERATIONAL_TIME is diagnostic) ---
   REG_OPER_TIME_COMPRESSOR:
     kind: sensor
+    translation_key: hours_compressor
     unit: h
     device_class: duration
     state_class: total_increasing
     default_enabled: true
   REG_OPER_TIME_HEATING:
     kind: sensor
+    translation_key: hours_heating
     unit: h
     device_class: duration
     state_class: total_increasing
     default_enabled: true
   REG_OPER_TIME_HOT_WATER:
     kind: sensor
+    translation_key: hours_hot_water
     unit: h
     device_class: duration
     state_class: total_increasing
     default_enabled: true
   REG_OPER_TIME_IMM1:
     kind: sensor
+    translation_key: hours_aux_1
     unit: h
     device_class: duration
     state_class: total_increasing
   REG_OPER_TIME_IMM2:
     kind: sensor
+    translation_key: hours_aux_2
     unit: h
     device_class: duration
     state_class: total_increasing

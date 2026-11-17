@@ -48,13 +48,132 @@
   },
   "device": {
     "device_circuit_1": {
-      "name": "Okruh 1"
+      "name": "Směšovací okruh 1"
     },
     "device_circuit_2": {
-      "name": "Okruh 2"
+      "name": "Směšovací okruh 2"
     },
     "device_pool": {
       "name": "Bazén"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hot_water_temperature": {
+        "name": "Teplota teplé vody"
+      },
+      "outdoor_temperature": {
+        "name": "Venkovní teplota"
+      },
+      "supply_temperature": {
+        "name": "Přívodní teplota"
+      },
+      "desired_supply_temperature": {
+        "name": "Požadovaná přívodní teplota"
+      },
+      "desired_system_supply_temperature": {
+        "name": "Požadovaná přívodní teplota systému"
+      },
+      "indoor_temperature": {
+        "name": "Vnitřní teplota"
+      },
+      "circuit_supply_temperature": {
+        "name": "Přívodní teplota"
+      },
+      "hours_compressor": {
+        "name": "Provozní hodiny kompresoru"
+      },
+      "hours_heating": {
+        "name": "Provozní hodiny vytápění"
+      },
+      "hours_hot_water": {
+        "name": "Provozní hodiny teplé vody"
+      },
+      "hours_aux_1": {
+        "name": "Provozní hodiny přídavného ohřevu 1"
+      },
+      "hours_aux_2": {
+        "name": "Provozní hodiny přídavného ohřevu 2"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "name": "Topná křivka"
+      },
+      "heating_curve_min": {
+        "name": "Topná křivka – minimum"
+      },
+      "heating_curve_max": {
+        "name": "Topná křivka – maximum"
+      },
+      "heating_curve_main": {
+        "name": "Topná křivka (hlavní okruh)"
+      },
+      "heating_curve_min_main": {
+        "name": "Topná křivka – minimum (hlavní okruh)"
+      },
+      "heating_curve_max_main": {
+        "name": "Topná křivka – maximum (hlavní okruh)"
+      },
+      "heating_stop": {
+        "name": "Teplota zastavení vytápění"
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "name": "Teplá voda"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "name": "Provozní režim",
+        "state": {
+          "off": "Vypnuto",
+          "auto": "Auto",
+          "compressor": "Kompresor",
+          "auxiliary": "Přídavný ohřev",
+          "hot_water": "Teplá voda"
+        }
+      },
+      "hot_water_mode": {
+        "name": "Režim teplé vody",
+        "state": {
+          "comfort": "Komfort",
+          "economy": "Ekonomický",
+          "away": "Pryč"
+        }
+      },
+      "circuit_mode": {
+        "name": "Režim okruhu",
+        "state": {
+          "off": "Vypnuto",
+          "curve": "Křivka",
+          "constant": "Konstantní"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "read_only_mode": {
+      "message": "Režim jen pro čtení je zapnutý: zápis do tepelného čerpadla je zablokován."
+    },
+    "invalid_value": {
+      "message": "Hodnota odmítnuta: {detail}"
+    },
+    "write_failed": {
+      "message": "Cloud Thermia změnu nepřijal: {detail}"
+    },
+    "unknown_register": {
+      "message": "Takový registr neexistuje: {register}"
+    },
+    "service_register": {
+      "message": "Tento registr je instalatérský a nelze ho měnit: {register}"
+    },
+    "not_writable": {
+      "message": "Tento registr nelze měnit: {register}"
+    },
+    "no_installation": {
+      "message": "Neznámá instalace pro tento záznam."
     }
   }
 }
