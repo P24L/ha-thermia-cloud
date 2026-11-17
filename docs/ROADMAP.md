@@ -47,7 +47,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P2.5 `models.py` — `Installation`, `Group`, `RegisterSpec`, `RegisterValue`, `Snapshot`
 - [x] P2.6 `api.py` — installations, groups, group registers, history registers, status, languages, localization 
 - [x] P2.7 `scripts/anonymize.py` — diagnostics/dump → fixture folder (strips ids, names, MAC, address, tokens)
-- [ ] P2.8 `api.write_register()` — validation (numbers vs min/max/step, enums vs **visible** `valueNames`, `isReadOnly`), per-installation lock, `RegisterWriteError`; semantics refined by P0.8
+- [x] P2.8 `api.write_register()` — validation (numbers vs min/max/step, enums vs **visible** `valueNames`, `isReadOnly`), per-installation lock, `RegisterWriteError`; semantics refined by P0.8 *(validated and serialized; tested against a fake server and fakes only — the real cloud's write response and latency are still unknown (P0.8 🔒))*
 - [x] P2.9 `sources.py` — `ValueSource` protocol + `PollingSource` (needed-groups selection)
 - [ ] P2.10 Client unit tests with fixtures (auth happy/bad password/401 retry/429; empty-group = `[]` is not an error) *(auth, http, models, api read-side covered, 20 tests against a local fake server; write tests follow P2.8)*
 - [x] P2.11 `scripts/live_smoke.py` (read-only, env credentials; prints the discovered specs now, the entity plan once P3.4 exists)
@@ -81,18 +81,18 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 5 — Writing
 
-- [ ] P5.4 **Do first:** Read-only mode (option + error message) — no writable build may exist without the kill switch
-- [ ] P5.1 `number.py` (limits from the cloud, step rounding)
-- [ ] P5.2 `select.py` (visible `valueNames`, localized)
-- [ ] P5.3 `switch.py` (two-value enumerations, hot water)
-- [ ] P5.5 Per-installation write lock, `pending_value` attribute, fast-poll read-back; **no debounce**, errors raised to the caller, queued writes are not errors (D6)
-- [ ] P5.6 `thermia_cloud.set_register` service + `services.yaml` (registered in `async_setup`, targets entry/device, same policy as entities)
-- [ ] P5.7 Write tests (validation, read-only, mismatch, offline device)
-- [ ] P5.8 Safety review of `risk` flags in the catalog (every writable register classified)
+- [x] P5.4 **Do first:** Read-only mode (option + error message) — no writable build may exist without the kill switch *(option in the options flow, blocks entities and the service; read-only is checked before any request is made)*
+- [x] P5.1 `number.py` (limits from the cloud, step rounding) *(limits and step from the cloud, slider/box by step count)*
+- [x] P5.2 `select.py` (visible `valueNames`, localized) *(options = visible cloud values as language-independent ids (`hot_water`, `economy`, …), states translated)*
+- [x] P5.3 `switch.py` (two-value enumerations, hot water) *(hot water on/off)*
+- [x] P5.5 Per-installation write lock, `pending_value` attribute, fast-poll read-back; **no debounce**, errors raised to the caller, queued writes are not errors (D6) *(per-installation lock in the client, `pending_value` attribute, 5 s fast poll for up to 30 s, give-up logged once (info when the device is offline); not yet seen against a real pump)*
+- [x] P5.6 `thermia_cloud.set_register` service + `services.yaml` (registered in `async_setup`, targets entry/device, same policy as entities) *(`device_id`, `group`, `register` (name or index), `value`; same policy as entities)*
+- [x] P5.7 Write tests (validation, read-only, mismatch, offline device) *(validation, read-only, mismatch/timeout, cloud rejection; offline-device behaviour is simulated (queued write), not observed)*
+- [x] P5.8 Safety review of `risk` flags in the catalog (every writable register classified) *(every writable register is classified in a regression table in `tests/catalog/test_planner.py` (D6))*
 
 ## Phase 6 — Options, repairs, UX
 
-- [ ] P6.1 Options flow: General (interval, read-only, timeout, debug attributes)
+- [x] P6.1 Options flow: General (interval, read-only, timeout, debug attributes) *(interval, read-only, timeout, debug attributes; the options menu with installations/names comes with P6.2/P6.4)*
 - [ ] P6.2 Options flow: Installations & registers (installation selection, show hidden, expose unknown)
 - [ ] P6.3 *(moved to P10.8 — not in v0.1)*
 - [ ] P6.4 Names: **Refresh names** button, *Label language* option (Auto / explicit culture), stored labels. **No weekly auto-refresh** (D4)

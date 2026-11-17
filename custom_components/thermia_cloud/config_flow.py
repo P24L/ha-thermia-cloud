@@ -8,10 +8,19 @@ from dataclasses import dataclass
 from typing import Any
 
 import voluptuous as vol
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlowWithReload,
+)
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
+    BooleanSelector,
+    NumberSelector,
+    NumberSelectorConfig,
+    NumberSelectorMode,
     SelectOptionDict,
     SelectSelector,
     SelectSelectorConfig,
@@ -41,6 +50,8 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TIMEOUT,
     DOMAIN,
+    MAX_SCAN_INTERVAL,
+    MIN_SCAN_INTERVAL,
     USER_AGENT,
 )
 
@@ -82,6 +93,11 @@ def error_key(err: ThermiaError) -> str:
 
 class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> ThermiaOptionsFlow:
+        return ThermiaOptionsFlow()
 
     def __init__(self) -> None:
         self._username = ""
@@ -225,3 +241,50 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
                 CONF_DEBUG_ATTRIBUTES: False,
             },
         )
+
+
+class ThermiaOptionsFlow(OptionsFlowWithReload):
+    """General options. (Installation selection and register visibility: roadmap P6.2.)"""
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(
+                data={
+                    **self.config_entry.options,
+                    CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
+                    CONF_READ_ONLY: user_input[CONF_READ_ONLY],
+                    CONF_TIMEOUT: int(user_input[CONF_TIMEOUT]),
+                    CONF_DEBUG_ATTRIBUTES: user_input[CONF_DEBUG_ATTRIBUTES],
+                }
+            )
+        options = self.config_entry.options
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_SCAN_INTERVAL,
+                    default=options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=MIN_SCAN_INTERVAL,
+                        max=MAX_SCAN_INTERVAL,
+                        step=1,
+                        unit_of_measurement="s",
+                        mode=NumberSelectorMode.BOX,
+                    )
+                ),
+                vol.Required(
+                    CONF_READ_ONLY, default=options.get(CONF_READ_ONLY, False)
+                ): BooleanSelector(),
+                vol.Required(
+                    CONF_TIMEOUT, default=options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=5, max=120, step=1, unit_of_measurement="s", mode=NumberSelectorMode.BOX
+                    )
+                ),
+                vol.Required(
+                    CONF_DEBUG_ATTRIBUTES, default=options.get(CONF_DEBUG_ATTRIBUTES, False)
+                ): BooleanSelector(),
+            }
+        )
+        return self.async_show_form(step_id="init", data_schema=schema)

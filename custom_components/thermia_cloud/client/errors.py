@@ -41,3 +41,7 @@ class RateLimitError(ApiError):
 
 class RegisterWriteError(ThermiaError):
     """A register write was rejected before or by the cloud."""
+
+
+class RegisterValidationError(RegisterWriteError):
+    """The value was refused locally (limits, step, visible values, read-only); nothing was sent."""

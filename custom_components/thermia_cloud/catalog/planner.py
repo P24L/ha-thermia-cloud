@@ -6,6 +6,7 @@ Names are not resolved here (labels are the ``LabelResolver``'s job); a plan car
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -24,6 +25,18 @@ from .units import HOURS_MODIFIER, TEMPERATURE_MODIFIERS, resolve_unit
 
 STATUS_FLAG_PRESENTATIONS = frozenset({"StatusFlags", "StatusFlagsTextInd", "MultipleStatusFlags"})
 SLIDER_MAX_STEPS = 100
+
+
+_OPTION_PREFIX = re.compile(r"^REG_VALUE_(?:STATUS_|OPERATION_MODE_|MODE_)?")
+
+
+def option_key(name: str) -> str:
+    """Stable select/enum option id from a cloud value name.
+
+    ``REG_VALUE_OPERATION_MODE_HOT_WATER`` -> ``hot_water``, ``Comfort`` -> ``comfort``. The
+    result is language independent, so automations survive a change of language.
+    """
+    return _OPTION_PREFIX.sub("", name).strip().lower().replace(" ", "_").replace(".", "")
 
 
 @dataclass(frozen=True, slots=True)
@@ -143,7 +156,7 @@ def _choose_platform(
     return generic
 
 
-def _effective_risk(spec: RegisterSpec, entry: CatalogRegister | None) -> Risk:
+def effective_risk(spec: RegisterSpec, entry: CatalogRegister | None) -> Risk:
     if entry is not None and entry.risk is not Risk.NONE:
         return entry.risk
     if entry is None and spec.name.startswith("REG_SER_"):
@@ -194,7 +207,7 @@ def build_plan(
                         continue
                     runtime_condition = node_to_text(runtime) if runtime is not None else None
 
-        risk = _effective_risk(spec, entry)
+        risk = effective_risk(spec, entry)
         writable_kind = platform in ("number", "select", "switch")
         if writable_kind and risk is Risk.SERVICE:
             notes.append(PlanNote("service_register_read_only", spec.name))

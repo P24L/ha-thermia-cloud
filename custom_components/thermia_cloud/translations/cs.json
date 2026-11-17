@@ -175,5 +175,43 @@
     "no_installation": {
       "message": "Neznámá instalace pro tento záznam."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Thermia Cloud",
+        "description": "Režim jen pro čtení zablokuje jakýkoli zápis do tepelného čerpadla (entity i služby). Interval aktualizace se projeví po uložení.",
+        "data": {
+          "scan_interval": "Interval aktualizace (sekundy)",
+          "read_only": "Režim jen pro čtení",
+          "timeout": "Časový limit požadavku (sekundy)",
+          "debug_attributes": "Přidat surové hodnoty registrů jako atributy"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Nastavit registr",
+      "description": "Zapíše hodnotu do libovolného registru, i takového bez entity. Platí stejná pravidla jako pro entity: režim jen pro čtení, ověření proti limitům z cloudu, instalatérské registry se odmítnou.",
+      "fields": {
+        "device_id": {
+          "name": "Tepelné čerpadlo",
+          "description": "Tepelné čerpadlo (zařízení instalace)."
+        },
+        "group": {
+          "name": "Skupina",
+          "description": "Skupina registrů, například REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Registr",
+          "description": "Název nebo index registru."
+        },
+        "value": {
+          "name": "Hodnota",
+          "description": "Hodnota k zápisu."
+        }
+      }
+    }
   }
 }

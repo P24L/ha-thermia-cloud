@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from custom_components.thermia_cloud.client.errors import RegisterWriteError
 from custom_components.thermia_cloud.client.models import (
     Group,
     HistoryRegister,
@@ -12,6 +13,7 @@ from custom_components.thermia_cloud.client.models import (
     RegisterSpec,
     RegisterValue,
 )
+from custom_components.thermia_cloud.client.validation import validate_write
 
 FIXTURES = Path(__file__).parent / "fixtures" / "itec_profile_1005"
 INSTALLATION_ID = 42
@@ -36,6 +38,11 @@ class FakeApi:
         self.overrides: dict[str, float] = {}  # register name -> value
         self.installation_ids = [INSTALLATION_ID]
         self.group_calls: list[str] = []  # groups read, in order
+        self.writes: list[tuple[int, float]] = []  # (register id, value) the "cloud" accepted
+        self.values: dict[int, float] = {}  # register id -> current value (after writes)
+        self.apply_writes = True  # False: accepted but not visible yet (queued / offline device)
+        self.write_error: Exception | None = None  # raised instead of accepting a write
+        self._queued: list[tuple[int, float]] = []
 
     def _check(self, name: str) -> None:
         self.calls.append(name)
@@ -69,7 +76,9 @@ class FakeApi:
         for item in raw:
             if item["registerName"] in self.hide:
                 continue
-            if item["registerName"] in self.overrides:
+            if item["registerId"] in self.values:
+                item = {**item, "registerValue": self.values[item["registerId"]]}
+            elif item["registerName"] in self.overrides:
                 item = {**item, "registerValue": self.overrides[item["registerName"]]}
             out.append((RegisterSpec.from_json(item), RegisterValue.from_json(item)))
         return out
@@ -78,3 +87,24 @@ class FakeApi:
         self._check("get_history_registers")
         data = json.loads((FIXTURES / "history_registers.json").read_text())
         return [HistoryRegister.from_json(r) for r in data["registers"]]
+
+    async def write_register(self, installation_id: int, spec: RegisterSpec, value: float) -> float:
+        self._check("write_register")
+        sent = validate_write(spec, value)  # the real validation, as the real client does
+        if self.write_error is not None:
+            raise self.write_error
+        self.writes.append((spec.register_id, sent))
+        if self.apply_writes:
+            self.values[spec.register_id] = float(sent)
+        else:
+            self._queued.append((spec.register_id, sent))
+        return sent
+
+    def apply_queued(self) -> None:
+        """The device came back: queued writes become visible."""
+        for register_id, value in self._queued:
+            self.values[register_id] = float(value)
+        self._queued.clear()
+
+
+__all__ = ["FIXTURES", "INSTALLATION_ID", "FakeApi", "FakeAuth", "RegisterWriteError"]

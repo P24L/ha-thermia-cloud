@@ -11,10 +11,12 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.storage import Store
+from homeassistant.helpers.typing import ConfigType
 
 from .catalog.labels import LabelResolver, async_load_bundled
 from .catalog.loader import async_load_catalog
@@ -40,18 +42,29 @@ from .const import (
     CONF_REFRESH_TOKEN,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_HIDDEN,
+    CONF_TIMEOUT,
     CONF_USERNAME,
     DEFAULT_SCAN_INTERVAL,
+    DEFAULT_TIMEOUT,
     DOMAIN,
     USER_AGENT,
 )
 from .coordinator import ThermiaCoordinator
 from .discovery import Discovery, discover
 from .entity import device_identifier
+from .services import async_register_services
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+PLATFORMS = [
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SWITCH,
+]
 DISCOVERY_MAX_AGE = 24 * 3600
 STORE_VERSION = 1
 
@@ -97,7 +110,9 @@ async def async_build_client(
         on_refresh_token=remember,
         user_agent=USER_AGENT,
     )
-    return config, auth, ThermiaApi(ThermiaHttp(session, auth, config.api_base_url))
+    timeout = float(entry.options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT))
+    http = ThermiaHttp(session, auth, config.api_base_url, timeout=timeout)
+    return config, auth, ThermiaApi(http)
 
 
 async def _load_discovery(
@@ -130,6 +145,11 @@ async def _load_discovery(
     return fresh
 
 
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    async_register_services(hass)
+    return True
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> bool:
     try:
         _, auth, api = await async_build_client(hass, entry)
@@ -150,7 +170,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
         for installation in installations:
             discovery = await _load_discovery(hass, entry, api, installation.id)
             coordinator = ThermiaCoordinator(
-                hass, entry, installation, PollingSource(api, installation.id), discovery, interval
+                hass,
+                entry,
+                installation,
+                PollingSource(api, installation.id),
+                api,
+                discovery,
+                interval,
             )
             await coordinator.async_config_entry_first_refresh()
             assert coordinator.data is not None

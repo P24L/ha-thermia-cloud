@@ -1,0 +1,26 @@
+set_register:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          integration: thermia_cloud
+    group:
+      required: true
+      example: REG_GROUP_HEATING_CURVE
+      selector:
+        text:
+    register:
+      required: true
+      example: REG_HEATING_HEAT_CURVE
+      selector:
+        text:
+    value:
+      required: true
+      example: 30
+      selector:
+        number:
+          mode: box
+          min: -1000
+          max: 100000
+          step: any

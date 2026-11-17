@@ -5,22 +5,27 @@ from __future__ import annotations
 import logging
 from collections.abc import Mapping
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .catalog.planner import EntityPlan
+from .client.api import ThermiaApi
 from .client.errors import AuthError, RateLimitError, ThermiaError
-from .client.models import Installation, RegisterValue
+from .client.models import Installation, RegisterSpec, RegisterValue
 from .client.sources import ValueSource
 from .client.visibility import RegisterLookup, VisibilityParseError, parse_condition
 from .const import DOMAIN
 from .discovery import Discovery
 
 _LOGGER = logging.getLogger(__name__)
+
+FAST_POLL = timedelta(seconds=5)  # after a write, until the read-back matches
+FAST_POLL_WINDOW = timedelta(seconds=30)
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,6 +43,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         entry: ConfigEntry,
         installation: Installation,
         source: ValueSource,
+        api: ThermiaApi,
         discovery: Discovery,
         interval: int,
     ) -> None:
@@ -50,13 +56,47 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
             always_update=False,
         )
         self.installation = installation
+        self.api = api
         self.discovery = discovery
+        self._base_interval = timedelta(seconds=interval)
+        # register id -> (value we wrote, give up at); shown as the ``pending_value`` attribute
+        self.pending: dict[int, tuple[float, datetime]] = {}
         self._source = source
         self._groups: tuple[str, ...] = discovery.groups  # all until the plan narrows it
         self._plans: tuple[EntityPlan, ...] = ()
         self._by_id = {s.register_id: s for s in discovery.specs}
         self._conditions: dict[str, object] = {}
         self._reported_missing = False
+
+    def spec(self, register_id: int) -> RegisterSpec | None:
+        return self._by_id.get(register_id)
+
+    def track_write(self, register_id: int, value: float) -> None:
+        """The cloud accepted ``value``: poll fast until the register shows it (max 30 s)."""
+        self.pending[register_id] = (value, dt_util.utcnow() + FAST_POLL_WINDOW)
+        self.update_interval = FAST_POLL
+        self.async_update_listeners()
+        self.hass.async_create_task(self.async_request_refresh())
+
+    def _settle_pending(self, values: Mapping[int, RegisterValue]) -> None:
+        now = dt_util.utcnow()
+        for register_id, (wanted, give_up_at) in list(self.pending.items()):
+            current = values.get(register_id)
+            if current is not None and current.value is not None and current.value == wanted:
+                del self.pending[register_id]
+            elif now >= give_up_at:
+                del self.pending[register_id]
+                log = _LOGGER.warning if self.installation.is_online else _LOGGER.info
+                log(
+                    "Written value %s for register %s not seen in the cloud yet (%s)",
+                    wanted,
+                    register_id,
+                    "the device is offline, the cloud queues the change"
+                    if not self.installation.is_online
+                    else "it may still be applied",
+                )
+        if not self.pending:
+            self.update_interval = self._base_interval
 
     def set_plans(self, plans: tuple[EntityPlan, ...], groups: tuple[str, ...]) -> None:
         """Called once the plan exists: runtime conditions and the groups worth polling."""
@@ -89,6 +129,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
             self._reported_missing = True
         elif not missing:
             self._reported_missing = False
+        self._settle_pending(values)
         return CoordinatorData(values, self._inactive(values))
 
     def _inactive(self, values: Mapping[int, RegisterValue]) -> frozenset[int]:

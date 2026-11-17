@@ -9,7 +9,7 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .catalog.planner import EntityPlan
-from .const import DOMAIN
+from .const import CONF_DEBUG_ATTRIBUTES, DOMAIN
 from .coordinator import ThermiaCoordinator
 
 
@@ -63,4 +63,17 @@ class ThermiaEntity(CoordinatorEntity[ThermiaCoordinator]):
             attrs["register_timestamp"] = entry.timestamp.isoformat()
         if self.plan.stale:
             attrs["stale"] = True
+        if self.plan.risk != "none":
+            attrs["risk"] = self.plan.risk  # "heating": changes how the building is heated
+        if self.coordinator.config_entry and self.coordinator.config_entry.options.get(
+            CONF_DEBUG_ATTRIBUTES, False
+        ):
+            attrs["register_id"] = self.plan.register_id
+            attrs["register_index"] = self.plan.register_index
+            attrs["register_name"] = self.plan.register_name
+            attrs["register_group"] = self.plan.group_name
+            attrs["raw_value"] = entry.value if entry else None
+        pending = self.coordinator.pending.get(self.plan.register_id)
+        if pending is not None:
+            attrs["pending_value"] = pending[0]
         return attrs

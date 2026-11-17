@@ -238,3 +238,36 @@ def test_unit_resolution_order() -> None:
     assert bracket_unit("Zone [foo]") is None
     assert strip_unit_bracket("Curve [°C]") == "Curve"
     assert strip_unit_bracket("Zone [foo]") == "Zone [foo]"
+
+
+# Safety regression (roadmap P5.8, DECISIONS D6): which registers can be written, how risky they
+# are and which are enabled out of the box. Changing this table means changing the safety story.
+WRITABLE = {
+    ("REG_GROUP_HEATING_CURVE", "REG_HEATING_HEAT_CURVE"): ("number", "heating", True),
+    ("REG_GROUP_HEATING_CURVE", "REG_HEATING_HEAT_CURVE_MIN"): ("number", "heating", False),
+    ("REG_GROUP_HEATING_CURVE", "REG_HEATING_HEAT_CURVE_MAX"): ("number", "heating", False),
+    ("REG_GROUP_HEATING_CURVE", "REG_HEATING_HEAT_STOP"): ("number", "heating", False),
+    ("REG_GROUP_HEATING_CURVE_CIRC1", "REG_ACTIVATE_CIRC1"): ("select", "heating", False),
+    ("REG_GROUP_HEATING_CURVE_CIRC1", "REG_HEATING_HEAT_CURVE"): ("number", "heating", True),
+    ("REG_GROUP_HEATING_CURVE_CIRC1", "REG_HEATING_HEAT_CURVE_MIN"): ("number", "heating", False),
+    ("REG_GROUP_HEATING_CURVE_CIRC1", "REG_HEATING_HEAT_CURVE_MAX"): ("number", "heating", False),
+    ("REG_GROUP_HOT_WATER", "REG_HOT_WATER_STATUS"): ("switch", "none", True),
+    ("REG_GROUP_HOT_WATER", "REG_OPERATIONMODE"): ("select", "none", True),
+    ("REG_GROUP_HOT_WATER", "REG_SER_HOT_WATER_TOPH_INTER"): ("number", "none", False),
+    ("REG_GROUP_OPERATIONAL_OPERATION", "REG_OPERATIONMODE"): ("select", "heating", True),
+}
+
+
+def test_writable_entities_match_the_safety_table(plan) -> None:  # type: ignore[no-untyped-def]
+    actual = {
+        (e.group_name, e.register_name): (e.platform, e.risk, e.default_enabled)
+        for e in plan.entities
+        if e.writable
+    }
+    assert actual == WRITABLE
+
+
+def test_installer_level_registers_are_never_enabled_by_default(plan) -> None:  # type: ignore[no-untyped-def]
+    disabled = {"REG_HEATING_HEAT_CURVE_MIN", "REG_HEATING_HEAT_CURVE_MAX", "REG_HEATING_HEAT_STOP",
+                "REG_ACTIVATE_CIRC1", "REG_SER_HOT_WATER_TOPH_INTER"}  # fmt: skip
+    assert all(not e.default_enabled for e in plan.entities if e.register_name in disabled)

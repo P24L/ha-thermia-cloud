@@ -18,7 +18,6 @@ from .errors import ApiError, NetworkError, RateLimitError
 _LOGGER = logging.getLogger(__name__)
 _NUMBER = re.compile(r"/\d+")
 
-TIMEOUT = aiohttp.ClientTimeout(total=30)
 MAX_SERVER_RETRIES = (
     2  # immediate retries for 5xx inside one request; longer waits are the caller's job
 )
@@ -37,7 +36,9 @@ class ThermiaHttp:
         base_url: str,
         *,
         sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
+        timeout: float = 30,
     ) -> None:
+        self._timeout = aiohttp.ClientTimeout(total=timeout)
         self._session = session
         self._auth = auth
         self._base_url = base_url.rstrip("/")
@@ -58,7 +59,7 @@ class ThermiaHttp:
                     json=json,
                     params=params,
                     headers={"Authorization": f"Bearer {token}"},
-                    timeout=TIMEOUT,
+                    timeout=self._timeout,
                 ) as resp:
                     status = resp.status
                     _LOGGER.debug("%s %s -> %s", method, _redact(path), status)

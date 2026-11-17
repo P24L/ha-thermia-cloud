@@ -175,5 +175,43 @@
     "no_installation": {
       "message": "Unknown installation for this entry."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Thermia Cloud options",
+        "description": "Read-only mode blocks every write to the heat pump (entities and services). The update interval takes effect after saving.",
+        "data": {
+          "scan_interval": "Update interval (seconds)",
+          "read_only": "Read-only mode",
+          "timeout": "Request timeout (seconds)",
+          "debug_attributes": "Add raw register values as attributes"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_register": {
+      "name": "Set register",
+      "description": "Write a value to any register, including ones without an entity. The same rules as for entities apply: read-only mode, validation against the cloud's limits, installer-level registers are refused.",
+      "fields": {
+        "device_id": {
+          "name": "Heat pump",
+          "description": "The heat pump (installation device)."
+        },
+        "group": {
+          "name": "Group",
+          "description": "Register group, for example REG_GROUP_HEATING_CURVE."
+        },
+        "register": {
+          "name": "Register",
+          "description": "Register name or index."
+        },
+        "value": {
+          "name": "Value",
+          "description": "The value to write."
+        }
+      }
+    }
   }
 }

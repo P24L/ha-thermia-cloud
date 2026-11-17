@@ -10,6 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import ThermiaConfigEntry
+from .catalog.planner import option_key
 from .entity import ThermiaEntity
 
 
@@ -33,7 +34,7 @@ class ThermiaSensor(ThermiaEntity, SensorEntity):
         if plan.display_precision is not None:
             self._attr_suggested_display_precision = plan.display_precision
         if plan.options:
-            self._attr_options = [name.lower() for _, name in plan.options]
+            self._attr_options = [option_key(name) for _, name in plan.options]
 
     @property
     def native_value(self) -> Any:
@@ -43,6 +44,6 @@ class ThermiaSensor(ThermiaEntity, SensorEntity):
         if self.plan.device_class == "timestamp":
             return datetime.fromtimestamp(value, UTC)
         if self.plan.options:
-            names = {v: n.lower() for v, n in self.plan.options}
+            names = {v: option_key(n) for v, n in self.plan.options}
             return names.get(int(value))
         return value
