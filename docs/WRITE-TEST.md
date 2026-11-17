@@ -35,6 +35,14 @@ Prefer daytime and mild weather.
 | 5 | Set the curve back to the original value | Same behaviour as step 2 |
 | 6 | Repeat steps 2–5 for **circuit 1** | Same; the main curve must **not** move when circuit 1 is changed (they are separate registers) |
 
+## Optional, only with a separate "go": what does Constant mode expose?
+
+The official app shows one extra parameter when a circuit is set to *Constant*. To learn which
+register it is: switch **circuit 1** to *Constant* for about a minute, run `live_smoke.py`, switch
+it back to *Curve* and verify the original value. The integration should rediscover by itself
+(*"register set changed"* in the log) and show the new register as a disabled entity. Do **not**
+do this together with the +1 °C test — one change at a time.
+
 ## Automation comes after, not instead
 
 Do the manual run first: a failure in an automation is much harder to read. Once steps 2–6 are

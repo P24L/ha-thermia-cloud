@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
@@ -22,6 +23,7 @@ from .catalog.labels import (
     LabelResolver,
     async_load_bundled,
     async_load_curated,
+    async_load_overrides,
     filter_label_keys,
     pick_culture,
 )
@@ -171,6 +173,23 @@ async def async_rediscover(
     hass.config_entries.async_schedule_reload(entry.entry_id)
 
 
+def _drift_handler(
+    hass: HomeAssistant, entry: ThermiaConfigEntry, installation_id: int
+) -> Callable[[], None]:
+    """Callback for the coordinator: rediscover in the background (never inside a poll)."""
+
+    async def rediscover() -> None:
+        try:
+            await async_rediscover(hass, entry, installation_id)
+        except ThermiaError as err:
+            _LOGGER.warning("Automatic rediscovery failed: %s", err)
+
+    def handler() -> None:
+        entry.async_create_background_task(hass, rediscover(), f"{DOMAIN}_rediscover")
+
+    return handler
+
+
 def _labels_store(hass: HomeAssistant, entry: ConfigEntry) -> Store[dict[str, Any]]:
     return Store(hass, STORE_VERSION, f"{DOMAIN}.labels.{entry.entry_id}")
 
@@ -217,6 +236,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
             bundled,
             curated=await async_load_curated(language),
             curated_fallback=await async_load_curated("en"),
+            overrides=await async_load_overrides(),
             refreshed=stored.get("labels")
             if stored.get("culture") == pick_culture(language, bundled)
             else None,
@@ -250,7 +270,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                     for i, t in missing_raw.items()
                     if i.isdigit() and installation_owns(discovery, int(i))
                 },
+                datetime.fromisoformat(missing_raw["last_drift"])
+                if "last_drift" in missing_raw
+                else None,
             )
+            coordinator.on_drift = _drift_handler(hass, entry, installation.id)
             await coordinator.async_config_entry_first_refresh()
             assert coordinator.data is not None
             registers = [

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
@@ -25,6 +25,9 @@ from .discovery import Discovery
 from .repairs import sync_vanished
 
 _LOGGER = logging.getLogger(__name__)
+
+DRIFT_MIN_INTERVAL = timedelta(hours=1)  # at most one automatic rediscovery per hour
+DRIFT_MISSING_POLLS = 3  # polls in a row a planned register must be missing to count as drift
 
 FAST_POLL = timedelta(seconds=5)  # after a write, until the read-back matches
 FAST_POLL_WINDOW = timedelta(seconds=30)
@@ -50,6 +53,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         interval: int,
         missing_store: Store[dict[str, str]] | None = None,
         missing_since: dict[int, datetime] | None = None,
+        last_drift: datetime | None = None,
     ) -> None:
         super().__init__(
             hass,
@@ -76,6 +80,10 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         # register id -> first time it was missing (persisted, so a restart does not reset it)
         self._missing_store = missing_store
         self.missing_since: dict[int, datetime] = missing_since or {}
+        # Called when the cloud's register set no longer matches our discovery (see _check_drift)
+        self.on_drift: Callable[[], None] | None = None
+        self._last_drift = last_drift  # persisted: a reload must not reset the rate limit
+        self._missing_polls = 0
 
     def spec(self, register_id: int) -> RegisterSpec | None:
         return self._by_id.get(register_id)
@@ -87,6 +95,25 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.update_interval = FAST_POLL
         self.async_update_listeners()
         self.hass.async_create_task(self.async_request_refresh())
+
+    def _check_drift(self, values: Mapping[int, RegisterValue], missing: bool) -> None:
+        """Rediscover when the cloud's register set changed under us.
+
+        Switching a circuit between *Curve* and *Constant* changes which registers the cloud
+        returns: new ones appear, others vanish. New registers are noticed immediately, vanished
+        ones after a few polls (a single odd answer must not trigger anything).
+        """
+        self._missing_polls = self._missing_polls + 1 if missing else 0
+        appeared = any(i not in self._by_id for i in values)
+        if not (appeared or self._missing_polls >= DRIFT_MISSING_POLLS) or self.on_drift is None:
+            return
+        now = dt_util.utcnow()
+        if self._last_drift is not None and now - self._last_drift < DRIFT_MIN_INTERVAL:
+            return
+        self._last_drift = now
+        self._save_state(immediately=True)  # a reload follows right away
+        _LOGGER.info("The cloud's register set changed; rediscovering the registers")
+        self.on_drift()
 
     def _track_vanished(self, missing: Mapping[int, str]) -> None:
         """Remember since when registers are missing; long-missing ones raise a Repair issue."""
@@ -104,10 +131,23 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         long_missing = [name for i, name in missing.items() if self.missing_since[i] <= limit]
         if self.config_entry is not None:
             sync_vanished(self.hass, self.config_entry.entry_id, self.installation.id, long_missing)
-        if changed and self._missing_store is not None:
-            self._missing_store.async_delay_save(
-                lambda: {str(i): t.isoformat() for i, t in self.missing_since.items()}, 10
-            )
+        if changed:
+            self._save_state()
+
+    def _save_state(self, *, immediately: bool = False) -> None:
+        if self._missing_store is None:
+            return
+
+        def data() -> dict[str, str]:
+            state = {str(i): t.isoformat() for i, t in self.missing_since.items()}
+            if self._last_drift is not None:
+                state["last_drift"] = self._last_drift.isoformat()
+            return state
+
+        if immediately:
+            self.hass.async_create_task(self._missing_store.async_save(data()))
+        else:
+            self._missing_store.async_delay_save(data, 10)
 
     def _settle_pending(self, values: Mapping[int, RegisterValue]) -> None:
         now = dt_util.utcnow()
@@ -166,6 +206,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         elif not missing:
             self._reported_missing = False
         self._track_vanished({p.register_id: p.register_name for p in missing_plans})
+        self._check_drift(values, bool(missing_plans))
         self._settle_pending(values)
         return CoordinatorData(values, self._inactive(values))
 

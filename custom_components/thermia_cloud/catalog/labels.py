@@ -16,6 +16,7 @@ from pathlib import Path
 from .units import strip_unit_bracket
 
 I18N_DIR = Path(__file__).parent / "i18n"
+OVERRIDES_DIR = I18N_DIR / "overrides"
 TRANSLATIONS_DIR = Path(__file__).parent.parent / "translations"
 FALLBACK_CULTURE = "en-US"
 _KEYLIKE = re.compile(r"^[A-Z][A-Z0-9_]*$")
@@ -29,6 +30,24 @@ def load_bundled(directory: Path = I18N_DIR) -> dict[str, dict[str, str]]:
         if not path.name.startswith("_"):
             result[path.stem] = json.loads(path.read_text(encoding="utf-8"))
     return result
+
+
+def load_overrides(directory: Path = OVERRIDES_DIR) -> dict[str, dict[str, str]]:
+    """Our corrections of Thermia's texts, ``{culture: {key: text}}``.
+
+    The bundled snapshots are verbatim copies of the cloud's texts and are never edited; where a
+    text is missing (still English) or wrong we keep a correction here. It wins over both the
+    snapshot and a refreshed copy.
+    """
+    if not directory.is_dir():
+        return {}
+    return {
+        p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted(directory.glob("*.json"))
+    }
+
+
+async def async_load_overrides(directory: Path = OVERRIDES_DIR) -> dict[str, dict[str, str]]:
+    return await asyncio.to_thread(load_overrides, directory)
 
 
 async def async_load_bundled(directory: Path = I18N_DIR) -> dict[str, dict[str, str]]:
@@ -99,12 +118,14 @@ class LabelResolver:
         curated: Mapping[str, str] | None = None,
         curated_fallback: Mapping[str, str] | None = None,
         refreshed: Mapping[str, str] | None = None,
+        overrides: Mapping[str, Mapping[str, str]] | None = None,
     ) -> None:
+        overrides = overrides or {}
         self._culture = pick_culture(language, bundled)
-        self._bundled = bundled
+        self._bundled = {c: {**texts, **overrides.get(c, {})} for c, texts in bundled.items()}
         self._curated = curated or {}
         self._curated_fallback = curated_fallback or {}  # English: used before en-US cloud text
-        self._refreshed = refreshed or {}
+        self._refreshed = {**(refreshed or {}), **overrides.get(self._culture, {})}
         base = self._culture.split("-")[0]
         self._same_language = [
             c for c in sorted(bundled) if c != self._culture and c.split("-")[0] == base

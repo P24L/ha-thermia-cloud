@@ -113,3 +113,23 @@ def test_real_snapshots_cover_the_itec_fixture() -> None:
     assert resolver.label("REG_HEATING_HEAT_CURVE") == "Křivka"  # bracket unit stripped
     missing = [n for n in sorted(names) if n not in bundled["cs-CZ"]]
     assert missing == []
+
+
+def test_overrides_beat_the_snapshot_and_a_refreshed_copy() -> None:
+    bundled = {"en-US": {"REG_A": "Actual RPM"}, "cs-CZ": {"REG_A": "Actual RPM", "REG_B": "Stará"}}
+    overrides = {"cs-CZ": {"REG_A": "Aktuální otáčky"}}
+    resolver = LabelResolver(
+        "cs", bundled, refreshed={"REG_A": "Actual RPM", "REG_B": "Nová"}, overrides=overrides
+    )
+    assert resolver.label("REG_A") == "Aktuální otáčky"  # our correction wins everywhere
+    assert resolver.label("REG_B") == "Nová"  # no override: the refreshed copy is used
+    # other cultures are untouched
+    assert LabelResolver("en", bundled, overrides=overrides).label("REG_A") == "Actual RPM"
+
+
+def test_load_overrides_reads_the_directory(tmp_path: Path) -> None:
+    from custom_components.thermia_cloud.catalog.labels import load_overrides
+
+    (tmp_path / "cs-CZ.json").write_text('{"REG_A": "x"}', encoding="utf-8")
+    assert load_overrides(tmp_path) == {"cs-CZ": {"REG_A": "x"}}
+    assert load_overrides(tmp_path / "missing") == {}
