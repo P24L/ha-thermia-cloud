@@ -181,25 +181,25 @@
       }
     },
     "binary_sensor": {
-      "COMP_VALUE_COMPR": {
+      "comp_value_compr": {
         "name": "Compressor running"
       },
-      "COMP_VALUE_HEATING": {
+      "comp_value_heating": {
         "name": "Heating active"
       },
-      "COMP_VALUE_HOT_WATER": {
+      "comp_value_hot_water": {
         "name": "Hot water heating"
       },
-      "COMP_VALUE_DEFROST": {
+      "comp_value_defrost": {
         "name": "Defrosting"
       },
-      "COMP_VALUE_COOLING": {
+      "comp_value_cooling": {
         "name": "Cooling active"
       },
-      "COMP_VALUE_POOL": {
+      "comp_value_pool": {
         "name": "Pool heating"
       },
-      "COMP_VALUE_RADIATORPUMP": {
+      "comp_value_radiatorpump": {
         "name": "Heating circuit pump"
       }
     }

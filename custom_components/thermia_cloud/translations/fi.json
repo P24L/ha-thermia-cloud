@@ -181,25 +181,25 @@
       }
     },
     "binary_sensor": {
-      "COMP_VALUE_COMPR": {
+      "comp_value_compr": {
         "name": "Kompressori käy"
       },
-      "COMP_VALUE_HEATING": {
+      "comp_value_heating": {
         "name": "Lämmitys käynnissä"
       },
-      "COMP_VALUE_HOT_WATER": {
+      "comp_value_hot_water": {
         "name": "Käyttöveden lämmitys"
       },
-      "COMP_VALUE_DEFROST": {
+      "comp_value_defrost": {
         "name": "Sulatus"
       },
-      "COMP_VALUE_COOLING": {
+      "comp_value_cooling": {
         "name": "Jäähdytys käynnissä"
       },
-      "COMP_VALUE_POOL": {
+      "comp_value_pool": {
         "name": "Altaan lämmitys"
       },
-      "COMP_VALUE_RADIATORPUMP": {
+      "comp_value_radiatorpump": {
         "name": "Lämmityspiirin pumppu"
       }
     }
