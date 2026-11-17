@@ -113,8 +113,8 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 8 — Validate on the maintainer's production setup 🔒
 
-- [ ] P8.1 Dev HA on the Mac (`hass -c dev-config`), integration set up with Read-only mode ON
-- [ ] P8.2 `live_smoke.py` against the real account; compare discovered plan with fixture
+- [ ] P8.1 Dev HA on the Mac (`hass -c dev-config`), integration set up with Read-only mode ON *(2026-11-17: dev HA on the Mac runs with the real account and only reads; Read-only mode itself does not exist yet (P5.4), the build has no write path at all. Restart survival checked: cached discovery reused, no re-login)*
+- [x] P8.2 `live_smoke.py` against the real account; compare discovered plan with fixture *(2026-11-17: live read matched the fixture (26 registers, 14 history entries, 9 conditions) except two hot-water registers that vanished later in the day (API-NOTES §8); in dev HA all 11 default-enabled entities show the values `live_smoke` printed)*
 - [ ] P8.3 🔒 Backup + deploy dev build to the real HA (Path A) — Stage A *observe ≥ 7 days* (checklist in `DEVELOPMENT.md` §4.4)
 - [ ] P8.4 Stage A results recorded (value comparison, request rate, token expiry, restart survival)
 - [ ] P8.5 🔒 Stage B: enable writes for the main heating curve only; verify in the Thermia app
