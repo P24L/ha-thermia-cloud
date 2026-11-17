@@ -1,0 +1,12 @@
+[
+ {
+  "code": "unresolved_reference",
+  "detail": "REG_SER_AUX_HEAT_MAX_STEP",
+  "register": "REG_OPER_TIME_IMM1"
+ },
+ {
+  "code": "unresolved_reference",
+  "detail": "REG_SER_AUX_HEAT_MAX_STEP",
+  "register": "REG_OPER_TIME_IMM2"
+ }
+]

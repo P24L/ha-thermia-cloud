@@ -1,10 +1,10 @@
 import json
+import os
 from dataclasses import asdict, replace
 from datetime import datetime
 from pathlib import Path
 
 import pytest
-from syrupy.assertion import SnapshotAssertion
 
 from custom_components.thermia_cloud.catalog.loader import load_catalog, parse_catalog
 from custom_components.thermia_cloud.catalog.planner import (
@@ -54,10 +54,26 @@ def by_name(plan, name: str, group: str | None = None) -> list[EntityPlan]:  # t
     ]
 
 
-def test_itec_snapshot(plan, snapshot: SnapshotAssertion) -> None:  # type: ignore[no-untyped-def]
-    rows = [asdict(e) for e in plan.entities]
-    assert rows == snapshot
-    assert [asdict(n) for n in plan.notes] == snapshot(name="notes")
+GOLDEN = Path(__file__).parent / "golden"
+
+
+def assert_golden(name: str, data: object) -> None:
+    """Compare with ``golden/<name>.json``; run with ``UPDATE_GOLDEN=1`` to rewrite it.
+
+    Plain JSON instead of a snapshot library: readable in a pull request and the same on every
+    platform.
+    """
+    actual = json.dumps(data, indent=1, sort_keys=True, ensure_ascii=False, default=list) + "\n"
+    path = GOLDEN / f"{name}.json"
+    if os.environ.get("UPDATE_GOLDEN"):
+        path.parent.mkdir(exist_ok=True)
+        path.write_text(actual, encoding="utf-8")
+    assert path.read_text(encoding="utf-8") == actual, f"{name} changed (UPDATE_GOLDEN=1 to accept)"
+
+
+def test_itec_plan_matches_the_golden_file(plan) -> None:  # type: ignore[no-untyped-def]
+    assert_golden("itec_plan", [asdict(e) for e in plan.entities])
+    assert_golden("itec_plan_notes", [asdict(n) for n in plan.notes])
 
 
 def test_hot_water_mode_uses_visible_values(plan) -> None:  # type: ignore[no-untyped-def]

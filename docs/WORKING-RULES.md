@@ -15,7 +15,7 @@ Status: design done, code not started. **Read first, in this order:** `docs/ROAD
 - **Layering:** `custom_components/thermia_cloud/client/` must **not** import `homeassistant`. The planner is a pure function. HA glue stays thin.
 - **Independent auth implementation:** `client/auth.py` is written from `docs/API-NOTES.md` §2 — do not copy or port code from the `klejejs/*` projects (decision D2).
 - **Home Assistant conventions:** `ConfigEntry.runtime_data` (not `hass.data`), `DataUpdateCoordinator`, `has_entity_name=True`, `entity_id` in services (never `device_id`; the `set_register` power-user service targets a config entry/device — a documented exception), typed errors (`ConfigEntryAuthFailed`, `UpdateFailed`, `HomeAssistantError` with translation keys), async only (no blocking calls in the event loop).
-- **Python 3.14**, `ruff` (lint+format), `mypy --strict` on `client/` and `catalog/`, tests with `pytest`; every client change needs a fixture-based test, every catalog change a planner snapshot.
+- **Python 3.14**, `ruff` (lint+format), `mypy --strict` on `client/` and `catalog/`, tests with `pytest`; every client change needs a fixture-based test, every catalog change an updated planner golden file.
 - **Commits:** conventional (`feat:`, `fix:`, `docs:`, `test:`, `chore:`), small and reviewable.
 
 ## Safety and privacy (non-negotiable)

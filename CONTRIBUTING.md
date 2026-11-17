@@ -22,7 +22,7 @@ Details: `docs/DEVELOPMENT.md`.
 ## Rules for changes
 
 - Conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`), small and reviewable.
-- Every client change needs a fixture-based test; every catalog change needs a planner snapshot.
+- Every client change needs a fixture-based test; every catalog change needs an updated planner golden file.
 - `custom_components/thermia_cloud/client/` must not import `homeassistant`.
 - No credentials, tokens, hostnames, installation ids, MAC addresses, addresses or e-mails in code, fixtures, logs or issues.
 - Fixtures must go through `scripts/anonymize.py` before they are committed.

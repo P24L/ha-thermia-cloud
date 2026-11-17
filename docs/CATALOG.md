@@ -204,4 +204,4 @@ Thermia's label texts are third-party content. See `DECISIONS.md` D4 for the acc
 
 1. Download diagnostics from the integration (redacted).
 2. Run `scripts/anonymize.py diagnostics.json tests/fixtures/<family>_profile_<id>/`.
-3. Add catalog entries + fixture + expected planner snapshot; CI validates the schema and snapshots.
+3. Add catalog entries + fixture + updated golden file (`UPDATE_GOLDEN=1 pytest tests/catalog/test_planner.py`); CI validates the schema and the golden files.

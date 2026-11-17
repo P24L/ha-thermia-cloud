@@ -10,7 +10,7 @@ HA needs Python ≥ 3.14 — use `uv` to get its own interpreter, don't touch th
 cd ~/dev/ha-thermia-cloud
 uv venv --python 3.14
 source .venv/bin/activate
-uv pip install -r requirements_test.txt     # pytest-homeassistant-custom-component, ruff, mypy, syrupy
+uv pip install -r requirements_test.txt     # pytest-homeassistant-custom-component, ruff, mypy
 pytest -q
 ```
 
@@ -25,7 +25,7 @@ Tooling: `ruff` (lint + format), `mypy --strict` for `client/` and `catalog/`, `
 | Client unit | `pytest` + local fake aiohttp server (`tests/client/conftest.py`; `aioresponses` 0.7.9 does not work with aiohttp 3.14) | auth flow against recorded HTML/JSON, 401 → re-auth → retry, 429/5xx backoff, typed errors, write validation, `ValueSource` fallbacks |
 | Visibility DSL | `pytest` (table-driven) | every condition seen in `history_registers.json` + malformed input |
 | Catalog | `pytest` | schema valid; every key used exists in some fixture or is flagged "family-only" |
-| Planner | `pytest` + `syrupy` snapshots | `tests/fixtures/itec_profile_1005/` → exact entity set (platform, key, unit, default_enabled, device) |
+| Planner | `pytest` + golden JSON files (`tests/catalog/golden/`, `UPDATE_GOLDEN=1` to accept a change) | `tests/fixtures/itec_profile_1005/` → exact entity set (platform, key, unit, default_enabled, device) |
 | Labels | `pytest` | resolution order, bracket-unit stripping, culture fallback (fixture `localization_cs-CZ.excerpt.json`) |
 | HA integration | `pytest-homeassistant-custom-component` | config flow (success, bad auth, policy page, multi-installation, reauth, reconfigure, options), setup/unload, entities, services, repairs, diagnostics snapshot |
 | Live smoke (manual) | `scripts/live_smoke.py` | **read-only** run against the real cloud with env credentials; prints discovered plan; never writes |
