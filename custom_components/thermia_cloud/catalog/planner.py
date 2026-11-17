@@ -35,8 +35,9 @@ class PlannerOptions:
 @dataclass(frozen=True, slots=True)
 class EntityPlan:
     platform: str  # sensor | binary_sensor | number | select | switch
-    key: str  # stable unique-id part: register id, plus "_<flag>" for status flags
-    register_id: int
+    key: str  # unique-id part (D10): registerIndex, plus "_<flag>" for status flags
+    register_id: int  # write id; the key uses register_index instead
+    register_index: int
     register_name: str
     group_name: str
     device: str
@@ -219,6 +220,7 @@ def build_plan(
 
         common = {
             "register_id": spec.register_id,
+            "register_index": spec.register_index,
             "register_name": spec.name,
             "group_name": spec.group_name,
             "device": catalog.device_for(spec.group_name, entry),
@@ -238,7 +240,7 @@ def build_plan(
                 entities.append(
                     EntityPlan(
                         platform="binary_sensor",
-                        key=f"{spec.register_id}_{flag.value}",
+                        key=f"{spec.register_index}_{flag.value}",
                         label_key=flag.name,
                         unit=None,
                         device_class=device_class,
@@ -276,7 +278,7 @@ def build_plan(
         entities.append(
             EntityPlan(
                 platform=platform,
-                key=str(spec.register_id),
+                key=str(spec.register_index),
                 label_key=spec.name,
                 unit=None if spec.presentation in ("Enumeration", "PosixTime") else unit,
                 device_class=device_class,

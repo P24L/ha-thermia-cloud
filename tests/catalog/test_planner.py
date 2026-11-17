@@ -85,6 +85,14 @@ def test_status_flags_only_visible_bits(plan) -> None:  # type: ignore[no-untype
     assert len({f.key for f in flags}) == len(flags)
 
 
+def test_keys_follow_decision_d10(plan) -> None:  # type: ignore[no-untyped-def]
+    [flag1] = [e for e in by_name(plan, "COMP_STATUS_ITEC") if e.flag_value == 1]
+    assert flag1.key == f"{flag1.register_index}_1"
+    [curve] = by_name(plan, "REG_HEATING_HEAT_CURVE", "REG_GROUP_HEATING_CURVE")
+    assert curve.key == str(curve.register_index) != str(curve.register_id)
+    assert len({e.key for e in plan.entities}) == len(plan.entities)
+
+
 def test_hidden_register_creates_nothing(plan) -> None:  # type: ignore[no-untyped-def]
     assert by_name(plan, "COMP_HAS_LINK") == []
 
@@ -200,11 +208,26 @@ def test_name_collision_pass() -> None:
 
 def _dummy() -> EntityPlan:
     return EntityPlan(
-        platform="sensor", key="0", register_id=0, register_name="R", group_name="G", device="main",
-        label_key="R", translation_key=None, description_key=None, unit=None, device_class=None,
-        state_class=None, entity_category=None, icon=None, default_enabled=False, stale=False,
-        risk="none", writable=False,
-    )  # fmt: skip
+        platform="sensor",
+        key="0",
+        register_id=0,
+        register_index=0,
+        register_name="R",
+        group_name="G",
+        device="main",
+        label_key="R",
+        translation_key=None,
+        description_key=None,
+        unit=None,
+        device_class=None,
+        state_class=None,
+        entity_category=None,
+        icon=None,
+        default_enabled=False,
+        stale=False,
+        risk="none",
+        writable=False,
+    )
 
 
 def test_unit_resolution_order() -> None:
