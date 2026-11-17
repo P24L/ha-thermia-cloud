@@ -41,7 +41,7 @@ Observed behaviour:
 | Groups of a profile | `GET /api/v1/installationprofiles/{profileId}/groups` | ✅ `[{id,name,parentId,visibility,description}]` — 23 groups for profile 1005 |
 | Registers of a group | `GET /api/v1/Registers/Installations/{id}/Groups/{groupName}` | ✅ values + specification (see §4). Unavailable groups return `200 []`. |
 | Write register | `POST /api/v1/Registers/Installations/{id}/Registers` body `{registerSpecificationId, registerValue, clientUuid}` | ✅ HTTP 200; value is **queued** for the device (see `queueId` in push messages) → read back may lag. |
-| Registers available for history | `GET /api/v1/DataHistory/installation/{id}/…` (see upstream `get_historical_data_registers`) | ✅ 14 registers, **carries visibility conditions** (§5). Ids here are `registerIndex`, not `registerId`. |
+| Registers available for history | `GET /api/v1/DataHistory/installation/{id}` → `{installationId, registers[]}` | ✅ 14 registers, **carries visibility conditions** (§5). Ids here are `registerIndex`, not `registerId`. |
 | Alarms | `GET /api/v1/installation/{id}/events?onlyActiveAlarms=false` | ⚠️ |
 | Languages | `GET /api/v1/languages` | ✅ 16 cultures (`en-US`, `cs-CZ`, `de-DE`, `sv-SE`, `pl-PL`, …) |
 | Texts | `GET /api/v1/localization/{culture}` | ✅ `{culture, resources:[{key,value}]}`; `cs-CZ`: 1477 keys, 560 are `REG_*`/`COMP_*` |
@@ -104,6 +104,8 @@ Keys are per name, not per group (`REG_OPERATIONMODE` has one label). Examples (
 - Writes return 200 even when the device is offline or the write is queued.
 - Register timestamps differ widely; polling faster than the gateway uploads is pointless (measure: P0.3).
 - Two different clients logging in with the same account coexist fine (a custom script and the HA integration run in parallel).
+
+- ✅ **Registers can vanish at runtime** (2026-11-17): between 14:29 and 16:38 the cloud stopped returning hot-water `REG_OPERATIONMODE` (id 114185) and `REG_SER_HOT_WATER_TOPH_INTER` (the group answered with 1 instead of 3 registers); everything else, including other registers with 2024 timestamps, stayed. Cause unknown (no change was made through this client; it only reads). → the integration must treat a vanished register as `unavailable` + Repair, not as an error (roadmap P4.5/P6.5), and rediscovery must be able to bring it back.
 
 ## 9. Not yet explored
 

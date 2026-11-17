@@ -62,6 +62,9 @@ async def run() -> int:
                             f"= {value.value}  @ {stamp}"
                         )
                 print(f"  -> {total} registers in {len(groups)} groups")
+                history = await api.get_history_registers(inst.id)
+                with_condition = sum(1 for h in history if h.visibility_condition)
+                print(f"  history registers: {len(history)} ({with_condition} with a condition)")
         finally:
             await auth.close()
     return 0

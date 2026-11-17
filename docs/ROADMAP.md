@@ -45,7 +45,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P2.3 `auth.py` — async B2C PKCE flow **written independently** from `API-NOTES.md` §2 (D2: no upstream code copied); private cookie-jar session, proactive refresh, generation-checked single-flight lock; `AuthError` only for definitive bad credentials, `LoginFlowError` otherwise (refresh-token use per P0.1)
 - [x] P2.4 `http.py` — timeouts, `401 → re-auth once → retry once`, bounded immediate retries with jitter (longer waits are the coordinator's job), redacted logging
 - [x] P2.5 `models.py` — `Installation`, `Group`, `RegisterSpec`, `RegisterValue`, `Snapshot`
-- [ ] P2.6 `api.py` — installations, groups, group registers, history registers, status, languages, localization *(done except history registers: the exact endpoint path is not recorded in `API-NOTES.md` yet)*
+- [x] P2.6 `api.py` — installations, groups, group registers, history registers, status, languages, localization 
 - [x] P2.7 `scripts/anonymize.py` — diagnostics/dump → fixture folder (strips ids, names, MAC, address, tokens)
 - [ ] P2.8 `api.write_register()` — validation (numbers vs min/max/step, enums vs **visible** `valueNames`, `isReadOnly`), per-installation lock, `RegisterWriteError`; semantics refined by P0.8
 - [x] P2.9 `sources.py` — `ValueSource` protocol + `PollingSource` (needed-groups selection)

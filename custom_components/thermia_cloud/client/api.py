@@ -7,6 +7,7 @@ from typing import Any
 from .http import ThermiaHttp
 from .models import (
     Group,
+    HistoryRegister,
     Installation,
     InstallationDetail,
     RegisterSpec,
@@ -38,6 +39,13 @@ class ThermiaApi:
             "GET", f"/api/v1/Registers/Installations/{installation_id}/Groups/{group_name}"
         )
         return [(RegisterSpec.from_json(item), RegisterValue.from_json(item)) for item in data]
+
+    async def get_history_registers(self, installation_id: int) -> list[HistoryRegister]:
+        """Registers offered for history; they carry the visibility conditions."""
+        data = await self._http.request(
+            "GET", f"/api/v1/DataHistory/installation/{installation_id}"
+        )
+        return [HistoryRegister.from_json(item) for item in data.get("registers", [])]
 
     async def get_status(self, installation_id: int) -> dict[str, Any]:
         result: dict[str, Any] = await self._http.request(

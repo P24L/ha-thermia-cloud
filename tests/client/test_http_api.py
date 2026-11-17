@@ -102,3 +102,15 @@ async def test_installation_detail(http: ThermiaHttp, cloud: FakeCloud) -> None:
 async def test_status_is_passed_through(http: ThermiaHttp, cloud: FakeCloud) -> None:
     cloud.on("GET", "/api/v1/installationstatus/0/status", Reply(body=load_api("status")))
     assert (await ThermiaApi(http).get_status(0))["outdoorTemperature"] == 4.0
+
+
+async def test_history_registers_from_fixture(http: ThermiaHttp, cloud: FakeCloud) -> None:
+    import json
+
+    from .conftest import FIXTURES
+
+    raw = json.loads((FIXTURES / "history_registers.json").read_text())
+    cloud.on("GET", "/api/v1/DataHistory/installation/5", Reply(body=raw))
+    registers = await ThermiaApi(http).get_history_registers(5)
+    assert len(registers) == len(raw["registers"])
+    assert any(r.visibility_condition == "{REG_ACTIVATE_POOL} = 1" for r in registers)
