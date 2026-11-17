@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Постоянная температура"
+      },
+      "hot_water_boost_interval": {
+        "name": "Интервал усиленного нагрева ГВС (дни)"
       }
     },
     "switch": {

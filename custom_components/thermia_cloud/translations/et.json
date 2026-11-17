@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Püsitemperatuur"
+      },
+      "hot_water_boost_interval": {
+        "name": "Kuuma vee täiendava kuumutuse intervall (päevad)"
       }
     },
     "switch": {

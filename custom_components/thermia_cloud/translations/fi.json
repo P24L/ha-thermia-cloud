@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Vakiolämpötila"
+      },
+      "hot_water_boost_interval": {
+        "name": "Käyttöveden tehostetun lämmityksen väli (päivää)"
       }
     },
     "switch": {

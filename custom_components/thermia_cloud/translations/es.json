@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Temperatura constante"
+      },
+      "hot_water_boost_interval": {
+        "name": "Intervalo de calentamiento reforzado de ACS (días)"
       }
     },
     "switch": {

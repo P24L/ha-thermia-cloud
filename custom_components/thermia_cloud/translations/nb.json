@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Konstant temperatur"
+      },
+      "hot_water_boost_interval": {
+        "name": "Intervall økt varmtvannsoppvarming (dager)"
       }
     },
     "switch": {

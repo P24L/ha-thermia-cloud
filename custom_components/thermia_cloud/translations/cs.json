@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Konstantní teplota"
+      },
+      "hot_water_boost_interval": {
+        "name": "Interval zvýšeného ohřevu TV (dny)"
       }
     },
     "switch": {

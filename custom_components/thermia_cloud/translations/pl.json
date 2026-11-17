@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Stała temperatura"
+      },
+      "hot_water_boost_interval": {
+        "name": "Interwał podwyższonego grzania CWU (dni)"
       }
     },
     "switch": {

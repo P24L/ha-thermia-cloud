@@ -114,6 +114,7 @@ registers:
     kind: number
     unit: d
     risk: none
+    translation_key: hot_water_boost_interval
 
   # --- temperatures ---
   REG_OPER_DATA_OUTDOOR_TEMP_MA_SA:

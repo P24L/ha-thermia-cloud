@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Temperatura costante"
+      },
+      "hot_water_boost_interval": {
+        "name": "Intervallo riscaldamento acqua calda potenziato (giorni)"
       }
     },
     "switch": {

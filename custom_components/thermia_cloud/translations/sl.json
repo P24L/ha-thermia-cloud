@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Konstantna temperatura"
+      },
+      "hot_water_boost_interval": {
+        "name": "Interval povečanega ogrevanja tople vode (dnevi)"
       }
     },
     "switch": {

@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Température constante"
+      },
+      "hot_water_boost_interval": {
+        "name": "Intervalle de chauffe ECS renforcée (jours)"
       }
     },
     "switch": {

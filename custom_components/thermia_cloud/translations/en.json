@@ -134,6 +134,9 @@
       },
       "constant_temperature": {
         "name": "Constant temperature"
+      },
+      "hot_water_boost_interval": {
+        "name": "Hot water boost interval (days)"
       }
     },
     "switch": {
