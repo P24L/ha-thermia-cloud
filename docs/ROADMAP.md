@@ -59,9 +59,9 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P3.3 `catalog/catalog.yaml` — initial content: the 26 iTec registers (incl. decisions: `REG_ACTIVATE_CIRC1` = select Curve/Constant, `risk: heating`; both `REG_OPERATIONMODE` as selects; `REG_OPER_DATA_DISTR_CIR1` on circuit 1; status flags enabled) + registers known from upstream (`REG_BRINE_*`, `REG_RETURN_LINE`, `REG_COOL_*`, pool, buffer tank, …) *(done: all 26 iTec registers curated and tested; still open: the upstream-known registers (`REG_BRINE_*`, `REG_RETURN_LINE`, cooling, pool, buffer tank), whose exact names/units must be verified before they go in)*
 - [x] P3.4 `planner.py` — pure `EntityPlan` builder (generic rules §4, *visible wins* for enums, risk flags, defaults, stale-register rule, name collision pass) + `syrupy` snapshot for the iTec fixture
 - [x] P3.5 Unit resolution (catalog → modifier map → en-US bracket parse through a fixed unit table → none) + tests
-- [ ] P3.6 `scripts/sync_localization.py` + bundled `i18n/*.json` for all 16 cultures (+ `_meta.json`)
-- [ ] P3.7 `LabelResolver` (order in `CATALOG.md` §5.2, language *Auto*) + tests (cs-CZ fallbacks, bracket stripping, curated names)
-- [ ] P3.8 Status-flag decoding (equality vs bitmask) + tests with `COMP_STATUS_ITEC`
+- [x] P3.6 `scripts/sync_localization.py` + bundled `i18n/*.json` for all 16 cultures (+ `_meta.json`)
+- [x] P3.7 `LabelResolver` (order in `CATALOG.md` §5.2, language *Auto*) + tests (cs-CZ fallbacks, bracket stripping, curated names)
+- [x] P3.8 Status-flag decoding (equality vs bitmask) + tests with `COMP_STATUS_ITEC`
 
 ## Phase 4 — HA integration core (read-only)
 

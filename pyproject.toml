@@ -27,3 +27,6 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-ra"
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*" = ["E402"]  # scripts adjust sys.path before importing the package

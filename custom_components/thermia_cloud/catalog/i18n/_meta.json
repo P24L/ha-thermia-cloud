@@ -1,0 +1,23 @@
+{
+ "fetched_at": "2026-11-17T13:22:23Z",
+ "key_counts": {
+  "cs-CZ": 560,
+  "da-DK": 560,
+  "de-DE": 560,
+  "en-US": 564,
+  "es-ES": 560,
+  "et-EE": 560,
+  "fi-FI": 560,
+  "fr-FR": 560,
+  "it-IT": 560,
+  "nb-NO": 560,
+  "nl-NL": 560,
+  "pl-PL": 560,
+  "ru-RU": 523,
+  "sl-SI": 559,
+  "sl-SL": 560,
+  "sv-SE": 560
+ },
+ "source": "Thermia Online localization endpoint (see NOTICE.md)",
+ "tool": "sync_localization/1"
+}
