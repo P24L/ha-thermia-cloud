@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import uuid
 from typing import Any
 
@@ -17,6 +18,8 @@ from .models import (
     RegisterValue,
 )
 from .validation import validate_write
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class ThermiaApi:
@@ -78,7 +81,7 @@ class ThermiaApi:
         lock = self._write_locks.setdefault(installation_id, asyncio.Lock())
         async with lock:
             try:
-                await self._http.request(
+                response = await self._http.request(
                     "POST",
                     f"/api/v1/Registers/Installations/{installation_id}/Registers",
                     json={
@@ -87,6 +90,7 @@ class ThermiaApi:
                         "clientUuid": str(uuid.uuid4()),
                     },
                 )
+                _LOGGER.debug("Write accepted by the cloud; response: %.200r", response)
             except RateLimitError:
                 raise
             except ApiError as err:

@@ -64,7 +64,9 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.discovery = discovery
         self._base_interval = timedelta(seconds=interval)
         # register id -> (value we wrote, give up at); shown as the ``pending_value`` attribute
-        self.pending: dict[int, tuple[float, datetime]] = {}
+        self.pending: dict[
+            int, tuple[float, datetime, datetime]
+        ] = {}  # value, give up at, written at
         self._source = source
         self._groups: tuple[str, ...] = discovery.groups  # all until the plan narrows it
         self._plans: tuple[EntityPlan, ...] = ()
@@ -80,7 +82,8 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     def track_write(self, register_id: int, value: float) -> None:
         """The cloud accepted ``value``: poll fast until the register shows it (max 30 s)."""
-        self.pending[register_id] = (value, dt_util.utcnow() + FAST_POLL_WINDOW)
+        now = dt_util.utcnow()
+        self.pending[register_id] = (value, now + FAST_POLL_WINDOW, now)
         self.update_interval = FAST_POLL
         self.async_update_listeners()
         self.hass.async_create_task(self.async_request_refresh())
@@ -108,10 +111,16 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
     def _settle_pending(self, values: Mapping[int, RegisterValue]) -> None:
         now = dt_util.utcnow()
-        for register_id, (wanted, give_up_at) in list(self.pending.items()):
+        for register_id, (wanted, give_up_at, written_at) in list(self.pending.items()):
             current = values.get(register_id)
             if current is not None and current.value is not None and current.value == wanted:
                 del self.pending[register_id]
+                _LOGGER.debug(
+                    "Register %s read back as %s after %.1f s",
+                    register_id,
+                    wanted,
+                    (now - written_at).total_seconds(),
+                )
             elif now >= give_up_at:
                 del self.pending[register_id]
                 log = _LOGGER.warning if self.installation.is_online else _LOGGER.info
