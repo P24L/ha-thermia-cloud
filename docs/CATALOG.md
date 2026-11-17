@@ -121,6 +121,14 @@ registers:
 
 Initial content = everything in the iTec profile fixtures (26 registers) + the registers the upstream library knows (`REG_BRINE_*`, `REG_RETURN_LINE`, `REG_COOL_SENSOR_*`, `REG_ACTUAL_POOL_TEMP`, `REG_OPER_DATA_BUFFER_TANK`, …) so other families get names/units even before anyone shares a dump.
 
+### 2a. `state_dependent`
+
+`state_dependent: true` marks a register the cloud only returns in some state — the curve
+registers of a circuit in *Curve* mode, the constant-temperature register in *Constant* mode, the
+hot-water mode and boost interval while hot water is on (`docs/API-NOTES.md` section 8). While
+such a register is absent its entity stays, `unavailable`, with no warning log and no Repair
+issue. Registers without the flag that vanish are logged once and raise a Repair after 7 days.
+
 ## 3. `risk` flag
 
 | Value | Meaning | Effect |

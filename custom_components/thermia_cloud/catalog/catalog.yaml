@@ -26,6 +26,7 @@ registers:
     risk: heating
     translation_key: heating_curve
     shared: true
+    state_dependent: true
   REG_HEATING_HEAT_CURVE_MIN:
     kind: number
     translation_key: heating_curve_min
@@ -33,6 +34,7 @@ registers:
     device_class: temperature
     risk: heating
     shared: true
+    state_dependent: true
   REG_HEATING_HEAT_CURVE_MAX:
     kind: number
     translation_key: heating_curve_max
@@ -40,6 +42,8 @@ registers:
     device_class: temperature
     risk: heating
     shared: true
+    state_dependent: true
+
   # main circuit (the heat pump device itself); the plain entries above serve circuit 1
   REG_GROUP_HEATING_CURVE/REG_HEATING_HEAT_CURVE:
     kind: number
@@ -78,6 +82,7 @@ registers:
     default_enabled: true
     risk: heating
     translation_key: constant_temperature
+    state_dependent: true
 
   # circuit mode: the cloud label says "Aktivovat", the values are OFF (hidden) / Curve / Constant
   REG_ACTIVATE_CIRC1:
@@ -96,6 +101,7 @@ registers:
     translation_key: hot_water_mode
     default_enabled: true
     risk: none
+    state_dependent: true
 
   # --- hot water ---
   REG_HOT_WATER_STATUS:
@@ -115,6 +121,7 @@ registers:
     unit: d
     risk: none
     translation_key: hot_water_boost_interval
+    state_dependent: true
 
   # --- temperatures ---
   REG_OPER_DATA_OUTDOOR_TEMP_MA_SA:

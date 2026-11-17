@@ -28,7 +28,7 @@ async def async_get_config_entry_diagnostics(
     for number, runtime in enumerate(entry.runtime_data.installations, 1):
         data = runtime.coordinator.data
         discovery = runtime.coordinator.discovery
-        specs = {s.register_id: s for s in discovery.specs}
+        specs = {s.register_id: s for s in discovery.all_specs}
         installations.append(
             {
                 # no installation id, name or MAC: the position stands in for them
@@ -39,7 +39,8 @@ async def async_get_config_entry_diagnostics(
                 "profile_id": discovery.profile_id,
                 "discovery_age_s": round(discovery.age_seconds()),
                 "groups": list(discovery.groups),
-                "specs": [asdict(s) for s in discovery.specs],
+                "specs": [asdict(s) for s in discovery.all_specs],
+                "remembered": sorted(r.spec.name for r in discovery.remembered),
                 "history": [asdict(h) for h in discovery.history],
                 "values": {
                     specs[i].name + f"@{specs[i].group_name}": {

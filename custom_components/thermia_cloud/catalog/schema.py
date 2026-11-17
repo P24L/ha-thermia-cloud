@@ -46,6 +46,9 @@ _REGISTER = {
     vol.Optional("device"): str,
     # Allows a plain NAME key although the name occurs in several groups
     vol.Optional("shared"): bool,
+    # The cloud only returns this register in some state (circuit mode, hot water on/off):
+    # while it is absent its entity stays, unavailable, and no Repair issue is raised for it
+    vol.Optional("state_dependent"): bool,
 }
 
 CATALOG_SCHEMA = vol.Schema(
@@ -88,6 +91,7 @@ class CatalogRegister:
     description_key: str | None = None
     device: str | None = None
     shared: bool = False
+    state_dependent: bool = False
 
     @classmethod
     def from_validated(cls, key: str, data: dict[str, Any]) -> CatalogRegister:

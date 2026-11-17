@@ -27,7 +27,6 @@ from .repairs import sync_vanished
 _LOGGER = logging.getLogger(__name__)
 
 DRIFT_MIN_INTERVAL = timedelta(minutes=10)  # at most one automatic rediscovery per 10 minutes
-DRIFT_MISSING_POLLS = 3  # polls in a row a planned register must be missing to count as drift
 
 FAST_POLL = timedelta(seconds=5)  # after a write, until the read-back matches
 FAST_POLL_WINDOW = timedelta(seconds=30)
@@ -77,7 +76,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._source = source
         self._groups: tuple[str, ...] = discovery.groups  # all until the plan narrows it
         self._plans: tuple[EntityPlan, ...] = ()
-        self._by_id = {s.register_id: s for s in discovery.specs}
+        self._by_id = {s.register_id: s for s in discovery.all_specs}
         self._conditions: dict[str, object] = {}
         self._reported_missing = False
         # register id -> first time it was missing (persisted, so a restart does not reset it)
@@ -86,7 +85,6 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         # Called when the cloud's register set no longer matches our discovery (see _check_drift)
         self.on_drift: Callable[[], None] | None = None
         self._last_drift = last_drift  # persisted: a reload must not reset the rate limit
-        self._missing_polls = 0
 
     def spec(self, register_id: int) -> RegisterSpec | None:
         return self._by_id.get(register_id)
@@ -99,23 +97,21 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.async_update_listeners()
         self.hass.async_create_task(self.async_request_refresh())
 
-    def _check_drift(self, values: Mapping[int, RegisterValue], missing: bool) -> None:
-        """Rediscover when the cloud's register set changed under us.
+    def _check_drift(self, values: Mapping[int, RegisterValue]) -> None:
+        """Rediscover when the cloud returns a register we have never seen.
 
-        Switching a circuit between *Curve* and *Constant* changes which registers the cloud
-        returns: new ones appear, others vanish. New registers are noticed immediately, vanished
-        ones after a few polls (a single odd answer must not trigger anything).
+        Switching a circuit between *Curve* and *Constant* makes new registers appear. (Registers
+        that merely vanish need nothing: their entities turn unavailable and are back when the
+        register returns.) At most one rediscovery per 10 minutes, persisted across reloads.
         """
-        self._missing_polls = self._missing_polls + 1 if missing else 0
-        appeared = any(i not in self._by_id for i in values)
-        if not (appeared or self._missing_polls >= DRIFT_MISSING_POLLS) or self.on_drift is None:
+        if not any(i not in self._by_id for i in values) or self.on_drift is None:
             return
         now = dt_util.utcnow()
         if self._last_drift is not None and now - self._last_drift < DRIFT_MIN_INTERVAL:
             return
         self._last_drift = now
         self._save_state(immediately=True)  # a reload follows right away
-        _LOGGER.info("The cloud's register set changed; rediscovering the registers")
+        _LOGGER.info("The cloud returned an unknown register; rediscovering the registers")
         self.on_drift()
 
     def _track_vanished(self, missing: Mapping[int, str]) -> None:
@@ -201,8 +197,12 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
         values = snapshot.values
         polled = set(self._groups)
+        # Registers that the cloud only returns in some state are *expected* to come and go:
+        # their entities just turn unavailable, with no warning and no Repair issue.
         missing_plans = [
-            p for p in self._plans if p.group_name in polled and p.register_id not in values
+            p
+            for p in self._plans
+            if p.group_name in polled and p.register_id not in values and not p.state_dependent
         ]
         missing = [p.register_name for p in missing_plans]
         if missing and not self._reported_missing:
@@ -211,7 +211,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         elif not missing:
             self._reported_missing = False
         self._track_vanished({p.register_id: p.register_name for p in missing_plans})
-        self._check_drift(values, bool(missing_plans))
+        self._check_drift(values)
         self._settle_pending(values)
         return CoordinatorData(
             values, self._inactive(values), {i: p[0] for i, p in self.pending.items()}

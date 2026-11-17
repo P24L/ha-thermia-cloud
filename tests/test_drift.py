@@ -7,7 +7,6 @@ from unittest.mock import patch
 import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
-from homeassistant.helpers import issue_registry as ir
 from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import MockConfigEntry, async_fire_time_changed
 
@@ -119,25 +118,17 @@ async def test_rediscovery_is_rate_limited_across_reloads(
     assert api.calls.count("get_history_registers") == count
 
 
-async def test_vanished_registers_trigger_rediscovery_after_three_polls(
-    hass: HomeAssistant, api: FakeApi
-) -> None:
-    entry = await setup(hass)
+async def test_a_vanished_register_needs_no_rediscovery(hass: HomeAssistant, api: FakeApi) -> None:
+    await setup(hass)
     before = api.calls.count("get_history_registers")
     api.hide.add("REG_OPER_DATA_OUTDOOR_TEMP_MA_SA")
-
-    await poll(hass, 61)
-    await poll(hass, 125)
-    assert api.calls.count("get_history_registers") == before  # two polls are not enough
-    await poll(hass, 190)
-    assert api.calls.count("get_history_registers") == before + 1
-
-    # after rediscovery the register is no longer expected: nothing is "missing" any more
-    coordinator = entry.runtime_data.installations[0].coordinator
-    assert coordinator.missing_since == {}
-    assert not any(
-        i.domain == DOMAIN and "vanished" in i.issue_id for i in ir.async_get(hass).issues.values()
+    for seconds in (61, 125, 190, 255):
+        await poll(hass, seconds)
+    assert api.calls.count("get_history_registers") == before  # its entity just turns unavailable
+    outdoor = er.async_get(hass).async_get_entity_id(
+        "sensor", DOMAIN, f"{INSTALLATION_ID}_{OUTDOOR['registerIndex']}"
     )
+    assert hass.states.get(outdoor).state == "unavailable"
 
 
 async def test_one_odd_answer_does_not_rediscover(hass: HomeAssistant, api: FakeApi) -> None:
@@ -154,15 +145,18 @@ async def test_one_odd_answer_does_not_rediscover(hass: HomeAssistant, api: Fake
 async def test_a_later_change_is_rediscovered_after_the_pause(
     hass: HomeAssistant, api: FakeApi, freezer
 ) -> None:
-    """Switching a circuit to Constant and back again: both changes must be picked up."""
+    """Two changes more than 10 minutes apart are both picked up."""
     await setup(hass)
     api.extra = [new_register()]
-    await poll(hass, 61)  # the mode-only register appears
+    await poll(hass, 61)
     after_first = api.calls.count("get_history_registers")
 
-    api.extra = []  # ... and disappears again, 11 minutes later
+    api.extra = [
+        new_register(),
+        {**new_register(), "registerId": NEW_ID + 1, "registerIndex": NEW_ID + 1},
+    ]
     freezer.tick(timedelta(minutes=11))
-    for _ in range(4):
+    for _ in range(2):
         freezer.tick(timedelta(seconds=61))
         async_fire_time_changed(hass)
         await hass.async_block_till_done()

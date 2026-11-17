@@ -41,7 +41,7 @@ from .client.auth import ThermiaAuth
 from .client.config import ThermiaConfig, fetch_config
 from .client.errors import AuthError, PolicyAcceptanceError, ThermiaError
 from .client.http import ThermiaHttp
-from .client.models import Installation
+from .client.models import Installation, RegisterValue
 from .client.sources import PollingSource
 from .client.visibility import VisibilityParseError, parse_condition
 from .const import (
@@ -61,7 +61,7 @@ from .const import (
     USER_AGENT,
 )
 from .coordinator import ThermiaCoordinator
-from .discovery import Discovery, discover
+from .discovery import Discovery, discover, merge_remembered
 from .entity import device_identifier
 from .repairs import sync_discovery_empty, sync_policy_acceptance
 from .services import async_register_services
@@ -156,6 +156,7 @@ async def _load_discovery(
             _LOGGER.warning("Cloud unreachable, using cached discovery")
             return cached
         raise
+    fresh = merge_remembered(cached, fresh)
     cache[str(installation_id)] = fresh.to_json()
     await store.async_save(cache)
     return fresh
@@ -166,15 +167,25 @@ async def async_rediscover(
     entry: ThermiaConfigEntry,
     installation_id: int,
     api: ThermiaApi | None = None,
+    *,
+    forget: bool = False,
 ) -> None:
     """Read everything again and reload the entry (button, or automatic on register drift).
 
+    ``forget`` drops the remembered specs of vanished registers (the *Rediscover* button).
     ``api`` is passed explicitly when the entry is still being set up (``runtime_data`` is not
     there yet): the first poll can already notice that the cached register set is outdated.
     """
     fresh = await discover(api or entry.runtime_data.api, installation_id)
     store = _discovery_store(hass, entry)
     cache = await store.async_load() or {}
+    previous: Discovery | None = None
+    if (raw := cache.get(str(installation_id))) is not None:
+        try:
+            previous = Discovery.from_json(raw)
+        except KeyError, TypeError, ValueError:
+            previous = None
+    fresh = merge_remembered(previous, fresh, forget=forget)
     cache[str(installation_id)] = fresh.to_json()
     await store.async_save(cache)
     hass.config_entries.async_schedule_reload(entry.entry_id)
@@ -209,7 +220,7 @@ async def async_refresh_labels(hass: HomeAssistant, entry: ThermiaConfigEntry) -
     value_names = {
         v.name
         for r in runtime.installations
-        for s in r.coordinator.discovery.specs
+        for s in r.coordinator.discovery.all_specs
         for v in s.value_names
     }
     await _labels_store(hass, entry).async_save(
@@ -284,10 +295,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
             coordinator.on_drift = _drift_handler(hass, entry, installation.id, api)
             await coordinator.async_config_entry_first_refresh()
             assert coordinator.data is not None
+            values = coordinator.data.values
+            remembered = {r.spec.register_id for r in discovery.remembered}
             registers = [
-                (spec, coordinator.data.values[spec.register_id])
-                for spec in discovery.specs
-                if spec.register_id in coordinator.data.values
+                # remembered registers are planned even though the cloud returns no value now
+                (
+                    spec,
+                    values.get(spec.register_id)
+                    or RegisterValue(spec.register_id, None, None, None),
+                )
+                for spec in discovery.all_specs
+                if spec.register_id in values or spec.register_id in remembered
             ]
             plan = build_plan(
                 registers,
@@ -349,7 +367,7 @@ async def _has_indoor_sensor(api: ThermiaApi, installation_id: int) -> bool | No
 
 
 def installation_owns(discovery: Discovery, register_id: int) -> bool:
-    return any(spec.register_id == register_id for spec in discovery.specs)
+    return any(spec.register_id == register_id for spec in discovery.all_specs)
 
 
 def _enable_integration_disabled(
@@ -385,7 +403,7 @@ def _needed_groups(
     registry = er.async_get(hass)
     installation_id = discovery.installation_id
     groups_by_name: dict[str, set[str]] = {}
-    for spec in discovery.specs:
+    for spec in discovery.all_specs:
         groups_by_name.setdefault(spec.name, set()).add(spec.group_name)
 
     needed: set[str] = set()

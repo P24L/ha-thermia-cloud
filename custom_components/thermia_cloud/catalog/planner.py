@@ -81,6 +81,7 @@ class EntityPlan:
     display_precision: int | None = None
     runtime_condition: str | None = None  # value-based visibility: false -> unavailable
     disabled_value: float | None = None  # register value meaning "sensor not connected"
+    state_dependent: bool = False  # the cloud only returns it in some state (mode, hot water on)
 
 
 @dataclass(frozen=True, slots=True)
@@ -257,6 +258,7 @@ def build_plan(
             "risk": risk.value,
             "runtime_condition": runtime_condition,
             "disabled_value": disabled_value,
+            "state_dependent": bool(entry and entry.state_dependent),
         }
 
         if platform == "binary_sensor":

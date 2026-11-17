@@ -38,6 +38,7 @@ class FakeApi:
         self.overrides: dict[str, float] = {}  # register name -> value
         self.installation_ids = [INSTALLATION_ID]
         self.has_indoor_sensor: bool | None = True  # from the installation status
+        self.constant_mode = False  # circuit 1 in Constant mode: different registers in its group
         self.group_calls: list[str] = []  # groups read, in order
         self.writes: list[tuple[int, float]] = []  # (register id, value) the "cloud" accepted
         self.values: dict[int, float] = {}  # register id -> current value (after writes)
@@ -75,7 +76,11 @@ class FakeApi:
     ) -> list[tuple[RegisterSpec, RegisterValue]]:
         self._check("get_group_registers")
         self.group_calls.append(group_name)
-        raw: list[dict[str, Any]] = json.loads((FIXTURES / f"group_{group_name}.json").read_text())
+        if self.constant_mode and group_name == "REG_GROUP_HEATING_CURVE_CIRC1":
+            source = FIXTURES / "mode_constant_group_REG_GROUP_HEATING_CURVE_CIRC1.json"
+        else:
+            source = FIXTURES / f"group_{group_name}.json"
+        raw: list[dict[str, Any]] = json.loads(source.read_text())
         if group_name == "REG_GROUP_TEMPERATURES":
             raw = [*raw, *self.extra]
         out = []

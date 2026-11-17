@@ -49,7 +49,9 @@ class ThermiaButton(ButtonEntity):
             if self._key == "refresh_names":
                 await async_refresh_labels(self.hass, self._entry)
             else:
-                await async_rediscover(self.hass, self._entry, self._runtime.installation.id)
+                await async_rediscover(
+                    self.hass, self._entry, self._runtime.installation.id, forget=True
+                )
         except ThermiaError as err:
             raise HomeAssistantError(
                 translation_domain=DOMAIN,
