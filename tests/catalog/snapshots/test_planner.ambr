@@ -377,7 +377,7 @@
       'stale': False,
       'state_class': None,
       'step': 1.0,
-      'translation_key': None,
+      'translation_key': 'hot_water_boost_interval',
       'unit': 'd',
       'writable': True,
     }),
