@@ -18,7 +18,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P0.5 🧪 Visibility-condition grammar: collect all conditions from more dumps; confirm operators (`=`, `!=`, `<`, `<=`, `>`, `>=`, `AND`, `OR`, parentheses?) *(profile 1005 only has `>=`, `>`, `=`, `AND`; parser should support the full set)*
 - [ ] P0.6 🧪 How does a login fail when Thermia requires accepting new terms? Collect from upstream issues; define detection → `PolicyAcceptanceError`
 - [ ] P0.7 🧪 `modifier` meaning table (8/12/1/16/0/…) and decoding of `StatusFlagsTextInd` vs `StatusFlags` vs `MultipleStatusFlags` *(modifier table done for profile 1005; status-flag variants need other families)*
-- [ ] P0.8 🧪🔒 Write semantics: latency until read-back after a write; behaviour when the device is offline (`queueId`). Test by writing the **current value** of a harmless register *(plan: `docs/WRITE-TEST.md`)*
+- [ ] P0.8 🧪🔒 Write semantics: latency until read-back after a write; behaviour when the device is offline (`queueId`). Test by writing the **current value** of a harmless register *(plan: `docs/WRITE-TEST.md`)* *(2026-11-17: first live write of the main curve +1 verified — empty 200 body, read-back after 3.1 s, nothing else changed; offline/rejection behaviour and the circuit-1 curve still to do)*
 - [ ] P0.9 🧪 `REG_PID` ("Heat demand"): unit and range; is it gone for good?
 - [ ] P0.10 🧪 Meaning of group `visibility` 1/2/3/null (role level?) *(not derivable from one dump; `null` = empty technical groups, 1–3 do not predict data; ignore in v0.1)*
 - [ ] P0.11 🧪 Is the WebSocket (`isWebSocketEnabled`) enabled for other regions/accounts? Is `api-prod.thermia.com` reachable with a mobile-app token? (optional)
@@ -117,7 +117,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P8.2 `live_smoke.py` against the real account; compare discovered plan with fixture *(2026-11-17: live read matched the fixture (26 registers, 14 history entries, 9 conditions) except two hot-water registers that vanished later in the day (API-NOTES §8); in dev HA all 11 default-enabled entities show the values `live_smoke` printed)*
 - [ ] P8.3 🔒 Backup + deploy dev build to the real HA (Path A) — Stage A *observe ≥ 7 days* (checklist in `DEVELOPMENT.md` §4.4)
 - [ ] P8.4 Stage A results recorded (value comparison, request rate, token expiry, restart survival)
-- [ ] P8.5 🔒 Stage B: enable writes for the main heating curve only; verify in the Thermia app *(plan: `docs/WRITE-TEST.md`)*
+- [ ] P8.5 🔒 Stage B: enable writes for the main heating curve only; verify in the Thermia app *(plan: `docs/WRITE-TEST.md`)* *(2026-11-17: first live write of the main curve +1 verified — empty 200 body, read-back after 3.1 s, nothing else changed; offline/rejection behaviour and the circuit-1 curve still to do)*
 - [ ] P8.6 Dual-curve sync (main + circuit 1 from one slider) re-created as an **HA automation/script** on the new number entities (no integration feature needed)
 - [ ] P8.7 🔒 Stage C: migrate scripts/automations that wrote to the cloud themselves (e.g. AppDaemon scripts) to the new entities; keep the old script disabled for a week, then remove
 - [ ] P8.8 🔒 Stage D: inventory + re-point references to the old integration's entities (automations, scenes, dashboards), then remove the old integration
