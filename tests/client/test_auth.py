@@ -19,6 +19,8 @@ async def test_login_happy_path(config: ThermiaConfig, cloud: FakeCloud) -> None
     await auth.close()
     assert (token, generation) == ("access-1", 1)
     assert saved == ["refresh-1"]
+    confirmed = ("GET", f"{AUTH_PATH}/api/CombinedSigninAndSignup/confirmed")
+    assert "x-ms-cpim-trans=TRANS-COOKIE" in cloud.cookies_sent[confirmed]
 
 
 async def test_bad_password_is_auth_error(config: ThermiaConfig, cloud: FakeCloud) -> None:

@@ -1,0 +1,15 @@
+{
+  "hasIndoorTempSensor": false,
+  "indoorTemperature": 0.0,
+  "isOutdoorTempSensorFunctioning": true,
+  "outdoorTemperature": 4.0,
+  "isHotWaterActive": false,
+  "hotWaterTemperature": 51.0,
+  "heatingEffect": 0.0,
+  "heatingEffectRegisters": [null],
+  "isHeatingEffectSetByUser": false,
+  "reducedHeatingEffect": 0.0,
+  "reducedHeatingEffectRegisters": [null],
+  "isReducedHeatingEffectSetByUser": false,
+  "hotWaterRegistryName": "REG_HOT_WATER_TEMPERATURE"
+}

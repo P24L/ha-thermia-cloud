@@ -34,6 +34,7 @@ class FakeCloud:
         self._queues: dict[tuple[str, str], deque[Reply]] = defaultdict(deque)
         self._sticky: dict[tuple[str, str], Reply] = {}
         self.calls: list[tuple[str, str]] = []
+        self.cookies_sent: dict[tuple[str, str], str] = {}
         self.base_url = ""
 
     def on(self, method: str, path: str, *replies: Reply) -> None:
@@ -48,6 +49,7 @@ class FakeCloud:
     async def handle(self, request: web.Request) -> web.Response:
         key = (request.method, request.path)
         self.calls.append(key)
+        self.cookies_sent[key] = request.headers.get("Cookie", "")
         queue = self._queues[key]
         reply = queue.popleft() if queue else self._sticky.get(key, Reply(500, "unscripted"))
         if isinstance(reply.body, str):
@@ -59,11 +61,23 @@ class FakeCloud:
         return Reply(200, token_body(**kw))
 
     def script_login(self, *, password_ok: bool = True, **token: Any) -> None:
-        self.on("GET", f"{AUTH_PATH}/oauth2/v2.0/authorize", Reply(body=SIGN_IN_PAGE))
+        self.on(
+            "GET",
+            f"{AUTH_PATH}/oauth2/v2.0/authorize",
+            Reply(
+                body=SIGN_IN_PAGE, headers={"Set-Cookie": "x-ms-cpim-trans=TRANS-COOKIE; Path=/"}
+            ),
+        )
         self.on(
             "POST",
             f"{AUTH_PATH}/SelfAsserted",
-            Reply(body='{"status":"200"}' if password_ok else '{"status":"400","message":"bad"}'),
+            Reply(
+                body='{"status":"200"}' if password_ok else '{"status":"400","message":"bad"}',
+                # B2C expires its transaction cookie here but still wants it on the next call.
+                headers={
+                    "Set-Cookie": "x-ms-cpim-trans=; Path=/; Expires=Wed, 17-Nov-2016 00:00:00 GMT"
+                },
+            ),
         )
         self.on(
             "GET",
@@ -114,3 +128,7 @@ def config(cloud: FakeCloud) -> ThermiaConfig:
 def load_group(name: str) -> list[dict[str, Any]]:
     data: list[dict[str, Any]] = json.loads((FIXTURES / f"group_{name}.json").read_text())
     return data
+
+
+def load_api(name: str) -> Any:
+    return json.loads((FIXTURES.parent / "api" / f"{name}.json").read_text())

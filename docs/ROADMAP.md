@@ -45,12 +45,12 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P2.4 `http.py` — timeouts, `401 → re-auth once → retry once`, bounded immediate retries with jitter (longer waits are the coordinator's job), redacted logging
 - [x] P2.5 `models.py` — `Installation`, `Group`, `RegisterSpec`, `RegisterValue`, `Snapshot`
 - [ ] P2.6 `api.py` — installations, groups, group registers, history registers, status, languages, localization *(done except history registers: the exact endpoint path is not recorded in `API-NOTES.md` yet)*
-- [ ] P2.7 `scripts/anonymize.py` — diagnostics/dump → fixture folder (strips ids, names, MAC, address, tokens)
+- [x] P2.7 `scripts/anonymize.py` — diagnostics/dump → fixture folder (strips ids, names, MAC, address, tokens)
 - [ ] P2.8 `api.write_register()` — validation (numbers vs min/max/step, enums vs **visible** `valueNames`, `isReadOnly`), per-installation lock, `RegisterWriteError`; semantics refined by P0.8
-- [ ] P2.9 `sources.py` — `ValueSource` protocol + `PollingSource` (needed-groups selection)
+- [x] P2.9 `sources.py` — `ValueSource` protocol + `PollingSource` (needed-groups selection)
 - [ ] P2.10 Client unit tests with fixtures (auth happy/bad password/401 retry/429; empty-group = `[]` is not an error) *(auth, http, models, api read-side covered, 20 tests against a local fake server; write tests follow P2.8)*
-- [ ] P2.11 `scripts/live_smoke.py` (read-only, env credentials; prints the discovered specs now, the entity plan once P3.4 exists)
-- [ ] P2.12 Anonymized fixtures for the auth HTML/JSON (csrf/transId placeholders), `installationsInfo`, `installations/{id}`, status and write responses; extend `scripts/anonymize.py`
+- [x] P2.11 `scripts/live_smoke.py` (read-only, env credentials; prints the discovered specs now, the entity plan once P3.4 exists)
+- [ ] P2.12 Anonymized fixtures for the auth HTML/JSON (csrf/transId placeholders), `installationsInfo`, `installations/{id}`, status and write responses; extend `scripts/anonymize.py` *(done: installationsInfo, installation, status in `tests/fixtures/api/`, hand-built from key names; auth placeholders live in `tests/client/conftest.py`; missing: write responses (P0.8))*
 
 ## Phase 3 — Visibility, catalog, planner, labels
 

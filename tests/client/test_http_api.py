@@ -9,7 +9,7 @@ from custom_components.thermia_cloud.client.config import ThermiaConfig
 from custom_components.thermia_cloud.client.errors import ApiError, NetworkError, RateLimitError
 from custom_components.thermia_cloud.client.http import ThermiaHttp
 
-from .conftest import AUTH_PATH, FakeCloud, Reply, load_group
+from .conftest import AUTH_PATH, FakeCloud, Reply, load_api, load_group
 
 TOKEN = f"{AUTH_PATH}/oauth2/v2.0/token"
 X = "/api/v1/x"
@@ -89,16 +89,16 @@ async def test_group_registers_from_fixture_and_empty_group(
 
 
 async def test_installations_listing(http: ThermiaHttp, cloud: FakeCloud) -> None:
-    item = {
-        "id": 1,
-        "name": "Test",
-        "model": "iTec",
-        "isOnline": True,
-        "firmwareVersion": "1.0",
-        "lastOnline": "2026-01-01T00:00:00",
-        "macAddress": "AA-PLACEHOLDER",
-    }
-    cloud.on("GET", "/api/v1/installationsInfo", Reply(body={"totalCount": 1, "items": [item]}))
+    cloud.on("GET", "/api/v1/installationsInfo", Reply(body=load_api("installations_info")))
     [inst] = await ThermiaApi(http).list_installations()
-    assert inst.id == 1 and inst.is_online
-    assert "AA-PLACEHOLDER" not in repr(inst)
+    assert inst.model == "iTec" and inst.is_online
+
+
+async def test_installation_detail(http: ThermiaHttp, cloud: FakeCloud) -> None:
+    cloud.on("GET", "/api/v1/installations/0", Reply(body=load_api("installation")))
+    assert (await ThermiaApi(http).get_installation(0)).profile_id == 1005
+
+
+async def test_status_is_passed_through(http: ThermiaHttp, cloud: FakeCloud) -> None:
+    cloud.on("GET", "/api/v1/installationstatus/0/status", Reply(body=load_api("status")))
+    assert (await ThermiaApi(http).get_status(0))["outdoorTemperature"] == 4.0

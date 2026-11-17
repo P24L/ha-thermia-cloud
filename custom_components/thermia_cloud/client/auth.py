@@ -55,6 +55,7 @@ class ThermiaAuth:
         self._lock = asyncio.Lock()
         # Private session and cookie jar: never share login cookies with anything else.
         self._session: aiohttp.ClientSession | None = None
+        self._cookies: dict[str, str] = {}
 
     @property
     def generation(self) -> int:
@@ -85,11 +86,23 @@ class ThermiaAuth:
     def _get_session(self) -> aiohttp.ClientSession:
         if self._session is None:
             self._session = aiohttp.ClientSession(
-                cookie_jar=aiohttp.CookieJar(),
+                # Cookies are tracked by hand (see _absorb): the B2C flow expires one of its
+                # own cookies mid-flow and still expects it to be sent on the last step.
+                cookie_jar=aiohttp.DummyCookieJar(),
                 headers={"User-Agent": self._user_agent},
                 timeout=aiohttp.ClientTimeout(total=30),
             )
         return self._session
+
+    def _absorb(self, resp: aiohttp.ClientResponse) -> None:
+        """Remember cookies set by a response; expiring (empty) ones are deliberately kept."""
+        for name, morsel in resp.cookies.items():
+            if morsel.value:
+                self._cookies[name] = morsel.coded_value
+
+    @property
+    def _cookie_header(self) -> dict[str, str]:
+        return {"Cookie": "; ".join(f"{k}={v}" for k, v in self._cookies.items())}
 
     @property
     def _scope(self) -> str:
@@ -140,7 +153,7 @@ class ThermiaAuth:
 
     async def _login(self) -> None:
         session = self._get_session()
-        session.cookie_jar.clear()
+        self._cookies = {}
         authority = self._config.authority
         verifier = secrets.token_urlsafe(48)
         challenge = (
@@ -161,23 +174,26 @@ class ThermiaAuth:
         )
         try:
             async with session.get(f"{authority}/oauth2/v2.0/authorize?{query}") as resp:
+                self._absorb(resp)
                 html = await resp.text()
                 if resp.status != 200:
                     raise LoginFlowError(f"authorize endpoint answered {resp.status}")
             trans, csrf = _TRANS_ID.search(html), _CSRF.search(html)
             if trans is None or csrf is None:
                 raise LoginFlowError("transId/csrf not found in the sign-in page")
+            # B2C wants ``tx=StateProperties=<id>`` verbatim: do not percent-encode the "=".
             tx = trans.group(1)
 
             async with session.post(
-                f"{authority}/SelfAsserted?" + urlencode({"tx": tx, "p": POLICY}),
+                f"{authority}/SelfAsserted?tx={tx}&p={POLICY}",
                 data={
                     "request_type": "RESPONSE",
                     "signInName": self._username,
                     "password": self._password,
                 },
-                headers={"X-Csrf-Token": csrf.group(1)},
+                headers={"X-Csrf-Token": csrf.group(1), **self._cookie_header},
             ) as resp:
+                self._absorb(resp)
                 text = await resp.text()
                 if resp.status >= 500:
                     raise LoginFlowError(f"sign-in endpoint answered {resp.status}")
@@ -185,8 +201,9 @@ class ThermiaAuth:
                     raise AuthError("the cloud rejected the credentials")
 
             async with session.get(
-                f"{authority}/api/CombinedSigninAndSignup/confirmed?"
-                + urlencode({"csrf_token": csrf.group(1), "tx": tx, "p": POLICY}),
+                f"{authority}/api/CombinedSigninAndSignup/confirmed"
+                f"?csrf_token={csrf.group(1)}&tx={tx}&p={POLICY}",
+                headers=self._cookie_header,
                 allow_redirects=False,
             ) as resp:
                 location = resp.headers.get("Location", "")
