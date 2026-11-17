@@ -147,6 +147,20 @@ def _join(terms: list[Node]) -> Node | None:
     return terms[0] if len(terms) == 1 else BoolOp("AND", tuple(terms))
 
 
+def node_to_text(node: Node) -> str:
+    """Render a node back to condition text (parseable by :func:`parse_condition`)."""
+    if isinstance(node, Compare):
+        return f"{_operand_text(node.left)} {node.op} {_operand_text(node.right)}"
+    parts = [
+        f"({node_to_text(t)})" if isinstance(t, BoolOp) else node_to_text(t) for t in node.terms
+    ]
+    return f" {node.kind} ".join(parts)
+
+
+def _operand_text(operand: Operand) -> str:
+    return f"{{{operand.name}}}" if isinstance(operand, _Ref) else f"{operand:g}"
+
+
 def evaluate_node(node: Node | None, resolve: Resolver) -> Evaluation:
     """Evaluate a part returned by :meth:`Condition.split`; ``None`` means always visible."""
     return Evaluation(True) if node is None else node.evaluate(resolve)

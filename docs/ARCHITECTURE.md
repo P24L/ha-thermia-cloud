@@ -93,7 +93,7 @@ flowchart TD
      - *Value-based* conditions reference the register **itself** (`{REG_HOT_WATER_TEMPERATURE} > 0`) and `disabledRegisterValue` (`-100` = sensor not connected). They are evaluated **on every poll** and make the entity `unavailable`. A transient 0 at setup therefore never removes an entity.
      - Unresolved reference → treated as visible and listed in diagnostics. References are by *name*; when a name exists in several groups resolve inside the same group first, else flag it.
    - Catalog entry (`GROUP/NAME`, then `NAME`) or the generic rules (§4); names per §4.3.
-   - `default_enabled` from the catalog (generic → `False`); registers whose `timeStamp` is older than 30 days (e.g. a disconnected indoor sensor last updated in 2024) are created disabled with a `stale` attribute.
+   - `default_enabled` from the catalog (generic → `False`); read-only registers (sensors, status flags) whose `timeStamp` is older than 30 days (e.g. a disconnected indoor sensor last updated in 2024) are created disabled with a `stale` attribute. Settings (number/select/switch) are exempt: their timestamp is the last *change*, which can legitimately be years old (hot-water mode, 2024).
 8. Platforms add entities; the entity registry remembers user choices (enabled, renamed, area).
 
 ### 3.2 Polling
