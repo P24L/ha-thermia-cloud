@@ -292,9 +292,11 @@ def build_plan(
 
 
 def resolve_name_collisions(
-    plans: Sequence[EntityPlan], label: Callable[[EntityPlan], str]
+    plans: Sequence[EntityPlan],
+    label: Callable[[EntityPlan], str],
+    suffix: Callable[[EntityPlan], str] = lambda p: p.group_name,
 ) -> dict[str, str]:
-    """Map ``plan.key -> display name``; colliding names on one device get a group suffix."""
+    """Map ``plan.key -> display name``; colliding names on one device get ``(suffix)``."""
     names = {p.key: label(p) for p in plans}
     by_name: dict[tuple[str, str], list[EntityPlan]] = {}
     for plan in plans:
@@ -303,5 +305,5 @@ def resolve_name_collisions(
     for (_, name), group in by_name.items():
         if len(group) > 1:
             for plan in group:
-                result[plan.key] = f"{name} ({plan.platform.replace('_', ' ')}, {plan.group_name})"
+                result[plan.key] = f"{name} ({suffix(plan)})"
     return result

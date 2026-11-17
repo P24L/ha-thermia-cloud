@@ -27,5 +27,16 @@
       "already_configured": "This Thermia account is already configured.",
       "no_installations": "No heat pump is linked to this account."
     }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Circuit 1"
+    },
+    "device_circuit_2": {
+      "name": "Circuit 2"
+    },
+    "device_pool": {
+      "name": "Pool"
+    }
   }
 }

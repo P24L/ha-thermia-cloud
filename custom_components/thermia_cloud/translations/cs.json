@@ -27,5 +27,16 @@
       "already_configured": "Tento účet Thermia je již nastaven.",
       "no_installations": "K tomuto účtu není přiřazeno žádné tepelné čerpadlo."
     }
+  },
+  "device": {
+    "device_circuit_1": {
+      "name": "Okruh 1"
+    },
+    "device_circuit_2": {
+      "name": "Okruh 2"
+    },
+    "device_pool": {
+      "name": "Bazén"
+    }
   }
 }

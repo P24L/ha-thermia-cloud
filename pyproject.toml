@@ -21,6 +21,8 @@ python_version = "3.14"
 strict = true
 files = ["custom_components/thermia_cloud/client", "custom_components/thermia_cloud/catalog"]
 explicit_package_bases = true
+# the HA glue imported by the package __init__ is not held to --strict (client/ and catalog/ are)
+follow_imports = "silent"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

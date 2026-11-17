@@ -70,13 +70,13 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P4.2 Config flow: user → create; entry `unique_id` = token `sub`; errors per `UI-DESIGN.md` §1; installation selection in options *(user → installations → create; installation selection in the options flow comes with P6.2)*
 - [ ] P4.3 Reauth flow
 - [ ] P4.4 Reconfigure flow
-- [ ] P4.5 Coordinator per installation: explicit `config_entry`, `always_update=False`, discovery cache in a `Store`, needed groups from the entity registry (verify HA's reload-on-enable behaviour), `ConfigEntryAuthFailed` / `UpdateFailed(retry_after)`
-- [ ] P4.6 Base entity, devices, child devices (`via_device`, `DeviceInfo(translation_key)`), `runtime_data`, dynamic devices + `async_remove_config_entry_device`
-- [ ] P4.7 `sensor.py` (generic + timestamp + enum)
-- [ ] P4.8 `binary_sensor.py` (status flags)
+- [ ] P4.5 Coordinator per installation: explicit `config_entry`, `always_update=False`, discovery cache in a `Store`, needed groups from the entity registry (verify HA's reload-on-enable behaviour), `ConfigEntryAuthFailed` / `UpdateFailed(retry_after)` *(coordinator, cached discovery, `async_setup_entry`, error mapping done; needed groups still come from `default_enabled` only — entity-registry awareness open)*
+- [ ] P4.6 Base entity, devices, child devices (`via_device`, `DeviceInfo(translation_key)`), `runtime_data`, dynamic devices + `async_remove_config_entry_device` *(base entity, devices incl. child devices, `runtime_data` done; dynamic devices and `async_remove_config_entry_device` open)*
+- [x] P4.7 `sensor.py` (generic + timestamp + enum)
+- [x] P4.8 `binary_sensor.py` (status flags)
 - [ ] P4.9 `diagnostics.py` (redaction + plan + visibility results)
-- [ ] P4.10 `translations/en.json`, `translations/cs.json`
-- [ ] P4.11 HA integration tests (setup/unload, entities from fixture, auth failure → reauth, multi-installation)
+- [ ] P4.10 `translations/en.json`, `translations/cs.json` *(config flow and device names done; entity/curated names follow with the platforms)*
+- [ ] P4.11 HA integration tests (setup/unload, entities from fixture, auth failure → reauth, multi-installation) *(setup/unload, entities from fixture, unavailable/recovery, setup errors done; reauth and multi-installation open)*
 - [ ] P4.12 **Bronze acceptance criteria enforced here, not at the end:** `test-before-configure`, `test-before-setup`, `unique-config-entry`, `config-flow-test-coverage`, `runtime-data`, `has-entity-name`, `entity-unique-id`, `appropriate-polling`, `entity-unavailable` (one log line down / one up)
 
 ## Phase 5 — Writing
