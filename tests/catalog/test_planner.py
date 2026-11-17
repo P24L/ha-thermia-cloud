@@ -275,7 +275,8 @@ def test_installer_level_registers_are_never_enabled_by_default(plan) -> None:  
 
 def test_constant_mode_register_becomes_an_enabled_number_on_circuit_1() -> None:
     """In *Constant* mode the cloud returns REG_HEATING_HEAT_CURVE1_CONSTANT instead of the curve
-    registers (recorded from the real cloud, 2026-11-17)."""
+    registers. The fixture is rebuilt from the real response of 2026-11-17 (id, index, limits,
+    modifier, value and timestamps as recorded; the remaining fields copied from a sibling)."""
     raw = json.loads(
         (FIXTURES / "mode_constant_group_REG_GROUP_HEATING_CURVE_CIRC1.json").read_text()
     )
