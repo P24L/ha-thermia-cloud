@@ -1,8 +1,8 @@
 """Label resolution (``docs/CATALOG.md`` 5.2).
 
 Order: curated name -> refreshed copy -> bundled snapshot of the chosen culture -> same language
-in another culture -> en-US -> humanized key. Cloud labels lose a trailing ``[unit]`` bracket
-only when the unit is a known one.
+in another culture -> curated English name -> en-US cloud text -> humanized key.
+Cloud labels lose a trailing ``[unit]`` bracket only when the unit is a known one.
 """
 
 from __future__ import annotations
@@ -10,12 +10,13 @@ from __future__ import annotations
 import asyncio
 import json
 import re
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from pathlib import Path
 
 from .units import strip_unit_bracket
 
 I18N_DIR = Path(__file__).parent / "i18n"
+TRANSLATIONS_DIR = Path(__file__).parent.parent / "translations"
 FALLBACK_CULTURE = "en-US"
 _KEYLIKE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 _PREFIX = re.compile(r"^(REG_GROUP_|REG_VALUE_|COMP_VALUE_|REG_|COMP_)")
@@ -32,6 +33,42 @@ def load_bundled(directory: Path = I18N_DIR) -> dict[str, dict[str, str]]:
 
 async def async_load_bundled(directory: Path = I18N_DIR) -> dict[str, dict[str, str]]:
     return await asyncio.to_thread(load_bundled, directory)
+
+
+def load_curated(language: str, directory: Path = TRANSLATIONS_DIR) -> dict[str, str]:
+    """Our own names for entities and devices in one language: ``{translation_key: name}``.
+
+    Read from the integration's ``translations/<language>.json`` (entity names plus device
+    names). A language we have no file for gives an empty mapping.
+    """
+    path = directory / f"{language.split('-')[0].split('_')[0].lower()}.json"
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    names: dict[str, str] = {}
+    for platform in data.get("entity", {}).values():
+        names.update({key: value["name"] for key, value in platform.items()})
+    names.update({key: value["name"] for key, value in data.get("device", {}).items()})
+    return names
+
+
+async def async_load_curated(language: str, directory: Path = TRANSLATIONS_DIR) -> dict[str, str]:
+    return await asyncio.to_thread(load_curated, language, directory)
+
+
+LABEL_PREFIXES = ("REG_", "COMP_")  # covers REG_GROUP_*, value names and component texts
+
+
+def filter_label_keys(
+    resources: Mapping[str, str], extra_keys: Iterable[str] = ()
+) -> dict[str, str]:
+    """Keep only register, group and value-name texts (alarm and UI texts are not copied)."""
+    wanted = set(extra_keys)
+    return {
+        key: text
+        for key, text in sorted(resources.items())
+        if key.startswith(LABEL_PREFIXES) or key in wanted
+    }
 
 
 def humanize(key: str) -> str:
@@ -60,11 +97,13 @@ class LabelResolver:
         bundled: Mapping[str, Mapping[str, str]],
         *,
         curated: Mapping[str, str] | None = None,
+        curated_fallback: Mapping[str, str] | None = None,
         refreshed: Mapping[str, str] | None = None,
     ) -> None:
         self._culture = pick_culture(language, bundled)
         self._bundled = bundled
         self._curated = curated or {}
+        self._curated_fallback = curated_fallback or {}  # English: used before en-US cloud text
         self._refreshed = refreshed or {}
         base = self._culture.split("-")[0]
         self._same_language = [
@@ -80,9 +119,13 @@ class LabelResolver:
             return self._curated[translation_key]
         sources = [self._refreshed, self._bundled.get(self._culture, {})]
         sources += [self._bundled[c] for c in self._same_language]
-        sources.append(self._bundled.get(FALLBACK_CULTURE, {}))
         for source in sources:
             text = source.get(key)
             if text:
                 return strip_unit_bracket(text)
+        if translation_key and translation_key in self._curated_fallback:
+            return self._curated_fallback[translation_key]
+        text = self._bundled.get(FALLBACK_CULTURE, {}).get(key)
+        if text:
+            return strip_unit_bracket(text)
         return humanize(key)

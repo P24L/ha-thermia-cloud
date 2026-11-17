@@ -151,6 +151,14 @@
           "constant": "Konstantní"
         }
       }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Obnovit názvy"
+      },
+      "rediscover": {
+        "name": "Znovu vyhledat registry"
+      }
     }
   },
   "exceptions": {
@@ -174,12 +182,24 @@
     },
     "no_installation": {
       "message": "Neznámá instalace pro tento záznam."
+    },
+    "action_failed": {
+      "message": "Požadavek na cloud Thermia selhal: {detail}"
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "Možnosti Thermia Cloud",
+        "description": "Co chcete změnit?",
+        "menu_options": {
+          "general": "Obecné",
+          "registers": "Instalace a registry",
+          "names": "Názvy a jazyk"
+        }
+      },
+      "general": {
+        "title": "Obecné",
         "description": "Režim jen pro čtení zablokuje jakýkoli zápis do tepelného čerpadla (entity i služby). Interval aktualizace se projeví po uložení.",
         "data": {
           "scan_interval": "Interval aktualizace (sekundy)",
@@ -187,7 +207,27 @@
           "timeout": "Časový limit požadavku (sekundy)",
           "debug_attributes": "Přidat surové hodnoty registrů jako atributy"
         }
+      },
+      "registers": {
+        "title": "Instalace a registry",
+        "description": "Změny se projeví opětovným načtením integrace.",
+        "data": {
+          "installations": "Instalace",
+          "show_hidden": "Zobrazit registry skryté Thermií",
+          "expose_unknown": "Zpřístupnit neznámé registry (jako vypnuté entity)"
+        }
+      },
+      "names": {
+        "title": "Názvy a jazyk",
+        "description": "Názvy entit používají naše krátké názvy, kde je máme (angličtina, čeština), jinak texty Thermie. Nejnovější texty stáhnete tlačítkem *Obnovit názvy* na zařízení.",
+        "data": {
+          "label_language": "Jazyk názvů"
+        }
       }
+    },
+    "abort": {
+      "entry_not_loaded": "Integrace právě neběží. Zkuste to znovu, až se načte.",
+      "cannot_connect": "Nepodařilo se spojit s cloudem Thermia. Zkuste to později."
     }
   },
   "services": {
@@ -212,6 +252,27 @@
           "description": "Hodnota k zápisu."
         }
       }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automaticky (jazyk Home Assistantu)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia žádá o odsouhlasení nových podmínek",
+      "description": "Jednou se přihlaste na online.thermia.se účtem použitým zde a odsouhlaste aktualizované podmínky. Integrace to zkusí sama znovu."
+    },
+    "register_vanished": {
+      "title": "Registry chybí v cloudu Thermia",
+      "description": "Tyto registry cloud už několik dní nevrací: {registers}. Jejich entity zůstávají nedostupné. Pokud se změnila konfigurace čerpadla, použijte *Znovu vyhledat registry*, případně entity odstraňte."
+    },
+    "discovery_empty": {
+      "title": "Cloud Thermia nevrátil žádné registry",
+      "description": "Pro toto čerpadlo nebyl nalezen žádný registr. Zkontrolujte, že je v aplikaci Thermia online, a stiskněte *Znovu vyhledat registry*."
     }
   }
 }

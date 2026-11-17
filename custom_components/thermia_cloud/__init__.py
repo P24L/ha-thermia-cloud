@@ -18,7 +18,13 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.typing import ConfigType
 
-from .catalog.labels import LabelResolver, async_load_bundled
+from .catalog.labels import (
+    LabelResolver,
+    async_load_bundled,
+    async_load_curated,
+    filter_label_keys,
+    pick_culture,
+)
 from .catalog.loader import async_load_catalog
 from .catalog.planner import (
     EntityPlan,
@@ -31,13 +37,15 @@ from .catalog.schema import Catalog
 from .client.api import ThermiaApi
 from .client.auth import ThermiaAuth
 from .client.config import ThermiaConfig, fetch_config
-from .client.errors import AuthError, ThermiaError
+from .client.errors import AuthError, PolicyAcceptanceError, ThermiaError
 from .client.http import ThermiaHttp
 from .client.models import Installation
 from .client.sources import PollingSource
 from .client.visibility import VisibilityParseError, parse_condition
 from .const import (
+    CONF_EXPOSE_UNKNOWN,
     CONF_INSTALLATIONS,
+    CONF_LABEL_LANGUAGE,
     CONF_PASSWORD,
     CONF_REFRESH_TOKEN,
     CONF_SCAN_INTERVAL,
@@ -47,11 +55,13 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TIMEOUT,
     DOMAIN,
+    LABEL_LANGUAGE_AUTO,
     USER_AGENT,
 )
 from .coordinator import ThermiaCoordinator
 from .discovery import Discovery, discover
 from .entity import device_identifier
+from .repairs import sync_discovery_empty, sync_policy_acceptance
 from .services import async_register_services
 
 _LOGGER = logging.getLogger(__name__)
@@ -64,6 +74,7 @@ PLATFORMS = [
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SWITCH,
+    Platform.BUTTON,
 ]
 DISCOVERY_MAX_AGE = 24 * 3600
 STORE_VERSION = 1
@@ -84,6 +95,7 @@ class ThermiaRuntime:
     auth: ThermiaAuth
     api: ThermiaApi
     catalog: Catalog
+    labels: LabelResolver
     installations: list[InstallationRuntime]
 
 
@@ -115,13 +127,15 @@ async def async_build_client(
     return config, auth, ThermiaApi(http)
 
 
+def _discovery_store(hass: HomeAssistant, entry: ConfigEntry) -> Store[dict[str, Any]]:
+    return Store(hass, STORE_VERSION, f"{DOMAIN}.discovery.{entry.entry_id}")
+
+
 async def _load_discovery(
     hass: HomeAssistant, entry: ThermiaConfigEntry, api: ThermiaApi, installation_id: int
 ) -> Discovery:
     """Cached discovery; refreshed daily, and the cache is used when the cloud is unreachable."""
-    store: Store[dict[str, Any]] = Store(
-        hass, STORE_VERSION, f"{DOMAIN}.discovery.{entry.entry_id}"
-    )
+    store = _discovery_store(hass, entry)
     cache = await store.async_load() or {}
     cached: Discovery | None = None
     if (raw := cache.get(str(installation_id))) is not None:
@@ -145,6 +159,39 @@ async def _load_discovery(
     return fresh
 
 
+async def async_rediscover(
+    hass: HomeAssistant, entry: ThermiaConfigEntry, installation_id: int
+) -> None:
+    """*Rediscover registers* button: read everything again, then reload the entry."""
+    fresh = await discover(entry.runtime_data.api, installation_id)
+    store = _discovery_store(hass, entry)
+    cache = await store.async_load() or {}
+    cache[str(installation_id)] = fresh.to_json()
+    await store.async_save(cache)
+    hass.config_entries.async_schedule_reload(entry.entry_id)
+
+
+def _labels_store(hass: HomeAssistant, entry: ConfigEntry) -> Store[dict[str, Any]]:
+    return Store(hass, STORE_VERSION, f"{DOMAIN}.labels.{entry.entry_id}")
+
+
+async def async_refresh_labels(hass: HomeAssistant, entry: ThermiaConfigEntry) -> None:
+    """*Refresh names* button: fetch Thermia's texts for the chosen culture, then reload."""
+    runtime = entry.runtime_data
+    culture = runtime.labels.culture
+    texts = await runtime.api.get_localization(culture)
+    value_names = {
+        v.name
+        for r in runtime.installations
+        for s in r.coordinator.discovery.specs
+        for v in s.value_names
+    }
+    await _labels_store(hass, entry).async_save(
+        {"culture": culture, "labels": filter_label_keys(texts, value_names)}
+    )
+    hass.config_entries.async_schedule_reload(entry.entry_id)
+
+
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     async_register_services(hass)
     return True
@@ -161,14 +208,34 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
         bundled = await async_load_bundled()
         wanted = set(entry.options.get(CONF_INSTALLATIONS, []))
         installations = [i for i in await api.list_installations() if not wanted or i.id in wanted]
-        labels = LabelResolver(hass.config.language, bundled)
+        language = entry.options.get(CONF_LABEL_LANGUAGE, LABEL_LANGUAGE_AUTO)
+        if language == LABEL_LANGUAGE_AUTO:
+            language = hass.config.language
+        stored = await _labels_store(hass, entry).async_load() or {}
+        labels = LabelResolver(
+            language,
+            bundled,
+            curated=await async_load_curated(language),
+            curated_fallback=await async_load_curated("en"),
+            refreshed=stored.get("labels")
+            if stored.get("culture") == pick_culture(language, bundled)
+            else None,
+        )
         interval = int(entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL))
-        options = PlannerOptions(show_hidden=bool(entry.options.get(CONF_SHOW_HIDDEN, False)))
+        options = PlannerOptions(
+            show_hidden=bool(entry.options.get(CONF_SHOW_HIDDEN, False)),
+            expose_unknown=bool(entry.options.get(CONF_EXPOSE_UNKNOWN, True)),
+        )
+        missing_store: Store[dict[str, str]] = Store(
+            hass, STORE_VERSION, f"{DOMAIN}.missing.{entry.entry_id}"
+        )
+        missing_raw = await missing_store.async_load() or {}
         runtimes: list[InstallationRuntime] = []
         device_registry = dr.async_get(hass)
 
         for installation in installations:
             discovery = await _load_discovery(hass, entry, api, installation.id)
+            sync_discovery_empty(hass, entry.entry_id, installation.id, not discovery.specs)
             coordinator = ThermiaCoordinator(
                 hass,
                 entry,
@@ -177,6 +244,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                 api,
                 discovery,
                 interval,
+                missing_store,
+                {
+                    int(i): datetime.fromisoformat(t)
+                    for i, t in missing_raw.items()
+                    if i.isdigit() and installation_owns(discovery, int(i))
+                },
             )
             await coordinator.async_config_entry_first_refresh()
             assert coordinator.data is not None
@@ -198,7 +271,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
                 lambda p: labels.label(p.group_name),
             )
             coordinator.set_plans(plan.entities, _needed_groups(hass, plan.entities, discovery))
-            _register_devices(device_registry, entry, installation, catalog, plan.entities)
+            _register_devices(device_registry, entry, installation, catalog, plan.entities, labels)
             runtimes.append(
                 InstallationRuntime(
                     installation,
@@ -212,6 +285,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
     except AuthError as err:
         await auth.close()
         raise ConfigEntryAuthFailed(str(err)) from err
+    except PolicyAcceptanceError as err:
+        await auth.close()
+        sync_policy_acceptance(hass, entry.entry_id, True)
+        raise ConfigEntryNotReady(str(err)) from err
     except ThermiaError as err:
         await auth.close()
         raise ConfigEntryNotReady(str(err)) from err
@@ -219,9 +296,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
         await auth.close()
         raise
 
-    entry.runtime_data = ThermiaRuntime(auth, api, catalog, runtimes)
+    sync_policy_acceptance(hass, entry.entry_id, False)
+    entry.runtime_data = ThermiaRuntime(auth, api, catalog, labels, runtimes)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
+
+
+def installation_owns(discovery: Discovery, register_id: int) -> bool:
+    return any(spec.register_id == register_id for spec in discovery.specs)
 
 
 def _needed_groups(
@@ -267,6 +349,7 @@ def _register_devices(
     installation: Installation,
     catalog: Catalog,
     plans: tuple[EntityPlan, ...],
+    labels: LabelResolver,
 ) -> None:
     main = registry.async_get_or_create(
         config_entry_id=entry.entry_id,
@@ -283,8 +366,7 @@ def _register_devices(
             identifiers={device_identifier(installation.id, key)},
             manufacturer="Thermia",
             via_device_id=main.id,
-            translation_key=device.translation_key if device else None,
-            name=None if device and device.translation_key else key,
+            name=labels.label(key, device.translation_key if device else None),
         )
 
 

@@ -295,7 +295,10 @@ async def test_options_flow_switches_read_only_on_and_reloads(
     assert len(api.writes) == 1
 
     result = await hass.config_entries.options.async_init(entry.entry_id)
-    assert result["step_id"] == "init"
+    assert result["type"] == "menu"
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], {"next_step_id": "general"}
+    )
     result = await hass.config_entries.options.async_configure(
         result["flow_id"],
         {"scan_interval": 30, "read_only": True, "timeout": 20, "debug_attributes": True},

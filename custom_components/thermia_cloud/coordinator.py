@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
@@ -19,8 +20,9 @@ from .client.errors import AuthError, RateLimitError, ThermiaError
 from .client.models import Installation, RegisterSpec, RegisterValue
 from .client.sources import ValueSource
 from .client.visibility import RegisterLookup, VisibilityParseError, parse_condition
-from .const import DOMAIN
+from .const import DOMAIN, VANISHED_AFTER_DAYS
 from .discovery import Discovery
+from .repairs import sync_vanished
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,6 +48,8 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         api: ThermiaApi,
         discovery: Discovery,
         interval: int,
+        missing_store: Store[dict[str, str]] | None = None,
+        missing_since: dict[int, datetime] | None = None,
     ) -> None:
         super().__init__(
             hass,
@@ -67,6 +71,9 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._by_id = {s.register_id: s for s in discovery.specs}
         self._conditions: dict[str, object] = {}
         self._reported_missing = False
+        # register id -> first time it was missing (persisted, so a restart does not reset it)
+        self._missing_store = missing_store
+        self.missing_since: dict[int, datetime] = missing_since or {}
 
     def spec(self, register_id: int) -> RegisterSpec | None:
         return self._by_id.get(register_id)
@@ -77,6 +84,27 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.update_interval = FAST_POLL
         self.async_update_listeners()
         self.hass.async_create_task(self.async_request_refresh())
+
+    def _track_vanished(self, missing: Mapping[int, str]) -> None:
+        """Remember since when registers are missing; long-missing ones raise a Repair issue."""
+        now = dt_util.utcnow()
+        changed = False
+        for register_id in list(self.missing_since):
+            if register_id not in missing:
+                del self.missing_since[register_id]
+                changed = True
+        for register_id in missing:
+            if register_id not in self.missing_since:
+                self.missing_since[register_id] = now
+                changed = True
+        limit = now - timedelta(days=VANISHED_AFTER_DAYS)
+        long_missing = [name for i, name in missing.items() if self.missing_since[i] <= limit]
+        if self.config_entry is not None:
+            sync_vanished(self.hass, self.config_entry.entry_id, self.installation.id, long_missing)
+        if changed and self._missing_store is not None:
+            self._missing_store.async_delay_save(
+                lambda: {str(i): t.isoformat() for i, t in self.missing_since.items()}, 10
+            )
 
     def _settle_pending(self, values: Mapping[int, RegisterValue]) -> None:
         now = dt_util.utcnow()
@@ -119,16 +147,16 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
 
         values = snapshot.values
         polled = set(self._groups)
-        missing = [
-            p.register_name
-            for p in self._plans
-            if p.group_name in polled and p.register_id not in values
+        missing_plans = [
+            p for p in self._plans if p.group_name in polled and p.register_id not in values
         ]
+        missing = [p.register_name for p in missing_plans]
         if missing and not self._reported_missing:
             _LOGGER.warning("Registers no longer returned by the cloud: %s", sorted(set(missing)))
             self._reported_missing = True
         elif not missing:
             self._reported_missing = False
+        self._track_vanished({p.register_id: p.register_name for p in missing_plans})
         self._settle_pending(values)
         return CoordinatorData(values, self._inactive(values))
 

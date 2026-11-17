@@ -88,6 +88,13 @@ class FakeApi:
         data = json.loads((FIXTURES / "history_registers.json").read_text())
         return [HistoryRegister.from_json(r) for r in data["registers"]]
 
+    async def get_localization(self, culture: str) -> dict[str, str]:
+        self._check("get_localization")
+        return {
+            "REG_OPER_DATA_OUTDOOR_TEMP_MA_SA": f"Fresh outdoor text ({culture})",
+            "ALARM_SOMETHING": "must not be kept",
+        }
+
     async def write_register(self, installation_id: int, spec: RegisterSpec, value: float) -> float:
         self._check("write_register")
         sent = validate_write(spec, value)  # the real validation, as the real client does

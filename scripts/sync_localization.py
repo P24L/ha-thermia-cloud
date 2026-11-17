@@ -13,7 +13,6 @@ import asyncio
 import json
 import os
 import sys
-from collections.abc import Iterable, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -22,6 +21,7 @@ import aiohttp
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from custom_components.thermia_cloud.catalog.labels import filter_label_keys
 from custom_components.thermia_cloud.client.api import ThermiaApi
 from custom_components.thermia_cloud.client.auth import ThermiaAuth
 from custom_components.thermia_cloud.client.config import fetch_config
@@ -29,7 +29,6 @@ from custom_components.thermia_cloud.client.http import ThermiaHttp
 
 OUT = ROOT / "custom_components" / "thermia_cloud" / "catalog" / "i18n"
 FIXTURES = ROOT / "tests" / "fixtures"
-PREFIXES = ("REG_", "COMP_")
 TOOL = "sync_localization/1"
 
 
@@ -41,13 +40,7 @@ def fixture_value_names(directory: Path = FIXTURES) -> set[str]:
     return names
 
 
-def filter_keys(resources: Mapping[str, str], extra_keys: Iterable[str] = ()) -> dict[str, str]:
-    wanted = set(extra_keys)
-    return {
-        key: text
-        for key, text in sorted(resources.items())
-        if key.startswith(PREFIXES) or key in wanted
-    }
+filter_keys = filter_label_keys
 
 
 async def run() -> int:

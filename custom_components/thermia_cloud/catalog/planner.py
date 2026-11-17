@@ -42,6 +42,7 @@ def option_key(name: str) -> str:
 @dataclass(frozen=True, slots=True)
 class PlannerOptions:
     show_hidden: bool = False  # create entities whose structural visibility is false
+    expose_unknown: bool = True  # generic (disabled) entities for registers the catalog lacks
     stale_after: timedelta = timedelta(days=30)
 
 
@@ -182,6 +183,9 @@ def build_plan(
 
     for spec, value in registers:
         entry = catalog.lookup(spec.group_name, spec.name)
+        if entry is None and not options.expose_unknown:
+            notes.append(PlanNote("unknown_register_hidden", spec.name, spec.group_name))
+            continue
         platform = _choose_platform(spec, entry, notes)
         if platform is None:
             continue

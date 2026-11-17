@@ -151,6 +151,14 @@
           "constant": "Constant"
         }
       }
+    },
+    "button": {
+      "refresh_names": {
+        "name": "Refresh names"
+      },
+      "rediscover": {
+        "name": "Rediscover registers"
+      }
     }
   },
   "exceptions": {
@@ -174,12 +182,24 @@
     },
     "no_installation": {
       "message": "Unknown installation for this entry."
+    },
+    "action_failed": {
+      "message": "The request to the Thermia cloud failed: {detail}"
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "Thermia Cloud options",
+        "description": "What would you like to change?",
+        "menu_options": {
+          "general": "General",
+          "registers": "Installations & registers",
+          "names": "Names & language"
+        }
+      },
+      "general": {
+        "title": "General",
         "description": "Read-only mode blocks every write to the heat pump (entities and services). The update interval takes effect after saving.",
         "data": {
           "scan_interval": "Update interval (seconds)",
@@ -187,7 +207,27 @@
           "timeout": "Request timeout (seconds)",
           "debug_attributes": "Add raw register values as attributes"
         }
+      },
+      "registers": {
+        "title": "Installations & registers",
+        "description": "Changes are applied by reloading the integration.",
+        "data": {
+          "installations": "Installations",
+          "show_hidden": "Show registers hidden by Thermia",
+          "expose_unknown": "Expose unknown registers (as disabled entities)"
+        }
+      },
+      "names": {
+        "title": "Names & language",
+        "description": "Entity names use our own short names where we have them (English, Czech) and Thermia's texts otherwise. Use the *Refresh names* button on the device to download the latest texts.",
+        "data": {
+          "label_language": "Label language"
+        }
       }
+    },
+    "abort": {
+      "entry_not_loaded": "The integration is not running right now. Try again when it has loaded.",
+      "cannot_connect": "Could not reach the Thermia cloud. Try again later."
     }
   },
   "services": {
@@ -212,6 +252,27 @@
           "description": "The value to write."
         }
       }
+    }
+  },
+  "selector": {
+    "label_language": {
+      "options": {
+        "auto": "Automatic (Home Assistant language)"
+      }
+    }
+  },
+  "issues": {
+    "policy_acceptance_required": {
+      "title": "Thermia asks you to accept new terms",
+      "description": "Log in once at online.thermia.se with the account used here and accept the updated terms. The integration retries automatically."
+    },
+    "register_vanished": {
+      "title": "Registers missing in the Thermia cloud",
+      "description": "These registers have not been returned by the cloud for days: {registers}. Their entities stay unavailable. Use *Rediscover registers* if the heat pump configuration changed, or remove the entities."
+    },
+    "discovery_empty": {
+      "title": "The Thermia cloud returned no registers",
+      "description": "No register was found for this heat pump. Check that it is online in the Thermia app, then press *Rediscover registers*."
     }
   }
 }

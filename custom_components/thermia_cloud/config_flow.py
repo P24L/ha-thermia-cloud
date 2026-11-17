@@ -26,6 +26,7 @@ from homeassistant.helpers.selector import (
     SelectSelectorConfig,
 )
 
+from .catalog.labels import I18N_DIR
 from .client.api import ThermiaApi
 from .client.auth import ThermiaAuth
 from .client.config import fetch_config
@@ -40,6 +41,7 @@ from .const import (
     CONF_DEBUG_ATTRIBUTES,
     CONF_EXPOSE_UNKNOWN,
     CONF_INSTALLATIONS,
+    CONF_LABEL_LANGUAGE,
     CONF_PASSWORD,
     CONF_READ_ONLY,
     CONF_REFRESH_TOKEN,
@@ -50,6 +52,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TIMEOUT,
     DOMAIN,
+    LABEL_LANGUAGE_AUTO,
     MAX_SCAN_INTERVAL,
     MIN_SCAN_INTERVAL,
     USER_AGENT,
@@ -244,13 +247,20 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class ThermiaOptionsFlow(OptionsFlowWithReload):
-    """General options. (Installation selection and register visibility: roadmap P6.2.)"""
+    """Options menu: general settings, installations and registers, names and language."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        return self.async_show_menu(step_id="init", menu_options=["general", "registers", "names"])
+
+    def _save(self, **changes: Any) -> ConfigFlowResult:
+        return self.async_create_entry(data={**self.config_entry.options, **changes})
+
+    async def async_step_general(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
         if user_input is not None:
-            return self.async_create_entry(
-                data={
-                    **self.config_entry.options,
+            return self._save(
+                **{
                     CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
                     CONF_READ_ONLY: user_input[CONF_READ_ONLY],
                     CONF_TIMEOUT: int(user_input[CONF_TIMEOUT]),
@@ -258,6 +268,7 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
                 }
             )
         options = self.config_entry.options
+        seconds = {"min": 5, "step": 1, "unit_of_measurement": "s", "mode": NumberSelectorMode.BOX}
         schema = vol.Schema(
             {
                 vol.Required(
@@ -265,11 +276,7 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
                     default=options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
                 ): NumberSelector(
                     NumberSelectorConfig(
-                        min=MIN_SCAN_INTERVAL,
-                        max=MAX_SCAN_INTERVAL,
-                        step=1,
-                        unit_of_measurement="s",
-                        mode=NumberSelectorMode.BOX,
+                        **{**seconds, "min": MIN_SCAN_INTERVAL, "max": MAX_SCAN_INTERVAL}
                     )
                 ),
                 vol.Required(
@@ -277,14 +284,74 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
                 ): BooleanSelector(),
                 vol.Required(
                     CONF_TIMEOUT, default=options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        min=5, max=120, step=1, unit_of_measurement="s", mode=NumberSelectorMode.BOX
-                    )
-                ),
+                ): NumberSelector(NumberSelectorConfig(**{**seconds, "max": 120})),
                 vol.Required(
                     CONF_DEBUG_ATTRIBUTES, default=options.get(CONF_DEBUG_ATTRIBUTES, False)
                 ): BooleanSelector(),
             }
         )
-        return self.async_show_form(step_id="init", data_schema=schema)
+        return self.async_show_form(step_id="general", data_schema=schema)
+
+    async def async_step_registers(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            return self._save(
+                **{
+                    CONF_INSTALLATIONS: [int(i) for i in user_input[CONF_INSTALLATIONS]],
+                    CONF_SHOW_HIDDEN: user_input[CONF_SHOW_HIDDEN],
+                    CONF_EXPOSE_UNKNOWN: user_input[CONF_EXPOSE_UNKNOWN],
+                }
+            )
+        if not hasattr(self.config_entry, "runtime_data"):
+            return self.async_abort(reason="entry_not_loaded")
+        try:
+            installations = await self.config_entry.runtime_data.api.list_installations()
+        except ThermiaError:
+            return self.async_abort(reason="cannot_connect")
+        options = self.config_entry.options
+        choices = [
+            SelectOptionDict(
+                value=str(i.id),
+                label=(
+                    f"{i.name} ({i.model or 'Thermia'}, {'online' if i.is_online else 'offline'})"
+                ),
+            )
+            for i in installations
+        ]
+        chosen = [str(i) for i in options.get(CONF_INSTALLATIONS, [])] or [
+            c["value"] for c in choices
+        ]
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_INSTALLATIONS, default=chosen): SelectSelector(
+                    SelectSelectorConfig(options=choices, multiple=True)
+                ),
+                vol.Required(
+                    CONF_SHOW_HIDDEN, default=options.get(CONF_SHOW_HIDDEN, False)
+                ): BooleanSelector(),
+                vol.Required(
+                    CONF_EXPOSE_UNKNOWN, default=options.get(CONF_EXPOSE_UNKNOWN, True)
+                ): BooleanSelector(),
+            }
+        )
+        return self.async_show_form(step_id="registers", data_schema=schema)
+
+    async def async_step_names(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        if user_input is not None:
+            return self._save(**{CONF_LABEL_LANGUAGE: user_input[CONF_LABEL_LANGUAGE]})
+        cultures = sorted(p.stem for p in I18N_DIR.glob("*.json") if not p.name.startswith("_"))
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_LABEL_LANGUAGE,
+                    default=self.config_entry.options.get(CONF_LABEL_LANGUAGE, LABEL_LANGUAGE_AUTO),
+                ): SelectSelector(
+                    SelectSelectorConfig(
+                        options=[LABEL_LANGUAGE_AUTO, *cultures],
+                        translation_key="label_language",
+                    )
+                )
+            }
+        )
+        return self.async_show_form(step_id="names", data_schema=schema)

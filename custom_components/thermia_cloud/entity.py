@@ -25,10 +25,11 @@ class ThermiaEntity(CoordinatorEntity[ThermiaCoordinator]):
         super().__init__(coordinator)
         self.plan = plan
         self._attr_unique_id = f"{coordinator.installation.id}_{plan.key}"
+        # Names come from the LabelResolver (curated -> Thermia's text in the chosen language), so
+        # the *Label language* option applies; the key is kept for translated select states.
+        self._attr_name = name
         if plan.translation_key:
             self._attr_translation_key = plan.translation_key
-        else:
-            self._attr_name = name
         self._attr_entity_registry_enabled_default = plan.default_enabled
         if plan.entity_category:
             self._attr_entity_category = EntityCategory(plan.entity_category)
