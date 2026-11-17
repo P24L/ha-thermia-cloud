@@ -89,12 +89,16 @@ async def test_disabled_by_default_entities_exist_in_the_registry_only(
     hass: HomeAssistant, entry: MockConfigEntry, api: FakeApi
 ) -> None:
     await setup(hass, entry, api)
+    system = entity_id(
+        hass, "sensor", str(index_of("REG_DESIRED_SYS_SUPPLY_LINE_TEMP", "REG_GROUP_TEMPERATURES"))
+    )
+    assert system is not None
+    assert er.async_get(hass).async_get(system).disabled_by is er.RegistryEntryDisabler.INTEGRATION
+    assert hass.states.get(system) is None
     imm1 = entity_id(
         hass, "sensor", str(index_of("REG_OPER_TIME_IMM1", "REG_GROUP_OPERATIONAL_TIME"))
     )
-    assert imm1 is not None
-    assert er.async_get(hass).async_get(imm1).disabled_by is er.RegistryEntryDisabler.INTEGRATION
-    assert hass.states.get(imm1) is None
+    assert hass.states.get(imm1).state == "138.0"  # the aux heater hours are on by default
 
 
 async def test_devices_main_and_child(
@@ -265,15 +269,17 @@ async def test_enabling_an_entity_reloads_and_polls_its_group(
     ):
         await hass.config_entries.async_setup(entry.entry_id)
         await hass.async_block_till_done()
-        imm1 = entity_id(
-            hass, "sensor", str(index_of("REG_OPER_TIME_IMM1", "REG_GROUP_OPERATIONAL_TIME"))
+        system = entity_id(
+            hass,
+            "sensor",
+            str(index_of("REG_DESIRED_SYS_SUPPLY_LINE_TEMP", "REG_GROUP_TEMPERATURES")),
         )
-        assert hass.states.get(imm1) is None
-        er.async_get(hass).async_update_entity(imm1, disabled_by=None)
+        assert hass.states.get(system) is None
+        er.async_get(hass).async_update_entity(system, disabled_by=None)
         async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=45))
         await hass.async_block_till_done()
         assert entry.state is ConfigEntryState.LOADED
-        assert hass.states.get(imm1).state == "138.0"
+        assert hass.states.get(system).state == "34.0"
 
 
 async def test_only_inactive_devices_can_be_removed(

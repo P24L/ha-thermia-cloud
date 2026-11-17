@@ -77,12 +77,16 @@ def test_hot_water_status_is_a_switch(plan) -> None:  # type: ignore[no-untyped-
     assert e.platform == "switch" and e.default_enabled
 
 
-def test_status_flags_only_visible_bits(plan) -> None:  # type: ignore[no-untyped-def]
-    flags = by_name(plan, "COMP_STATUS_ITEC")
-    assert flags and all(f.platform == "binary_sensor" and not f.flag_equality for f in flags)
-    assert 2 not in {f.flag_value for f in flags}  # radiator pump bit is hidden
-    assert {f.flag_value for f in flags} >= {1, 8, 16}
-    assert len({f.key for f in flags}) == len(flags)
+def test_status_flags_visible_enabled_hidden_as_disabled_diagnostics(plan) -> None:  # type: ignore[no-untyped-def]
+    flags = {f.flag_value: f for f in by_name(plan, "COMP_STATUS_ITEC")}
+    assert all(f.platform == "binary_sensor" and not f.flag_equality for f in flags.values())
+    assert {1, 8, 16, 32} <= set(flags)
+    assert all(flags[v].default_enabled for v in (1, 8, 16, 32))
+    # radiator pump (2), pool (64) and cooling (128) are hidden by the cloud: offered, but off
+    for hidden in (2, 64, 128):
+        assert not flags[hidden].default_enabled
+        assert flags[hidden].entity_category == "diagnostic"
+    assert len({f.key for f in flags.values()}) == len(flags)
 
 
 def test_keys_follow_decision_d10(plan) -> None:  # type: ignore[no-untyped-def]

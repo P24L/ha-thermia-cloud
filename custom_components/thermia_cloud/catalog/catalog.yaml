@@ -188,12 +188,14 @@ registers:
     unit: h
     device_class: duration
     state_class: total_increasing
+    default_enabled: true  # when the electric aux heater runs: worth a history
   REG_OPER_TIME_IMM2:
     kind: sensor
     translation_key: hours_aux_2
     unit: h
     device_class: duration
     state_class: total_increasing
+    default_enabled: true  # when the electric aux heater runs: worth a history
 
   # --- status ---
   COMP_STATUS_ITEC:  # bitmask: one binary sensor per visible flag

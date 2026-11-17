@@ -253,7 +253,20 @@ def build_plan(
         }
 
         if platform == "binary_sensor":
-            for flag in _visible_options(spec):
+            visible = _visible_options(spec)
+            visible_values = {v.value for v in visible}
+            hidden = {
+                v.value: v
+                for v in spec.value_names
+                if not v.visible and v.value not in visible_values
+            }
+            # Visible flags follow the catalog. Flags the cloud hides (e.g. the heating circuit
+            # pump) are still real signals worth a history: offered as disabled diagnostics.
+            flags = [(f, False) for f in visible] + [(f, True) for f in hidden.values()]
+            for flag, is_hidden in flags:
+                flag_common = dict(common)
+                if is_hidden:
+                    flag_common.update(default_enabled=False, entity_category="diagnostic")
                 entities.append(
                     EntityPlan(
                         platform="binary_sensor",
@@ -265,7 +278,7 @@ def build_plan(
                         writable=False,
                         flag_value=flag.value,
                         flag_equality=spec.presentation == "StatusFlags",
-                        **common,  # type: ignore[arg-type]
+                        **flag_common,  # type: ignore[arg-type]
                     )
                 )
             continue
