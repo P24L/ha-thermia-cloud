@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Temperatura wyłączenia ogrzewania"
+      },
+      "constant_temperature": {
+        "name": "Stała temperatura"
       }
     },
     "switch": {

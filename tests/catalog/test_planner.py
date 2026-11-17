@@ -271,3 +271,23 @@ def test_installer_level_registers_are_never_enabled_by_default(plan) -> None:  
     disabled = {"REG_HEATING_HEAT_CURVE_MIN", "REG_HEATING_HEAT_CURVE_MAX", "REG_HEATING_HEAT_STOP",
                 "REG_ACTIVATE_CIRC1", "REG_SER_HOT_WATER_TOPH_INTER"}  # fmt: skip
     assert all(not e.default_enabled for e in plan.entities if e.register_name in disabled)
+
+
+def test_constant_mode_register_becomes_an_enabled_number_on_circuit_1() -> None:
+    """In *Constant* mode the cloud returns REG_HEATING_HEAT_CURVE1_CONSTANT instead of the curve
+    registers (recorded from the real cloud, 2026-11-17)."""
+    raw = json.loads(
+        (FIXTURES / "mode_constant_group_REG_GROUP_HEATING_CURVE_CIRC1.json").read_text()
+    )
+    registers = [(RegisterSpec.from_json(r), RegisterValue.from_json(r)) for r in raw]
+    plan = build_plan(registers, load_catalog(), now=NOW)
+    by = {e.register_name: e for e in plan.entities}
+    assert set(by) == {
+        "REG_ACTIVATE_CIRC1",
+        "REG_HEATING_HEAT_CURVE1_CONSTANT",
+    }  # no curve registers
+    constant = by["REG_HEATING_HEAT_CURVE1_CONSTANT"]
+    assert constant.platform == "number" and constant.device == "circuit_1"
+    assert (constant.unit, constant.risk, constant.default_enabled) == ("°C", "heating", True)
+    assert (constant.min_value, constant.max_value, constant.step) == (20.0, 55.0, 1.0)
+    assert constant.translation_key == "constant_temperature"

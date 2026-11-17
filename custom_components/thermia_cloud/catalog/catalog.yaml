@@ -69,6 +69,16 @@ registers:
     device_class: temperature
     risk: heating
 
+  # Only returned by the cloud while circuit 1 is in *Constant* mode (the curve registers vanish
+  # then). The cloud has no text for it in any language. Observed 2026-11-17.
+  REG_HEATING_HEAT_CURVE1_CONSTANT:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    default_enabled: true
+    risk: heating
+    translation_key: constant_temperature
+
   # circuit mode: the cloud label says "Aktivovat", the values are OFF (hidden) / Curve / Constant
   REG_ACTIVATE_CIRC1:
     kind: select

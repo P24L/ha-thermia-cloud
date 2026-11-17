@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Kütte seiskamistemperatuur"
+      },
+      "constant_temperature": {
+        "name": "Püsitemperatuur"
       }
     },
     "switch": {

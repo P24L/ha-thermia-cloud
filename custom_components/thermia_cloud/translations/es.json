@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Temperatura de parada de la calefacción"
+      },
+      "constant_temperature": {
+        "name": "Temperatura constante"
       }
     },
     "switch": {

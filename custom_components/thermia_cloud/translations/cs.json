@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Teplota zastavení vytápění"
+      },
+      "constant_temperature": {
+        "name": "Konstantní teplota"
       }
     },
     "switch": {

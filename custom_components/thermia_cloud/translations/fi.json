@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Lämmityksen pysäytyslämpötila"
+      },
+      "constant_temperature": {
+        "name": "Vakiolämpötila"
       }
     },
     "switch": {

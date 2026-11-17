@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Температура остановки отопления"
+      },
+      "constant_temperature": {
+        "name": "Постоянная температура"
       }
     },
     "switch": {

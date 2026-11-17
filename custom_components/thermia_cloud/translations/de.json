@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Heizstopp-Temperatur"
+      },
+      "constant_temperature": {
+        "name": "Konstante Temperatur"
       }
     },
     "switch": {

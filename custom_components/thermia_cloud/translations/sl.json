@@ -131,6 +131,9 @@
       },
       "heating_stop": {
         "name": "Temperatura izklopa ogrevanja"
+      },
+      "constant_temperature": {
+        "name": "Konstantna temperatura"
       }
     },
     "switch": {
