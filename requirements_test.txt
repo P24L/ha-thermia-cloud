@@ -4,3 +4,4 @@ ruff
 mypy
 pre-commit
 types-PyYAML
+home-assistant-frontend  # the list of valid mdi icon names, used by tests/test_icons.py

@@ -3,13 +3,15 @@
 import json
 from pathlib import Path
 
+import pytest
+
 PACKAGE = Path(__file__).parent.parent / "custom_components" / "thermia_cloud"
 ICONS = json.loads((PACKAGE / "icons.json").read_text())["entity"]
 EN = json.loads((PACKAGE / "translations" / "en.json").read_text())["entity"]
 
 
 def _mdi_names() -> set[str]:
-    import hass_frontend
+    hass_frontend = pytest.importorskip("hass_frontend")
 
     path = Path(hass_frontend.__file__).parent / "static" / "mdi" / "iconList.json"
     return {i["name"] if isinstance(i, dict) else i for i in json.loads(path.read_text())}
