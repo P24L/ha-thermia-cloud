@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Speichertemperatur"
+      },
+      "last_contact": {
+        "name": "Letzter Kontakt"
+      },
+      "alarm_count": {
+        "name": "Aktive Alarme"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Heizkreispumpe"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

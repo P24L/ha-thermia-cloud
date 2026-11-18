@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Tanktemperatur"
+      },
+      "last_contact": {
+        "name": "Siste kontakt"
+      },
+      "alarm_count": {
+        "name": "Aktive alarmer"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Varmekretspumpe"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

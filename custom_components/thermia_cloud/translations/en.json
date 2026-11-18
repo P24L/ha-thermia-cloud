@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Tank temperature"
+      },
+      "last_contact": {
+        "name": "Last contact"
+      },
+      "alarm_count": {
+        "name": "Active alarms"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Heating circuit pump"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

@@ -9,6 +9,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from . import ThermiaConfigEntry
 from .catalog.flags import flag_is_set
 from .entity import ThermiaEntity
+from .info import ACTIVE_ALARM, CONNECTED, InfoBinarySensor
 
 PARALLEL_UPDATES = 0  # coordinator-based, no per-entity I/O
 
@@ -21,6 +22,11 @@ async def async_setup_entry(
         for runtime in entry.runtime_data.installations
         for plan in runtime.plans
         if plan.platform == "binary_sensor"
+    )
+    async_add_entities(
+        InfoBinarySensor(entry, runtime, spec)
+        for runtime in entry.runtime_data.installations
+        for spec in (CONNECTED, ACTIVE_ALARM)
     )
 
 

@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Temperatura zalogovnika"
+      },
+      "last_contact": {
+        "name": "Zadnji stik"
+      },
+      "alarm_count": {
+        "name": "Aktivni alarmi"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Obtočna črpalka ogrevanja"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Na spletu"
       }
     }
   },

@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Paagi temperatuur"
+      },
+      "last_contact": {
+        "name": "Viimane ühendus"
+      },
+      "alarm_count": {
+        "name": "Aktiivsed alarmid"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Küttekontuuri pump"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Võrgus"
       }
     }
   },

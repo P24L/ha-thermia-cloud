@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Tanktemperatur"
+      },
+      "last_contact": {
+        "name": "Senaste kontakt"
+      },
+      "alarm_count": {
+        "name": "Aktiva larm"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Cirkulationspump värme"
+      },
+      "active_alarm": {
+        "name": "Larm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

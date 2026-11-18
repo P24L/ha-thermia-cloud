@@ -28,6 +28,7 @@ _LOGGER = logging.getLogger(__name__)
 
 DRIFT_MIN_INTERVAL = timedelta(minutes=10)  # at most one automatic rediscovery per 10 minutes
 
+INFO_REFRESH = timedelta(minutes=5)  # online state and alarm counts change slowly
 FAST_POLL = timedelta(seconds=5)  # after a write, until the read-back matches
 FAST_POLL_WINDOW = timedelta(seconds=30)
 
@@ -41,6 +42,7 @@ class CoordinatorData:
     # register id -> value written and not confirmed yet. Part of the comparison on purpose:
     # when a write is confirmed or given up, entities must re-render even if no register changed.
     pending: Mapping[int, float] = field(default_factory=dict)
+    installation: Installation | None = None  # online state, last contact, alarm counts
 
 
 class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
@@ -79,6 +81,7 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._by_id = {s.register_id: s for s in discovery.all_specs}
         self._conditions: dict[str, object] = {}
         self._reported_missing = False
+        self._info_checked = dt_util.utcnow()  # the installation passed in is fresh
         # register id -> first time it was missing (persisted, so a restart does not reset it)
         self._missing_store = missing_store
         self.missing_since: dict[int, datetime] = missing_since or {}
@@ -96,6 +99,22 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self.update_interval = FAST_POLL
         self.async_update_listeners()
         self.hass.async_create_task(self.async_request_refresh())
+
+    async def _refresh_installation(self) -> None:
+        """Re-read the installation's online state and alarm counts every few minutes.
+
+        One cheap request that never fails a poll: the values are what matters.
+        """
+        now = dt_util.utcnow()
+        if now - self._info_checked < INFO_REFRESH:
+            return
+        self._info_checked = now
+        try:
+            for item in await self.api.list_installations():
+                if item.id == self.installation.id:
+                    self.installation = item
+        except ThermiaError as err:
+            _LOGGER.debug("Could not refresh the installation status: %s", err)
 
     def _check_drift(self, values: Mapping[int, RegisterValue]) -> None:
         """Rediscover when the cloud returns a register we have never seen.
@@ -181,7 +200,10 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         if self.data is not None:  # the first poll ran before there was a plan
             self.async_set_updated_data(
                 CoordinatorData(
-                    self.data.values, self._inactive(self.data.values), self.data.pending
+                    self.data.values,
+                    self._inactive(self.data.values),
+                    self.data.pending,
+                    self.data.installation,
                 )
             )
 
@@ -213,8 +235,12 @@ class ThermiaCoordinator(DataUpdateCoordinator[CoordinatorData]):
         self._track_vanished({p.register_id: p.register_name for p in missing_plans})
         self._check_drift(values)
         self._settle_pending(values)
+        await self._refresh_installation()
         return CoordinatorData(
-            values, self._inactive(values), {i: p[0] for i, p in self.pending.items()}
+            values,
+            self._inactive(values),
+            {i: p[0] for i, p in self.pending.items()},
+            self.installation,
         )
 
     def _inactive(self, values: Mapping[int, RegisterValue]) -> frozenset[int]:

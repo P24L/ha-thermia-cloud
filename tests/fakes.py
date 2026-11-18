@@ -40,6 +40,10 @@ class FakeApi:
         self.has_indoor_sensor: bool | None = True  # from the installation status
         self.fail_installations: set[int] = set()  # their register reads fail (offline gateway)
         self.installation_name = "Test installation"
+        self.online = True
+        self.last_online = "2026-11-18T18:16:39.25"  # UTC, as the cloud sends it
+        self.active_alarms = 0
+        self.status_error: Exception | None = None  # makes the installation list fail
         self.constant_mode = False  # circuit 1 in Constant mode: different registers in its group
         self.group_calls: list[str] = []  # groups read, in order
         self.writes: list[tuple[int, float]] = []  # (register id, value) the "cloud" accepted
@@ -58,9 +62,19 @@ class FakeApi:
 
     async def list_installations(self) -> list[Installation]:
         self._check("list_installations")
+        if self.status_error is not None and len(self.calls) > 8:
+            raise self.status_error
         return [
             Installation(
-                i, f"{self.installation_name} {i}", "iTec", True, "1.0", "AA:BB:CC:00:00:01"
+                i,
+                f"{self.installation_name} {i}",
+                "iTec",
+                self.online,
+                "1.0",
+                self.last_online,
+                active_alarms=self.active_alarms,
+                critical_alarms=0,
+                mac_address="AA:BB:CC:00:00:01",
             )
             for i in self.installation_ids
         ]

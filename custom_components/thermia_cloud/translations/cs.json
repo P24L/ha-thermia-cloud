@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Teplota zásobníku"
+      },
+      "last_contact": {
+        "name": "Poslední spojení"
+      },
+      "alarm_count": {
+        "name": "Aktivní alarmy"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Čerpadlo topného okruhu"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

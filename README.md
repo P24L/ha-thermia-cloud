@@ -91,6 +91,7 @@ Copy `custom_components/thermia_cloud` into your `config/custom_components/` fol
 | Outdoor, supply line, desired supply line, hot water temperature | `sensor` | ✔ |
 | Compressor, heating, hot water, defrost (status flags Thermia marks as visible) | `binary_sensor` | ✔ |
 | Compressor / heating / hot-water / aux-heater hours | `sensor` (diagnostic) | ✔ |
+| Online, last contact with the cloud, alarm and active-alarm count | `binary_sensor` / `sensor` | ✔ |
 | Heating curve (main circuit on the heat pump device, mixing circuit 1/2 as child devices) | `number` | ✔ |
 | Supply min/max, heating stop, circuit mode (installer-level) | `number` / `select` | ✘ (enable when needed) |
 | Hot water on/off, hot water mode, operation mode | `switch` / `select` | ✔ |

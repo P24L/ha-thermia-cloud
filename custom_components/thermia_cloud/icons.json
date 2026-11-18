@@ -1,0 +1,192 @@
+{
+  "entity": {
+    "sensor": {
+      "outdoor_temperature": {
+        "default": "mdi:thermometer"
+      },
+      "supply_temperature": {
+        "default": "mdi:thermometer-chevron-up"
+      },
+      "desired_supply_temperature": {
+        "default": "mdi:thermometer-auto"
+      },
+      "desired_system_supply_temperature": {
+        "default": "mdi:thermometer-auto"
+      },
+      "circuit_supply_temperature": {
+        "default": "mdi:thermometer-lines"
+      },
+      "hot_water_temperature": {
+        "default": "mdi:water-thermometer"
+      },
+      "indoor_temperature": {
+        "default": "mdi:home-thermometer"
+      },
+      "tank_temperature": {
+        "default": "mdi:storage-tank"
+      },
+      "hours_compressor": {
+        "default": "mdi:engine"
+      },
+      "hours_heating": {
+        "default": "mdi:radiator"
+      },
+      "hours_hot_water": {
+        "default": "mdi:water-boiler"
+      },
+      "hours_aux_1": {
+        "default": "mdi:flash"
+      },
+      "hours_aux_2": {
+        "default": "mdi:flash"
+      },
+      "last_contact": {
+        "default": "mdi:access-point-network"
+      },
+      "alarm_count": {
+        "default": "mdi:alert-circle"
+      }
+    },
+    "number": {
+      "heating_curve": {
+        "default": "mdi:chart-bell-curve"
+      },
+      "heating_curve_main": {
+        "default": "mdi:chart-bell-curve"
+      },
+      "heating_curve_min": {
+        "default": "mdi:thermometer-low"
+      },
+      "heating_curve_min_main": {
+        "default": "mdi:thermometer-low"
+      },
+      "heating_curve_max": {
+        "default": "mdi:thermometer-high"
+      },
+      "heating_curve_max_main": {
+        "default": "mdi:thermometer-high"
+      },
+      "heating_stop": {
+        "default": "mdi:thermometer-off"
+      },
+      "constant_temperature": {
+        "default": "mdi:thermometer-lines"
+      },
+      "hot_water_boost_interval": {
+        "default": "mdi:calendar-clock"
+      }
+    },
+    "select": {
+      "operation_mode": {
+        "default": "mdi:heat-pump",
+        "state": {
+          "off": "mdi:power",
+          "auto": "mdi:autorenew",
+          "compressor": "mdi:engine",
+          "auxiliary": "mdi:flash",
+          "hot_water": "mdi:water-boiler"
+        }
+      },
+      "hot_water_mode": {
+        "default": "mdi:water-boiler",
+        "state": {
+          "comfort": "mdi:sofa",
+          "economy": "mdi:leaf",
+          "away": "mdi:home-export-outline"
+        }
+      },
+      "circuit_mode": {
+        "default": "mdi:chart-line-variant",
+        "state": {
+          "curve": "mdi:chart-bell-curve",
+          "constant": "mdi:equal"
+        }
+      }
+    },
+    "switch": {
+      "hot_water": {
+        "default": "mdi:water-boiler",
+        "state": {
+          "on": "mdi:water-boiler",
+          "off": "mdi:water-boiler-off"
+        }
+      },
+      "hot_water_boost": {
+        "default": "mdi:water-boiler-auto"
+      }
+    },
+    "binary_sensor": {
+      "comp_value_compr": {
+        "default": "mdi:engine",
+        "state": {
+          "on": "mdi:engine",
+          "off": "mdi:engine-off"
+        }
+      },
+      "comp_value_heating": {
+        "default": "mdi:radiator",
+        "state": {
+          "on": "mdi:radiator",
+          "off": "mdi:radiator-off"
+        }
+      },
+      "comp_value_hot_water": {
+        "default": "mdi:water-boiler",
+        "state": {
+          "on": "mdi:water-boiler",
+          "off": "mdi:water-boiler-off"
+        }
+      },
+      "comp_value_defrost": {
+        "default": "mdi:snowflake-melt",
+        "state": {
+          "on": "mdi:snowflake-melt",
+          "off": "mdi:snowflake-off"
+        }
+      },
+      "comp_value_cooling": {
+        "default": "mdi:snowflake",
+        "state": {
+          "on": "mdi:snowflake",
+          "off": "mdi:snowflake-off"
+        }
+      },
+      "comp_value_pool": {
+        "default": "mdi:pool",
+        "state": {
+          "on": "mdi:pool",
+          "off": "mdi:pool"
+        }
+      },
+      "comp_value_radiatorpump": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "connected": {
+        "default": "mdi:lan-connect",
+        "state": {
+          "on": "mdi:lan-connect",
+          "off": "mdi:lan-disconnect"
+        }
+      },
+      "active_alarm": {
+        "default": "mdi:alert-circle-outline",
+        "state": {
+          "on": "mdi:alert-circle",
+          "off": "mdi:check-circle-outline"
+        }
+      }
+    },
+    "button": {
+      "refresh_names": {
+        "default": "mdi:translate"
+      },
+      "rediscover": {
+        "default": "mdi:database-refresh"
+      }
+    }
+  }
+}

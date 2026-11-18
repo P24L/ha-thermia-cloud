@@ -280,11 +280,11 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
                     )
                 ),
                 vol.Required(
-                    CONF_READ_ONLY, default=options.get(CONF_READ_ONLY, False)
-                ): BooleanSelector(),
-                vol.Required(
                     CONF_TIMEOUT, default=options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
                 ): NumberSelector(NumberSelectorConfig(**{**seconds, "max": 120})),
+                vol.Required(
+                    CONF_READ_ONLY, default=options.get(CONF_READ_ONLY, False)
+                ): BooleanSelector(),
                 vol.Required(
                     CONF_DEBUG_ATTRIBUTES, default=options.get(CONF_DEBUG_ATTRIBUTES, False)
                 ): BooleanSelector(),

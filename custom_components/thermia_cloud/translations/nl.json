@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Boilertemperatuur"
+      },
+      "last_contact": {
+        "name": "Laatste contact"
+      },
+      "alarm_count": {
+        "name": "Actieve alarmen"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Verwarmingspomp"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Säiliön lämpötila"
+      },
+      "last_contact": {
+        "name": "Viimeisin yhteys"
+      },
+      "alarm_count": {
+        "name": "Aktiiviset hälytykset"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Lämmityspiirin pumppu"
+      },
+      "active_alarm": {
+        "name": "Hälytys"
+      },
+      "connected": {
+        "name": "Verkossa"
       }
     }
   },

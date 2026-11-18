@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -18,6 +18,10 @@ def parse_timestamp(value: str | None) -> datetime | None:
         return None
 
 
+def _count(value: Any) -> int | None:
+    return value if isinstance(value, int) and not isinstance(value, bool) else None
+
+
 @dataclass(frozen=True, slots=True)
 class Installation:
     id: int
@@ -27,18 +31,30 @@ class Installation:
     firmware_version: str | None
     last_online: str | None
     model_id: str | None = None  # the profile's own name, e.g. "IQ" for an iTec
+    # from the installation's status object (installationsInfo)
+    active_alarms: int | None = None
+    critical_alarms: int | None = None
     # Private: never shown in repr/logs.
     mac_address: str | None = field(default=None, repr=False)
+
+    @property
+    def last_online_utc(self) -> datetime | None:
+        """``lastOnline`` is UTC (register timestamps are local time, see API-NOTES)."""
+        parsed = parse_timestamp(self.last_online)
+        return parsed.replace(tzinfo=UTC) if parsed and parsed.tzinfo is None else parsed
 
     @classmethod
     def from_json(cls, d: Mapping[str, Any]) -> Installation:
         profile = d.get("profile") or {}
+        status = d.get("status") or {}
         return cls(
             id=int(d["id"]),
             name=str(d.get("name") or ""),
             # ``model`` is empty on current accounts; the profile carries the product family
             model=str(d.get("model") or profile.get("thermiaName") or ""),
             model_id=profile.get("name") or None,
+            active_alarms=_count(status.get("activeAlarms")),
+            critical_alarms=_count(status.get("activeCriticalAlarms")),
             is_online=bool(d.get("isOnline")),
             firmware_version=d.get("firmwareVersion"),
             last_online=d.get("lastOnline"),

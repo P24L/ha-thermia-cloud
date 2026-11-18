@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Temperatura serbatoio"
+      },
+      "last_contact": {
+        "name": "Ultimo contatto"
+      },
+      "alarm_count": {
+        "name": "Allarmi attivi"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Pompa circuito riscaldamento"
+      },
+      "active_alarm": {
+        "name": "Allarme"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

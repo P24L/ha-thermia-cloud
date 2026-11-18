@@ -30,6 +30,8 @@ class ThermiaEntity(CoordinatorEntity[ThermiaCoordinator]):
         self._attr_name = name
         if plan.translation_key:
             self._attr_translation_key = plan.translation_key
+        elif plan.flag_value is not None:
+            self._attr_translation_key = plan.label_key.lower()  # e.g. comp_value_compr
         self._attr_entity_registry_enabled_default = plan.default_enabled
         if plan.entity_category:
             self._attr_entity_category = EntityCategory(plan.entity_category)

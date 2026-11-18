@@ -10,12 +10,13 @@ from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.typing import ConfigType
 
@@ -79,6 +80,7 @@ PLATFORMS = [
     Platform.BUTTON,
 ]
 DISCOVERY_MAX_AGE = 24 * 3600
+SETUP_RETRY_DELAY = 120  # seconds until a failed installation is tried again
 STORE_VERSION = 1
 
 
@@ -234,6 +236,89 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     return True
 
 
+async def _build_installation(
+    hass: HomeAssistant,
+    entry: ThermiaConfigEntry,
+    api: ThermiaApi,
+    installation: Installation,
+    catalog: Catalog,
+    labels: LabelResolver,
+    options: PlannerOptions,
+    interval: int,
+    missing_store: Store[dict[str, str]],
+    missing_raw: dict[str, str],
+    device_registry: dr.DeviceRegistry,
+) -> InstallationRuntime:
+    """Discovery, first poll, plan and devices of one installation."""
+    discovery = await _load_discovery(hass, entry, api, installation.id)
+    sync_discovery_empty(hass, entry.entry_id, installation.id, not discovery.specs)
+    coordinator = ThermiaCoordinator(
+        hass,
+        entry,
+        installation,
+        PollingSource(api, installation.id),
+        api,
+        discovery,
+        interval,
+        missing_store,
+        {
+            int(i): datetime.fromisoformat(t)
+            for i, t in missing_raw.items()
+            if i.isdigit() and installation_owns(discovery, int(i))
+        },
+        datetime.fromisoformat(missing_raw["last_drift"]) if "last_drift" in missing_raw else None,
+    )
+    coordinator.on_drift = _drift_handler(hass, entry, installation.id, api)
+    try:
+        await coordinator.async_config_entry_first_refresh()
+    except ConfigEntryNotReady:
+        await coordinator.async_shutdown()
+        raise
+    assert coordinator.data is not None
+    values = coordinator.data.values
+    remembered = {r.spec.register_id for r in discovery.remembered}
+    registers = [
+        # remembered registers are planned even though the cloud returns no value now
+        (
+            spec,
+            values.get(spec.register_id) or RegisterValue(spec.register_id, None, None, None),
+        )
+        for spec in discovery.all_specs
+        if spec.register_id in values or spec.register_id in remembered
+    ]
+    plan = build_plan(
+        registers,
+        catalog,
+        history={h.register_index: h for h in discovery.history},
+        options=replace(options, has_indoor_sensor=await _has_indoor_sensor(api, installation.id)),
+        now=datetime.now(),
+    )
+    names = resolve_name_collisions(
+        plan.entities,
+        lambda p: labels.label(p.label_key, p.translation_key),
+        lambda p: labels.label(p.group_name),
+    )
+    _enable_integration_disabled(hass, installation.id, plan.entities)
+    coordinator.set_plans(plan.entities, _needed_groups(hass, plan.entities, discovery))
+    _register_devices(device_registry, entry, installation, catalog, plan.entities, labels)
+    return InstallationRuntime(
+        installation,
+        coordinator,
+        plan.entities,
+        names,
+        plan.notes,
+        frozenset({"main"} | {p.device for p in plan.entities}),
+    )
+
+
+def _retry_callback(hass: HomeAssistant, entry: ThermiaConfigEntry) -> Callable[[datetime], None]:
+    @callback
+    def retry(_now: datetime) -> None:
+        hass.config_entries.async_schedule_reload(entry.entry_id)
+
+    return retry
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> bool:
     try:
         _, auth, api = await async_build_client(hass, entry)
@@ -271,68 +356,35 @@ async def async_setup_entry(hass: HomeAssistant, entry: ThermiaConfigEntry) -> b
         runtimes: list[InstallationRuntime] = []
         device_registry = dr.async_get(hass)
 
+        failed: list[tuple[Installation, Exception]] = []
         for installation in installations:
-            discovery = await _load_discovery(hass, entry, api, installation.id)
-            sync_discovery_empty(hass, entry.entry_id, installation.id, not discovery.specs)
-            coordinator = ThermiaCoordinator(
-                hass,
-                entry,
-                installation,
-                PollingSource(api, installation.id),
-                api,
-                discovery,
-                interval,
-                missing_store,
-                {
-                    int(i): datetime.fromisoformat(t)
-                    for i, t in missing_raw.items()
-                    if i.isdigit() and installation_owns(discovery, int(i))
-                },
-                datetime.fromisoformat(missing_raw["last_drift"])
-                if "last_drift" in missing_raw
-                else None,
-            )
-            coordinator.on_drift = _drift_handler(hass, entry, installation.id, api)
-            await coordinator.async_config_entry_first_refresh()
-            assert coordinator.data is not None
-            values = coordinator.data.values
-            remembered = {r.spec.register_id for r in discovery.remembered}
-            registers = [
-                # remembered registers are planned even though the cloud returns no value now
-                (
-                    spec,
-                    values.get(spec.register_id)
-                    or RegisterValue(spec.register_id, None, None, None),
+            try:
+                runtimes.append(
+                    await _build_installation(
+                        hass,
+                        entry,
+                        api,
+                        installation,
+                        catalog,
+                        labels,
+                        options,
+                        interval,
+                        missing_store,
+                        missing_raw,
+                        device_registry,
+                    )
                 )
-                for spec in discovery.all_specs
-                if spec.register_id in values or spec.register_id in remembered
-            ]
-            plan = build_plan(
-                registers,
-                catalog,
-                history={h.register_index: h for h in discovery.history},
-                options=replace(
-                    options, has_indoor_sensor=await _has_indoor_sensor(api, installation.id)
-                ),
-                now=datetime.now(),
-            )
-            names = resolve_name_collisions(
-                plan.entities,
-                lambda p: labels.label(p.label_key, p.translation_key),
-                lambda p: labels.label(p.group_name),
-            )
-            _enable_integration_disabled(hass, installation.id, plan.entities)
-            coordinator.set_plans(plan.entities, _needed_groups(hass, plan.entities, discovery))
-            _register_devices(device_registry, entry, installation, catalog, plan.entities, labels)
-            runtimes.append(
-                InstallationRuntime(
-                    installation,
-                    coordinator,
-                    plan.entities,
-                    names,
-                    plan.notes,
-                    frozenset({"main"} | {p.device for p in plan.entities}),
-                )
+            except (ThermiaError, ConfigEntryNotReady) as err:
+                if isinstance(err, AuthError | PolicyAcceptanceError):
+                    raise
+                failed.append((installation, err))
+                _LOGGER.warning("Installation %s could not be set up yet: %s", installation.id, err)
+        if failed and not runtimes:
+            raise failed[0][1]
+        if failed:
+            # Set up the healthy installations now and retry the others in the background
+            entry.async_on_unload(
+                async_call_later(hass, SETUP_RETRY_DELAY, _retry_callback(hass, entry))
             )
     except AuthError as err:
         await auth.close()

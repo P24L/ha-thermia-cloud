@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Температура бака"
+      },
+      "last_contact": {
+        "name": "Последняя связь"
+      },
+      "alarm_count": {
+        "name": "Активные аварии"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Насос контура отопления"
+      },
+      "active_alarm": {
+        "name": "Авария"
+      },
+      "connected": {
+        "name": "В сети"
       }
     }
   },

@@ -12,6 +12,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from . import ThermiaConfigEntry
 from .catalog.planner import option_key
 from .entity import ThermiaEntity
+from .info import ALARM_COUNT, LAST_CONTACT, InfoSensor
 
 PARALLEL_UPDATES = 0  # coordinator-based, no per-entity I/O
 
@@ -24,6 +25,11 @@ async def async_setup_entry(
         for runtime in entry.runtime_data.installations
         for plan in runtime.plans
         if plan.platform == "sensor"
+    )
+    async_add_entities(
+        InfoSensor(entry, runtime, spec)
+        for runtime in entry.runtime_data.installations
+        for spec in (LAST_CONTACT, ALARM_COUNT)
     )
 
 

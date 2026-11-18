@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Température du ballon"
+      },
+      "last_contact": {
+        "name": "Dernier contact"
+      },
+      "alarm_count": {
+        "name": "Alarmes actives"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Pompe du circuit de chauffage"
+      },
+      "active_alarm": {
+        "name": "Alarme"
+      },
+      "connected": {
+        "name": "En ligne"
       }
     }
   },

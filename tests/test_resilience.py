@@ -64,7 +64,7 @@ def sensor(hass: HomeAssistant, installation: int, name: str, group: str):  # ty
     eid = er.async_get(hass).async_get_entity_id(
         "sensor", DOMAIN, f"{installation}_{index_of(name, group)}"
     )
-    return hass.states.get(eid)
+    return hass.states.get(eid) if eid else None
 
 
 async def test_a_counter_that_dips_slightly_is_not_reported_as_a_reset(
@@ -130,3 +130,36 @@ async def test_a_failed_authentication_asks_for_reauth_once_without_a_retry_stor
     assert [f["context"]["source"] for f in flows] == ["reauth"]  # one flow, not four
     assert len(api.calls) - reads <= 2  # not hammering the cloud with a rejected password
     assert entry.state.value in ("loaded", "setup_error")
+
+
+async def test_healthy_installations_start_while_a_failing_one_is_retried(
+    hass: HomeAssistant, api: FakeApi, freezer
+) -> None:
+    from homeassistant.config_entries import ConfigEntryState
+
+    api.installation_ids = [42, 43]
+    api.fail_installations = {43}  # the second installation fails at setup
+    entry = await setup(hass, [42, 43])
+    assert entry.state is ConfigEntryState.LOADED  # not blocked by installation 43
+    outdoor = ("REG_OPER_DATA_OUTDOOR_TEMP_MA_SA", "REG_GROUP_TEMPERATURES")
+    assert sensor(hass, 42, *outdoor).state == "4.0"
+    assert sensor(hass, 43, *outdoor) is None
+    assert [r.installation.id for r in entry.runtime_data.installations] == [42]
+
+    api.fail_installations = set()  # it comes back; the background retry picks it up
+    freezer.tick(timedelta(seconds=130))
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done()
+    assert sorted(r.installation.id for r in entry.runtime_data.installations) == [42, 43]
+    assert sensor(hass, 43, *outdoor).state == "4.0"
+
+
+async def test_when_every_installation_fails_the_entry_retries(
+    hass: HomeAssistant, api: FakeApi
+) -> None:
+    from homeassistant.config_entries import ConfigEntryState
+
+    api.installation_ids = [42, 43]
+    api.fail_installations = {42, 43}
+    entry = await setup(hass, [42, 43])
+    assert entry.state is ConfigEntryState.SETUP_RETRY

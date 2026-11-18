@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Temperatura zbiornika"
+      },
+      "last_contact": {
+        "name": "Ostatni kontakt"
+      },
+      "alarm_count": {
+        "name": "Aktywne alarmy"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Pompa obiegu grzewczego"
+      },
+      "active_alarm": {
+        "name": "Alarm"
+      },
+      "connected": {
+        "name": "Online"
       }
     }
   },

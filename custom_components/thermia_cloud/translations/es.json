@@ -111,6 +111,12 @@
       },
       "tank_temperature": {
         "name": "Temperatura del depósito"
+      },
+      "last_contact": {
+        "name": "Último contacto"
+      },
+      "alarm_count": {
+        "name": "Alarmas activas"
       }
     },
     "number": {
@@ -207,6 +213,12 @@
       },
       "comp_value_radiatorpump": {
         "name": "Bomba del circuito de calefacción"
+      },
+      "active_alarm": {
+        "name": "Alarma"
+      },
+      "connected": {
+        "name": "En línea"
       }
     }
   },
