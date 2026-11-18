@@ -130,10 +130,10 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P9.3 🔒 Public-repo polish: social preview image, final topics, issue templates live, CI green *(CI is green; social preview image still to do)*
 - [x] P9.4 `v0.1.0` as a regular GitHub release (beta in the notes; the Marketplace hides pre-releases by default); manifest version matches the tag *(2026-11-18: v0.1.0 published as a regular (non-pre-release) GitHub release, beta in the notes)*
 - [ ] P9.5 🔒 Install on the maintainer's HA via Marketplace *Add from link* (no restart expected); update path tested with `v0.1.1`
-- [ ] P9.6 🔒 Announce — **only after P0.12**: courtesy post to upstream, HA community forum thread
+- [ ] P9.6 🔒 Announce — later, after a week of production observation: courtesy post to upstream only (decided 2026-11-18: no HA forum thread)
 - [ ] P9.7 Collect community diagnostics → fixtures → catalog entries (issue label `new-model`)
 - [ ] P9.8 `v1.0.0` when bronze+ is green, ≥ 2 other users confirmed, no open data-loss/auth bugs
-- [ ] P9.9 🔒 PR to `hacs/default` (checklist in `RELEASE.md` §5)
+- [-] P9.9 PR to `hacs/default` — decided 2026-11-18 not to do it (the integration is installed via *Add from link*; review takes months). Requirements are met if that changes: see `RELEASE.md` §5
 
 ## Phase 10 — Later / stretch
 
@@ -152,5 +152,5 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P10.15 Explore the classic API's `GET /api/v1/installations/{id}/calendarFunctions` (calendar/schedule functions such as reduced heating and hot water) read-only, and ATEC spot-price registers (hot-water start temperature, supply-line minimum): high value for price-based control; writes only with the maintainer's approval
 - [x] P10.16 Fix: if the *first* load of one of several installations of an account fails at setup, the whole entry retries and the other installations wait; set up the healthy ones and retry the failing one in the background (found while testing resilience; at runtime installations are already independent) *(2026-11-18: healthy installations start at once, a failing one is retried in the background after 2 min; if all fail the entry retries as before)*
 - [x] P10.13 A *data fresh* indicator when the gateway stops uploading (entities stay available with old values); decide after P0.3 *(register timestamps cannot tell this: they change only with the value, outdoor temperature can stand still for 27 h; computed registers refresh on every read. Candidate signal: `installationsInfo.lastOnline`, UTC)* *(2026-11-18: *Last contact* (timestamp from `lastOnline`, UTC) and *Online* diagnostics, re-read every 5 min; `register_timestamp` stays an attribute only)*
-- [x] P10.17 Setup wizard (mode choice), collapsible option sections with icons, entity icons, beginner guide, blueprints (2026-11-18, v0.2.0)
+- [x] P10.17 Setup wizard (mode choice), collapsible option sections with icons, entity icons, beginner guide, blueprints (2026-11-18, v0.2.0; water heater in v0.2.1)
 - [ ] P10.8 "Unmapped registers" editor → `options.overrides` (cost estimate in `UI-DESIGN.md` §4); build only if users of other model families ask for it
