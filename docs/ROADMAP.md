@@ -106,7 +106,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [ ] P7.2 *(moved to P10.7)*
 - [x] P7.3 Quality-scale **bronze** final audit (the criteria are already enforced in P4.12) *(audit in `docs/QUALITY.md`)*
 - [x] P7.4 Quality-scale **silver**: reauth, parallel updates, `config-entry-unloading`, `integration-owner`, `docs-configuration-parameters`, `docs-installation-parameters`, `log-when-unavailable`, integration-module coverage > 95 % *(audit in `docs/QUALITY.md`, coverage 97 %)*
-- [ ] P7.5 Final README with screenshots/GIF (see README outline) *(README matches the implementation; screenshots/GIF still missing)*
+- [x] P7.5 Final README with screenshots (device page, options) in `docs/img/`; no animated GIF
 - [ ] P7.6 Czech translation review; optional `README.cs.md` *(`cs.json` is machine-translated and needs a native review by the maintainer)*
 - [x] P7.7 Final icon, dashboard example (Mushroom) in README *(final icon; Mushroom example is in the README)*
 - [x] P7.8 Performance check: request rate matches plan; no blocking calls in the event loop *(dev HA log: 7 requests/min, no blocking-call warnings; file I/O runs in worker threads)*

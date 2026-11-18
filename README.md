@@ -45,11 +45,10 @@ The existing [Thermia integration by klejejs](https://github.com/klejejs/ha-ther
 - ✅ Reauth and reconfigure flows, Repairs, downloadable diagnostics
 - ✅ Multiple installations per account
 
-<!-- Screenshots: put images in docs/img and enable
 <p align="center">
-  <img src="docs/img/device.png" width="45%"> <img src="docs/img/options.png" width="45%">
+  <img src="docs/img/device.png" width="52%" alt="The heat pump device with controls and sensors">
+  <img src="docs/img/options-general.png" width="30%" alt="General options with read-only mode">
 </p>
--->
 
 ## Requirements
 
