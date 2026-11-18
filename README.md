@@ -1,5 +1,5 @@
 <!-- Status banner: remove when v0.1.0 is released -->
-> 🚧 **Status: pre-release (not published yet).** The integration is feature-complete for v0.1 and runs against a real iTec heat pump **read-only**. **Writing to a real heat pump has not been verified yet** — the write path is tested against fakes only. Progress: [`docs/ROADMAP.md`](docs/ROADMAP.md).
+> 🚧 **Status: beta (v0.1.0).** Verified against a real iTec heat pump: reading in production (read-only mode) and reading plus writing in a development Home Assistant. Other model families are expected to work but are unverified. Progress and open work: [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 <p align="center">
   <img src="custom_components/thermia_cloud/brand/icon@2x.png" width="120" alt="Thermia Cloud">
