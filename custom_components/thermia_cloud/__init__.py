@@ -92,6 +92,7 @@ class InstallationRuntime:
     names: dict[str, str]
     notes: tuple[PlanNote, ...]
     devices: frozenset[str]
+    has_indoor_sensor: bool | None = None  # from the installation status
 
 
 @dataclass(slots=True)
@@ -286,11 +287,12 @@ async def _build_installation(
         for spec in discovery.all_specs
         if spec.register_id in values or spec.register_id in remembered
     ]
+    has_indoor = await _has_indoor_sensor(api, installation.id)
     plan = build_plan(
         registers,
         catalog,
         history={h.register_index: h for h in discovery.history},
-        options=replace(options, has_indoor_sensor=await _has_indoor_sensor(api, installation.id)),
+        options=replace(options, has_indoor_sensor=has_indoor),
         now=datetime.now(),
     )
     names = resolve_name_collisions(
@@ -308,6 +310,7 @@ async def _build_installation(
         names,
         plan.notes,
         frozenset({"main"} | {p.device for p in plan.entities}),
+        has_indoor,
     )
 
 

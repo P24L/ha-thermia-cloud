@@ -1,5 +1,5 @@
 import json
-from datetime import timedelta
+from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pytest
@@ -338,3 +338,50 @@ async def test_diagnostics_are_redacted(hass: HomeAssistant, api: FakeApi) -> No
     [installation] = dump["installations"]
     assert installation["model"] == "iTec" and len(installation["specs"]) == 26
     assert any(n["code"] == "unresolved_reference" for n in installation["notes"])
+
+
+async def test_diagnostics_can_be_turned_back_into_a_fixture(
+    hass: HomeAssistant, api: FakeApi, tmp_path
+) -> None:
+    """A user's diagnostics file becomes a fixture folder the planner reads like the originals."""
+    import importlib.util
+    from pathlib import Path
+
+    from custom_components.thermia_cloud.catalog.loader import load_catalog
+    from custom_components.thermia_cloud.catalog.planner import build_plan
+    from custom_components.thermia_cloud.client.models import RegisterSpec, RegisterValue
+    from custom_components.thermia_cloud.diagnostics import async_get_config_entry_diagnostics
+
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id="sub-1",
+        data={CONF_USERNAME: "u", CONF_PASSWORD: "p", CONF_REFRESH_TOKEN: "r"},
+        options={CONF_INSTALLATIONS: [INSTALLATION_ID], CONF_SCAN_INTERVAL: 60},
+    )
+    entry.add_to_hass(hass)
+    await setup(hass, entry, api)
+    dump = json.loads(
+        json.dumps(await async_get_config_entry_diagnostics(hass, entry), default=str)
+    )
+
+    script = Path(__file__).parent.parent / "scripts" / "diagnostics_to_fixture.py"
+    spec = importlib.util.spec_from_file_location("diag2fixture", script)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.write(module.convert(dump["installations"][0]), tmp_path)
+
+    def plan_of(folder: Path):  # type: ignore[no-untyped-def]
+        pairs = [
+            (RegisterSpec.from_json(r), RegisterValue.from_json(r))
+            for p in sorted(folder.glob("group_*.json"))
+            for r in json.loads(p.read_text())
+        ]
+        return build_plan(pairs, load_catalog(), now=datetime(2026, 11, 17, 12, 0))
+
+    original = plan_of(FIXTURES)
+    rebuilt = plan_of(tmp_path)
+    assert [(e.platform, e.key, e.register_name) for e in rebuilt.entities] == [
+        (e.platform, e.key, e.register_name) for e in original.entities
+    ]
+    assert (tmp_path / "history_registers.json").exists() and (tmp_path / "info.json").exists()

@@ -37,6 +37,7 @@ async def async_get_config_entry_diagnostics(
                 "firmware": runtime.installation.firmware_version,
                 "online": runtime.installation.is_online,
                 "profile_id": discovery.profile_id,
+                "has_indoor_sensor": runtime.has_indoor_sensor,
                 "discovery_age_s": round(discovery.age_seconds()),
                 "groups": list(discovery.groups),
                 "specs": [asdict(s) for s in discovery.all_specs],

@@ -30,7 +30,7 @@ Details: `docs/DEVELOPMENT.md`.
 
 ## Sharing data from your pump
 
-Use the *new model* issue template and attach the integration's diagnostics download (it is redacted). Please look through it before posting.
+Use the *new model* issue template and attach the integration's diagnostics download (*Settings → Devices & services → Thermia Cloud → ⋮ → Download diagnostics*). It is redacted (no account, ids, MAC or name), but please look through it before posting. Maintainers turn it into a test fixture with `scripts/diagnostics_to_fixture.py`, which is how new model families get supported.
 
 ## License
 
