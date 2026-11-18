@@ -35,7 +35,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P1.5 CI: `validate.yml` (hassfest + HACS action), `tests.yml`
 - [x] P1.6 `CONTRIBUTING.md`, `SECURITY.md`, issue templates (bug / new model / feature)
 - [x] P1.7 🔒 Create the **public** GitHub repo `P24L/ha-thermia-cloud` (decision D12), push, set description + topics (`home-assistant`, `hacs`, `homeassistant-integration`, `thermia`, `heat-pump`)
-- [x] P1.8 Draft icon (own generic heat-pump drawing, not the Thermia logo) *(draft done: `scripts/make_icon.py`, own drawing; replace whenever a nicer one exists)*
+- [x] P1.8 Draft icon (own generic heat-pump drawing, not the Thermia logo) *(final: generated artwork, 256 and 512 px in `brand/`; no brand marks)*
 - [ ] P1.9 🔒 Heads-up post to `klejejs/ha-thermia-heat-pump-integration` discussions (courtesy; announce the alternative) — after P0.12
 
 ## Phase 2 — Client library (`custom_components/thermia_cloud/client/`)
@@ -66,7 +66,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 4 — HA integration core (read-only)
 
-- [x] P4.1 `manifest.json`, `const.py`; review the existing `hacs.json` (name *Thermia Cloud (unofficial)*, min HA 2026.10); brand images in `custom_components/thermia_cloud/brand/` (`icon.png` 256×256, `icon@2x.png`) *(done; the icon is a draft drawn by `scripts/make_icon.py`)*
+- [x] P4.1 `manifest.json`, `const.py`; review the existing `hacs.json` (name *Thermia Cloud (unofficial)*, min HA 2026.10); brand images in `custom_components/thermia_cloud/brand/` (`icon.png` 256×256, `icon@2x.png`) *(done; icon in `brand/`)*
 - [x] P4.2 Config flow: user → create; entry `unique_id` = token `sub`; errors per `UI-DESIGN.md` §1; installation selection in options *(user → installations → create; installation selection in the options flow comes with P6.2)*
 - [x] P4.3 Reauth flow
 - [x] P4.4 Reconfigure flow
@@ -108,7 +108,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P7.4 Quality-scale **silver**: reauth, parallel updates, `config-entry-unloading`, `integration-owner`, `docs-configuration-parameters`, `docs-installation-parameters`, `log-when-unavailable`, integration-module coverage > 95 % *(audit in `docs/QUALITY.md`, coverage 97 %)*
 - [ ] P7.5 Final README with screenshots/GIF (see README outline) *(README matches the implementation; screenshots/GIF still missing)*
 - [ ] P7.6 Czech translation review; optional `README.cs.md` *(`cs.json` is machine-translated and needs a native review by the maintainer)*
-- [x] P7.7 Final icon, dashboard example (Mushroom) in README *(icon is a draft; Mushroom example is in the README)*
+- [x] P7.7 Final icon, dashboard example (Mushroom) in README *(final icon; Mushroom example is in the README)*
 - [x] P7.8 Performance check: request rate matches plan; no blocking calls in the event loop *(dev HA log: 7 requests/min, no blocking-call warnings; file I/O runs in worker threads)*
 
 ## Phase 8 — Validate on the maintainer's production setup 🔒
@@ -147,7 +147,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 - [x] P10.9 Decided 2026-11-17: variant B — enabled-by-default is re-applied to entities the integration itself disabled earlier (see D6); unknown registers stay disabled. A *New registers: off / read-only / all* option remains a possible later addition
 - [x] P10.10 Registers the cloud returns only in some state (circuit *Curve*/*Constant*, hot-water mode and interval while hot water is on) are *state-dependent*: catalog flag `state_dependent`; vanished registers are remembered for 30 days (discovery cache), their entities stay as `unavailable` and are back when the register returns, no rediscovery on vanishing (only on an unknown register appearing), no warning or Repair for flagged registers. *Rediscover registers* forgets the remembered ones
 - [ ] P10.11 Alarms and events as diagnostics: `GET /api/v1/installation/{id}/events?onlyActiveAlarms=false` (item keys `isActiveAlarm`, `eventTitle`), an *active alarm* binary sensor plus a count, polled every few minutes; do one read-only live call first to learn the response shape (found by reviewing the upstream sources)
-- [ ] P10.12 Catalog and tests for other families (from the community dumps): return/supply/brine/outdoor/desired temperatures (`REG_RETURN_LINE`, `REG_OPER_DATA_RETURN_MA_SA`, `REG_BRINE_IN/OUT`, …), `REG_HEATING_STOP`, cooling hours, circuit-2 groups (`REG_GROUP_HEATING_CURVE_2`, `…CURVE1`, `…CURVE2`), name traps (names without `REG_`, groups without `REG_GROUP_`, the cloud's `REG_DESIRED_BUFFRER_TANK` typo). Without entries those sensors are generic and *disabled* on other families
+- [x] P10.12 Catalog entries for other families (from the older-cloud community dumps): return/supply/outdoor/brine/tank/pool temperatures, aux-heater hours, defrost diagnostics, circuit-2 curve registers and groups, status registers of ATEC/Diplomat/NCP with their core flags. Units and defaults are educated guesses for families we cannot test; uncertain ones start disabled. Name traps (names without `REG_`, `REG_DESIRED_BUFFRER_TANK`) are covered by the entries
 - [x] P10.14 Resilience checks from the upstream issue history (2026-11-17): hour counters that dip slightly are held (no false reset in the statistics), a read-only/hidden enum value is never offered as a choice, a rejected refresh is followed by exactly one login then reauth (no retry loop), one failing installation does not stop the others, a renamed installation keeps all entity ids, the write body never contains `registerIndex`. All covered by tests
 - [ ] P10.15 Explore the classic API's `GET /api/v1/installations/{id}/calendarFunctions` (calendar/schedule functions such as reduced heating and hot water) read-only, and ATEC spot-price registers (hot-water start temperature, supply-line minimum): high value for price-based control; writes only with the maintainer's approval
 - [ ] P10.16 Fix: if the *first* load of one of several installations of an account fails at setup, the whole entry retries and the other installations wait; set up the healthy ones and retry the failing one in the background (found while testing resilience; at runtime installations are already independent)

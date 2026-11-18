@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Provozní hodiny přídavného ohřevu 2"
+      },
+      "tank_temperature": {
+        "name": "Teplota zásobníku"
       }
     },
     "number": {

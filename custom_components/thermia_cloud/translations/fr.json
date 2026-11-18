@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Heures de fonctionnement du chauffage d'appoint 2"
+      },
+      "tank_temperature": {
+        "name": "Température du ballon"
       }
     },
     "number": {

@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Betriebsstunden Zusatzheizung 2"
+      },
+      "tank_temperature": {
+        "name": "Speichertemperatur"
       }
     },
     "number": {

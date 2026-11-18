@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Tillsats 2 drifttid"
+      },
+      "tank_temperature": {
+        "name": "Tanktemperatur"
       }
     },
     "number": {

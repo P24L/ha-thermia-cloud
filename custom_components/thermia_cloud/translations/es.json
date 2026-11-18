@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Horas de funcionamiento del calefactor auxiliar 2"
+      },
+      "tank_temperature": {
+        "name": "Temperatura del depósito"
       }
     },
     "number": {

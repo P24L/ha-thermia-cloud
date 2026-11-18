@@ -14,6 +14,12 @@ groups:
   REG_GROUP_HEATING_CURVE_CIRC2: {device: circuit_2}
   REG_GROUP_POOL: {device: pool}
   REG_GROUP_OPERATIONAL_TIME: {device: main, category: diagnostic}
+  # other families name the second/first circuit's groups differently (older-cloud dumps)
+  REG_GROUP_HEATING_CURVE1: {device: circuit_1}
+  REG_GROUP_HEATING_CURVE2: {device: circuit_2}
+  REG_GROUP_HEATING_CURVE_2: {device: circuit_2}
+  REG_GROUP_DEFROSTING: {device: main, category: diagnostic}
+  REG_GROUP_DEFROSTS: {device: main, category: diagnostic}
 
 registers:
   # --- heating curves (the same names exist in the main and the circuit-1 group) ---
@@ -243,6 +249,222 @@ registers:
     device_class: duration
     state_class: total_increasing
     default_enabled: true  # when the electric aux heater runs: worth a history
+
+
+  # ===== Other model families =====================================================================
+  # Register names seen in dumps of ATEC, Diplomat, NCP/Atlas and iTec from the OLDER cloud (before
+  # September 2026), see NOTICE.md. Names are stable, but units/defaults are educated: sensors are
+  # degrees from the modifier, anything uncertain starts disabled. Extend with real diagnostics.
+  REG_OPER_DATA_RETURN_MA_SA:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_OPER_DATA_RETURN:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_RETURN_LINE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_SUPPLY_LINE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_DESIRED_SUPPLY_LINE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+  REG_OUTDOOR_TEMPERATURE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_BRINE_IN:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_BRINE_OUT:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_OPER_DATA_BUFFER_TANK:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_DESIRED_BUFFRER_TANK:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+  REG_DESIRED_INDOOR_TEMPERATURE:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+  REG_COOL_SENSOR_TANK:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+  REG_COOL_SENSOR_SUPPLY:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+  OPER_DATA_TANK:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+    translation_key: tank_temperature
+  REG_ACTUAL_POOL_TEMP:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+  REG_DESIRED_DISTR_CIR1:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+    device: circuit_1
+  REG_DESIRED_DISTR_CIR2:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: false
+    device: circuit_2
+  REG_OPER_DATA_DISTR_CIR2:
+    kind: sensor
+    unit: "°C"
+    device_class: temperature
+    state_class: measurement
+    default_enabled: true
+    device: circuit_2
+  REG_OPER_TIME_COOLING:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+    default_enabled: false
+  REG_OPER_TIME_IMM3:
+    kind: sensor
+    unit: h
+    device_class: duration
+    state_class: total_increasing
+    default_enabled: true
+  REG_INTEGRAL_LSD:
+    kind: sensor
+    unit: ""
+    category: diagnostic
+  REG_DEFROSTS_MA_SA:
+    kind: sensor
+    unit: ""
+    state_class: total_increasing
+    category: diagnostic
+  REG_DEFROSTS_BETW2DEFR_MA_SA:
+    kind: sensor
+    unit: h
+    category: diagnostic
+  REG_DEFROST_TIME_LAST_DEFROST_MA_SA:
+    kind: sensor
+    unit: min
+    category: diagnostic
+  REG_CURRENT_LIMITER_EXP_PORT203_1:
+    kind: sensor
+    category: diagnostic
+  REG_SER_HEATING_INTEGRALA1:
+    kind: number
+    risk: service
+  REG_ROOM_SENSOR_ENABLE:
+    kind: switch
+    risk: heating
+  REG_LINK_INTEGRATION:  # values LIGHT / SYSTEM, not an on/off pair
+    kind: select
+    risk: none
+
+  # --- heating: other names for the same settings, and circuit 2 ---
+  REG_HEATING_STOP:  # Diplomat's name of REG_HEATING_HEAT_STOP
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+  REG_CURVE2_CURVE:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    default_enabled: true
+    risk: heating
+    translation_key: heating_curve
+    state_dependent: true
+  REG_CURVE2_MIN:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+    translation_key: heating_curve_min
+    state_dependent: true
+  REG_CURVE2_MAX:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+    translation_key: heating_curve_max
+    state_dependent: true
+  REG_SHUNT_COOLING:
+    kind: number
+    unit: "°C"
+    device_class: temperature
+    risk: heating
+  REG_ACTIVATE_COOLING:
+    kind: switch
+    risk: heating
+
+  # --- status registers of other families (a flag per entity) ---
+  COMP_STATUS_ATEC:
+    kind: binary_sensor
+    default_enabled: true
+    core_flags: [COMP_VALUE_COMPR, COMP_VALUE_HEATING, COMP_VALUE_HOT_WATER, COMP_VALUE_DEFROST]
+  COMP_STATUS:  # Diplomat
+    kind: binary_sensor
+    default_enabled: true
+    core_flags: [COMP_VALUE_COMPR, COMP_VALUE_HEATING, COMP_VALUE_HOT_WATER]
+  COMP_POWER_STATUS:  # Diplomat: stages of the electric auxiliary heater (3/6/9/12/15 kW)
+    kind: binary_sensor
+    default_enabled: true
+  COMP_POWER_STATUS_ATEC:
+    kind: binary_sensor
+    default_enabled: true
+  REG_OPERATIONAL_STATUS_PRIORITY_BITMASK:  # NCP / Atlas: what the pump is doing, as a bitmask
+    kind: binary_sensor
+    default_enabled: true
+    core_flags: [REG_VALUE_STATUS_DEFROST, REG_VALUE_STATUS_HOTWATER, REG_VALUE_STATUS_HEAT]
 
   # --- status ---
   COMP_STATUS_ITEC:  # bitmask: one binary sensor per flag

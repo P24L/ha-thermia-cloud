@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Ure delovanja pomožnega grelca 2"
+      },
+      "tank_temperature": {
+        "name": "Temperatura zalogovnika"
       }
     },
     "number": {

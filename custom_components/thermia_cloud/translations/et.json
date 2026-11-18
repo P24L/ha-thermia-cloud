@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Lisaküttekeha 2 töötunnid"
+      },
+      "tank_temperature": {
+        "name": "Paagi temperatuur"
       }
     },
     "number": {

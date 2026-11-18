@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Auxiliary heater 2 operating hours"
+      },
+      "tank_temperature": {
+        "name": "Tank temperature"
       }
     },
     "number": {

@@ -108,6 +108,9 @@
       },
       "hours_aux_2": {
         "name": "Lisälämmitin 2, käyttötunnit"
+      },
+      "tank_temperature": {
+        "name": "Säiliön lämpötila"
       }
     },
     "number": {
