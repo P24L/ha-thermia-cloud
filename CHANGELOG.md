@@ -2,7 +2,7 @@
 
 All notable changes are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [0.2.1] - 2026-11-18
 
 ### Added
 - A **water heater** entity for the hot water (standard Home Assistant card and voice control): on/off and the comfort / economy / away modes, with the current hot water temperature. The switch, select and sensor stay.
