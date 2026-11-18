@@ -1,5 +1,5 @@
 <!-- Status banner: remove when v0.1.0 is released -->
-> 🚧 **Status: beta (v0.1.0).** Verified against a real iTec heat pump: reading in production (read-only mode) and reading plus writing in a development Home Assistant. Other model families are expected to work but are unverified. Progress and open work: [`docs/ROADMAP.md`](docs/ROADMAP.md).
+> 🚧 **Status: beta (v0.2.0).** Verified against a real iTec heat pump: reading in production (read-only mode) and reading plus writing in a development Home Assistant. Other model families are expected to work but are unverified. Progress and open work: [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 <p align="center">
   <img src="custom_components/thermia_cloud/brand/icon@2x.png" width="120" alt="Thermia Cloud">
@@ -49,6 +49,8 @@ The existing [Thermia integration by klejejs](https://github.com/klejejs/ha-ther
   <img src="docs/img/device.png" width="52%" alt="The heat pump device with controls and sensors">
   <img src="docs/img/options-general.png" width="30%" alt="General options with read-only mode">
 </p>
+
+> 👋 **New here?** Follow the [getting started guide](docs/GETTING-STARTED.md).
 
 ## Requirements
 
@@ -138,6 +140,13 @@ The integration polls the Thermia cloud every 60 seconds (configurable, 10–600
 ## Removing the integration
 
 *Settings → Devices & services → Thermia Cloud → ⋮ → Delete*. Nothing is left on the heat pump; the integration stores only its own cache files inside Home Assistant.
+
+## Blueprints
+
+[![Alarm notification](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2FP24L%2Fha-thermia-cloud%2Fblob%2Fmain%2Fblueprints%2Fautomation%2Fthermia_cloud%2Falarm_notification.yaml)
+[![Connection lost](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2FP24L%2Fha-thermia-cloud%2Fblob%2Fmain%2Fblueprints%2Fautomation%2Fthermia_cloud%2Fconnection_lost.yaml)
+
+Two ready-made automations: a notification when the heat pump reports an alarm, and when it has been offline for a while.
 
 ## Dashboard example (Mushroom)
 

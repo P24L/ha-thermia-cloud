@@ -44,6 +44,16 @@
           "username": "Het e-mailadres van hetzelfde Thermia-account.",
           "password": "Het huidige wachtwoord."
         }
+      },
+      "mode": {
+        "title": "Hoe moet het werken?",
+        "description": "Kies wat de integratie met uw warmtepomp mag doen. U kunt dit op elk moment wijzigen via *Configureren → Algemeen → Veiligheid*.",
+        "data": {
+          "start_mode": "Modus"
+        },
+        "data_description": {
+          "start_mode": "Met 'Bewaken en bedienen' kunt u instellingen zoals de stooklijn en het warm water wijzigen. 'Alleen bewaken (alleen-lezen)' schrijft nooit iets naar de warmtepomp."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Algemeen",
-        "description": "De alleen-lezenmodus blokkeert elke schrijfactie naar de warmtepomp (entiteiten en diensten). Het updateinterval gaat in na opslaan.",
-        "data": {
-          "scan_interval": "Updateinterval (seconden)",
-          "read_only": "Alleen-lezenmodus",
-          "timeout": "Time-out voor verzoeken (seconden)",
-          "debug_attributes": "Ruwe registerwaarden als attributen toevoegen"
-        },
-        "data_description": {
-          "scan_interval": "Hoe vaak de cloud om nieuwe waarden wordt gevraagd (10–600 seconden).",
-          "read_only": "Indien ingeschakeld kan er niets naar de warmtepomp worden geschreven.",
-          "timeout": "Hoe lang wordt gewacht op één antwoord van de cloud.",
-          "debug_attributes": "Voegt register-id's en ruwe waarden toe aan de entiteitsattributen."
+        "description": "Hoe de integratie met de Thermia-cloud communiceert en hoe voorzichtig ze is.",
+        "sections": {
+          "updates": {
+            "name": "Updates",
+            "description": "Hoe vaak waarden uit de cloud worden gelezen.",
+            "data": {
+              "scan_interval": "Updateinterval (seconden)",
+              "timeout": "Time-out voor verzoeken (seconden)"
+            },
+            "data_description": {
+              "scan_interval": "Hoe vaak de cloud om nieuwe waarden wordt gevraagd (10–600 seconden).",
+              "timeout": "Hoe lang wordt gewacht op één antwoord van de cloud."
+            }
+          },
+          "safety": {
+            "name": "Veiligheid",
+            "description": "Bepaalt wat de integratie mag doen.",
+            "data": {
+              "read_only": "Alleen-lezenmodus"
+            },
+            "data_description": {
+              "read_only": "Indien ingeschakeld kan er niets naar de warmtepomp worden geschreven (entiteiten en diensten)."
+            }
+          },
+          "advanced": {
+            "name": "Geavanceerd",
+            "description": "Voor probleemoplossing.",
+            "data": {
+              "debug_attributes": "Ruwe registerwaarden als attributen toevoegen"
+            },
+            "data_description": {
+              "debug_attributes": "Voegt register-id's en ruwe waarden toe aan de entiteitsattributen."
+            }
+          }
         }
       },
       "registers": {
         "title": "Installaties & registers",
         "description": "Wijzigingen worden toegepast door de integratie opnieuw te laden.",
-        "data": {
-          "installations": "Installaties",
-          "show_hidden": "Door Thermia verborgen registers tonen",
-          "expose_unknown": "Onbekende registers beschikbaar maken (als uitgeschakelde entiteiten)"
-        },
-        "data_description": {
-          "installations": "Welke installaties van het account worden gebruikt.",
-          "show_hidden": "Entiteiten ook aanmaken als de eigen regels van Thermia ze verbergen.",
-          "expose_unknown": "Uitgeschakelde entiteiten aanmaken voor registers waarvoor deze integratie geen invoer heeft."
+        "sections": {
+          "installations": {
+            "name": "Installaties",
+            "description": "Welke warmtepompen van dit account worden gebruikt.",
+            "data": {
+              "installations": "Installaties"
+            },
+            "data_description": {
+              "installations": "Welke installaties van het account worden gebruikt."
+            }
+          },
+          "visibility": {
+            "name": "Zichtbaarheid",
+            "description": "Welke registers entiteiten worden.",
+            "data": {
+              "show_hidden": "Door Thermia verborgen registers tonen",
+              "expose_unknown": "Onbekende registers beschikbaar maken (als uitgeschakelde entiteiten)"
+            },
+            "data_description": {
+              "show_hidden": "Entiteiten ook aanmaken als de eigen regels van Thermia ze verbergen.",
+              "expose_unknown": "Uitgeschakelde entiteiten aanmaken voor registers waarvoor deze integratie geen invoer heeft."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatisch (taal van Home Assistant)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Bewaken en bedienen (aanbevolen)",
+        "monitor": "Alleen bewaken (alleen-lezen)"
       }
     }
   },

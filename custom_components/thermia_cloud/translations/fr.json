@@ -44,6 +44,16 @@
           "username": "L'adresse e-mail du même compte Thermia.",
           "password": "Le mot de passe actuel."
         }
+      },
+      "mode": {
+        "title": "Comment doit-elle fonctionner ?",
+        "description": "Choisissez ce que l'intégration peut faire avec votre pompe à chaleur. Vous pouvez le modifier à tout moment sous *Configurer → Général → Sécurité*.",
+        "data": {
+          "start_mode": "Mode"
+        },
+        "data_description": {
+          "start_mode": "« Surveiller et contrôler » permet de modifier des réglages tels que la courbe de chauffe et l'eau chaude. « Surveiller uniquement (lecture seule) » n'écrit jamais rien sur la pompe à chaleur."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Général",
-        "description": "Le mode lecture seule bloque toute écriture vers la pompe à chaleur (entités et services). L'intervalle de mise à jour prend effet après l'enregistrement.",
-        "data": {
-          "scan_interval": "Intervalle de mise à jour (secondes)",
-          "read_only": "Mode lecture seule",
-          "timeout": "Délai d'attente des requêtes (secondes)",
-          "debug_attributes": "Ajouter les valeurs brutes des registres comme attributs"
-        },
-        "data_description": {
-          "scan_interval": "Fréquence à laquelle le cloud est interrogé pour obtenir de nouvelles valeurs (10 à 600 secondes).",
-          "read_only": "Si activé, rien ne peut être écrit vers la pompe à chaleur.",
-          "timeout": "Durée d'attente d'une réponse du cloud.",
-          "debug_attributes": "Ajoute les identifiants de registre et les valeurs brutes aux attributs des entités."
+        "description": "Comment l'intégration communique avec le cloud Thermia et son niveau de prudence.",
+        "sections": {
+          "updates": {
+            "name": "Mises à jour",
+            "description": "Fréquence de lecture des valeurs depuis le cloud.",
+            "data": {
+              "scan_interval": "Intervalle de mise à jour (secondes)",
+              "timeout": "Délai d'attente des requêtes (secondes)"
+            },
+            "data_description": {
+              "scan_interval": "Fréquence à laquelle le cloud est interrogé pour obtenir de nouvelles valeurs (10 à 600 secondes).",
+              "timeout": "Durée d'attente d'une réponse du cloud."
+            }
+          },
+          "safety": {
+            "name": "Sécurité",
+            "description": "Définit ce que l'intégration est autorisée à faire.",
+            "data": {
+              "read_only": "Mode lecture seule"
+            },
+            "data_description": {
+              "read_only": "Si activé, rien ne peut être écrit vers la pompe à chaleur (entités et services)."
+            }
+          },
+          "advanced": {
+            "name": "Avancé",
+            "description": "Pour le dépannage.",
+            "data": {
+              "debug_attributes": "Ajouter les valeurs brutes des registres comme attributs"
+            },
+            "data_description": {
+              "debug_attributes": "Ajoute les identifiants de registre et les valeurs brutes aux attributs des entités."
+            }
+          }
         }
       },
       "registers": {
         "title": "Installations et registres",
         "description": "Les modifications sont appliquées en rechargeant l'intégration.",
-        "data": {
-          "installations": "Installations",
-          "show_hidden": "Afficher les registres masqués par Thermia",
-          "expose_unknown": "Exposer les registres inconnus (comme entités désactivées)"
-        },
-        "data_description": {
-          "installations": "Quelles installations du compte utiliser.",
-          "show_hidden": "Crée des entités même lorsque les règles propres à Thermia les masquent.",
-          "expose_unknown": "Crée des entités désactivées pour les registres que cette intégration ne connaît pas."
+        "sections": {
+          "installations": {
+            "name": "Installations",
+            "description": "Quelles pompes à chaleur de ce compte utiliser.",
+            "data": {
+              "installations": "Installations"
+            },
+            "data_description": {
+              "installations": "Quelles installations du compte utiliser."
+            }
+          },
+          "visibility": {
+            "name": "Visibilité",
+            "description": "Quels registres deviennent des entités.",
+            "data": {
+              "show_hidden": "Afficher les registres masqués par Thermia",
+              "expose_unknown": "Exposer les registres inconnus (comme entités désactivées)"
+            },
+            "data_description": {
+              "show_hidden": "Crée des entités même lorsque les règles propres à Thermia les masquent.",
+              "expose_unknown": "Crée des entités désactivées pour les registres que cette intégration ne connaît pas."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatique (langue de Home Assistant)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Surveiller et contrôler (recommandé)",
+        "monitor": "Surveiller uniquement (lecture seule)"
       }
     }
   },

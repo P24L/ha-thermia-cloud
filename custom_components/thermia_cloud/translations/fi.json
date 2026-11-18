@@ -44,6 +44,16 @@
           "username": "Saman Thermia-tilin sähköpostiosoite.",
           "password": "Nykyinen salasana."
         }
+      },
+      "mode": {
+        "title": "Miten sen pitäisi toimia?",
+        "description": "Valitse, mitä integraatio saa tehdä lämpöpumpullesi. Voit muuttaa tätä milloin tahansa kohdassa *Määritä → Yleiset → Turvallisuus*.",
+        "data": {
+          "start_mode": "Tila"
+        },
+        "data_description": {
+          "start_mode": "Seuranta ja ohjaus mahdollistaa asetusten, kuten lämpökäyrän ja käyttöveden, muuttamisen. Vain seuranta (vain luku) ei voi koskaan kirjoittaa lämpöpumppuun."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Yleiset",
-        "description": "Vain luku -tila estää kaiken kirjoittamisen lämpöpumppuun (entiteetit ja palvelut). Päivitysväli tulee voimaan tallennuksen jälkeen.",
-        "data": {
-          "scan_interval": "Päivitysväli (sekuntia)",
-          "read_only": "Vain luku -tila",
-          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
-          "debug_attributes": "Lisää rekisterien raaka-arvot attribuutteina"
-        },
-        "data_description": {
-          "scan_interval": "Kuinka usein pilveltä kysytään uusia arvoja (10–600 sekuntia).",
-          "read_only": "Kun tämä on päällä, lämpöpumppuun ei voi kirjoittaa mitään.",
-          "timeout": "Kuinka kauan odotetaan yhtä vastausta pilveltä.",
-          "debug_attributes": "Lisää rekisteritunnukset ja raaka-arvot entiteetin attribuutteihin."
+        "description": "Miten integraatio keskustelee Thermia-pilven kanssa ja kuinka varovainen se on.",
+        "sections": {
+          "updates": {
+            "name": "Päivitykset",
+            "description": "Kuinka usein arvot luetaan pilvestä.",
+            "data": {
+              "scan_interval": "Päivitysväli (sekuntia)",
+              "timeout": "Pyynnön aikakatkaisu (sekuntia)"
+            },
+            "data_description": {
+              "scan_interval": "Kuinka usein pilveltä kysytään uusia arvoja (10–600 sekuntia).",
+              "timeout": "Kuinka kauan odotetaan yhtä vastausta pilveltä."
+            }
+          },
+          "safety": {
+            "name": "Turvallisuus",
+            "description": "Määritä, mitä integraatio saa tehdä.",
+            "data": {
+              "read_only": "Vain luku -tila"
+            },
+            "data_description": {
+              "read_only": "Kun tämä on päällä, lämpöpumppuun ei voi kirjoittaa mitään (entiteetit ja palvelut)."
+            }
+          },
+          "advanced": {
+            "name": "Lisäasetukset",
+            "description": "Vianmääritystä varten.",
+            "data": {
+              "debug_attributes": "Lisää rekisterien raaka-arvot attribuutteina"
+            },
+            "data_description": {
+              "debug_attributes": "Lisää rekisteritunnukset ja raaka-arvot entiteetin attribuutteihin."
+            }
+          }
         }
       },
       "registers": {
         "title": "Laitokset ja rekisterit",
         "description": "Muutokset otetaan käyttöön lataamalla integraatio uudelleen.",
-        "data": {
-          "installations": "Laitokset",
-          "show_hidden": "Näytä rekisterit, jotka Thermia piilottaa",
-          "expose_unknown": "Näytä tuntemattomat rekisterit (käytöstä poistettuina entiteetteinä)"
-        },
-        "data_description": {
-          "installations": "Mitä tilin laitoksia käytetään.",
-          "show_hidden": "Luo entiteetit, vaikka Thermian omat säännöt piilottaisivat ne.",
-          "expose_unknown": "Luo käytöstä poistetut entiteetit rekistereille, joille integraatiolla ei ole omaa kuvausta."
+        "sections": {
+          "installations": {
+            "name": "Laitokset",
+            "description": "Mitä tämän tilin lämpöpumppuja käytetään.",
+            "data": {
+              "installations": "Laitokset"
+            },
+            "data_description": {
+              "installations": "Mitä tilin laitoksia käytetään."
+            }
+          },
+          "visibility": {
+            "name": "Näkyvyys",
+            "description": "Mistä rekistereistä tulee entiteettejä.",
+            "data": {
+              "show_hidden": "Näytä rekisterit, jotka Thermia piilottaa",
+              "expose_unknown": "Näytä tuntemattomat rekisterit (käytöstä poistettuina entiteetteinä)"
+            },
+            "data_description": {
+              "show_hidden": "Luo entiteetit, vaikka Thermian omat säännöt piilottaisivat ne.",
+              "expose_unknown": "Luo käytöstä poistetut entiteetit rekistereille, joille integraatiolla ei ole omaa kuvausta."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automaattinen (Home Assistantin kieli)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Seuranta ja ohjaus (suositus)",
+        "monitor": "Vain seuranta (vain luku)"
       }
     }
   },

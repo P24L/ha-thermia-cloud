@@ -44,6 +44,16 @@
           "username": "Adres e-mail tego samego konta Thermia.",
           "password": "Aktualne hasło."
         }
+      },
+      "mode": {
+        "title": "Jak ma działać?",
+        "description": "Wybierz, co integracja może robić z Twoją pompą ciepła. Możesz to w każdej chwili zmienić w *Konfiguruj → Ogólne → Bezpieczeństwo*.",
+        "data": {
+          "start_mode": "Tryb"
+        },
+        "data_description": {
+          "start_mode": "Monitorowanie i sterowanie pozwala zmieniać ustawienia, takie jak krzywa grzewcza i ciepła woda. Tylko monitorowanie (tylko do odczytu) nigdy nic nie zapisuje do pompy ciepła."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Ogólne",
-        "description": "Tryb tylko do odczytu blokuje każdy zapis do pompy ciepła (encje i usługi). Interwał aktualizacji zaczyna obowiązywać po zapisaniu.",
-        "data": {
-          "scan_interval": "Interwał aktualizacji (sekundy)",
-          "read_only": "Tryb tylko do odczytu",
-          "timeout": "Limit czasu żądania (sekundy)",
-          "debug_attributes": "Dodaj surowe wartości rejestrów jako atrybuty"
-        },
-        "data_description": {
-          "scan_interval": "Jak często chmura jest odpytywana o nowe wartości (10–600 sekund).",
-          "read_only": "Gdy włączony, nic nie można zapisać do pompy ciepła.",
-          "timeout": "Jak długo czekać na jedną odpowiedź z chmury.",
-          "debug_attributes": "Dodaje identyfikatory rejestrów i surowe wartości do atrybutów encji."
+        "description": "Jak integracja komunikuje się z chmurą Thermia i jak ostrożnie działa.",
+        "sections": {
+          "updates": {
+            "name": "Aktualizacje",
+            "description": "Jak często wartości są odczytywane z chmury.",
+            "data": {
+              "scan_interval": "Interwał aktualizacji (sekundy)",
+              "timeout": "Limit czasu żądania (sekundy)"
+            },
+            "data_description": {
+              "scan_interval": "Jak często chmura jest odpytywana o nowe wartości (10–600 sekund).",
+              "timeout": "Jak długo czekać na jedną odpowiedź z chmury."
+            }
+          },
+          "safety": {
+            "name": "Bezpieczeństwo",
+            "description": "Określ, co integracja może robić.",
+            "data": {
+              "read_only": "Tryb tylko do odczytu"
+            },
+            "data_description": {
+              "read_only": "Gdy włączony, nic nie można zapisać do pompy ciepła (encje i usługi)."
+            }
+          },
+          "advanced": {
+            "name": "Zaawansowane",
+            "description": "Do diagnozowania problemów.",
+            "data": {
+              "debug_attributes": "Dodaj surowe wartości rejestrów jako atrybuty"
+            },
+            "data_description": {
+              "debug_attributes": "Dodaje identyfikatory rejestrów i surowe wartości do atrybutów encji."
+            }
+          }
         }
       },
       "registers": {
         "title": "Instalacje i rejestry",
         "description": "Zmiany są stosowane po ponownym załadowaniu integracji.",
-        "data": {
-          "installations": "Instalacje",
-          "show_hidden": "Pokaż rejestry ukryte przez Thermia",
-          "expose_unknown": "Udostępnij nieznane rejestry (jako wyłączone encje)"
-        },
-        "data_description": {
-          "installations": "Których instalacji z konta używać.",
-          "show_hidden": "Tworzy encje nawet wtedy, gdy własne reguły Thermia je ukrywają.",
-          "expose_unknown": "Tworzy wyłączone encje dla rejestrów, których ta integracja nie zna."
+        "sections": {
+          "installations": {
+            "name": "Instalacje",
+            "description": "Które pompy ciepła z tego konta używać.",
+            "data": {
+              "installations": "Instalacje"
+            },
+            "data_description": {
+              "installations": "Których instalacji z konta używać."
+            }
+          },
+          "visibility": {
+            "name": "Widoczność",
+            "description": "Które rejestry stają się encjami.",
+            "data": {
+              "show_hidden": "Pokaż rejestry ukryte przez Thermia",
+              "expose_unknown": "Udostępnij nieznane rejestry (jako wyłączone encje)"
+            },
+            "data_description": {
+              "show_hidden": "Tworzy encje nawet wtedy, gdy własne reguły Thermia je ukrywają.",
+              "expose_unknown": "Tworzy wyłączone encje dla rejestrów, których ta integracja nie zna."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatyczny (język Home Assistant)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Monitorowanie i sterowanie (zalecane)",
+        "monitor": "Tylko monitorowanie (tylko do odczytu)"
       }
     }
   },

@@ -32,7 +32,7 @@
   "writable": true
  },
  {
-  "default_enabled": false,
+  "default_enabled": true,
   "description_key": null,
   "device": "main",
   "device_class": "temperature",
@@ -64,7 +64,7 @@
   "writable": true
  },
  {
-  "default_enabled": false,
+  "default_enabled": true,
   "description_key": null,
   "device": "main",
   "device_class": "temperature",
@@ -96,7 +96,7 @@
   "writable": true
  },
  {
-  "default_enabled": false,
+  "default_enabled": true,
   "description_key": null,
   "device": "main",
   "device_class": "temperature",
@@ -201,7 +201,7 @@
   "writable": true
  },
  {
-  "default_enabled": false,
+  "default_enabled": true,
   "description_key": null,
   "device": "circuit_1",
   "device_class": "temperature",
@@ -233,7 +233,7 @@
   "writable": true
  },
  {
-  "default_enabled": false,
+  "default_enabled": true,
   "description_key": null,
   "device": "circuit_1",
   "device_class": "temperature",

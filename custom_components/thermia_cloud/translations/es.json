@@ -44,6 +44,16 @@
           "username": "La dirección de correo electrónico de la misma cuenta de Thermia.",
           "password": "La contraseña actual."
         }
+      },
+      "mode": {
+        "title": "¿Cómo debe funcionar?",
+        "description": "Elija qué puede hacer la integración con su bomba de calor. Puede cambiarlo en cualquier momento en *Configurar → General → Seguridad*.",
+        "data": {
+          "start_mode": "Modo"
+        },
+        "data_description": {
+          "start_mode": "«Supervisar y controlar» permite cambiar ajustes como la curva de calefacción y el agua caliente. «Solo supervisar (solo lectura)» nunca escribe nada en la bomba de calor."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "General",
-        "description": "El modo de solo lectura bloquea toda escritura en la bomba de calor (entidades y servicios). El intervalo de actualización se aplica tras guardar.",
-        "data": {
-          "scan_interval": "Intervalo de actualización (segundos)",
-          "read_only": "Modo de solo lectura",
-          "timeout": "Tiempo de espera de las solicitudes (segundos)",
-          "debug_attributes": "Añadir los valores sin procesar de los registros como atributos"
-        },
-        "data_description": {
-          "scan_interval": "Con qué frecuencia se piden valores nuevos a la nube (10–600 segundos).",
-          "read_only": "Si está activado, no se puede escribir nada en la bomba de calor.",
-          "timeout": "Cuánto esperar una respuesta de la nube.",
-          "debug_attributes": "Añade los identificadores de registro y los valores sin procesar a los atributos de la entidad."
+        "description": "Cómo se comunica la integración con la nube de Thermia y cuán prudente es.",
+        "sections": {
+          "updates": {
+            "name": "Actualizaciones",
+            "description": "Con qué frecuencia se leen los valores de la nube.",
+            "data": {
+              "scan_interval": "Intervalo de actualización (segundos)",
+              "timeout": "Tiempo de espera de las solicitudes (segundos)"
+            },
+            "data_description": {
+              "scan_interval": "Con qué frecuencia se piden valores nuevos a la nube (10–600 segundos).",
+              "timeout": "Cuánto esperar una respuesta de la nube."
+            }
+          },
+          "safety": {
+            "name": "Seguridad",
+            "description": "Controla lo que la integración puede hacer.",
+            "data": {
+              "read_only": "Modo de solo lectura"
+            },
+            "data_description": {
+              "read_only": "Si está activado, no se puede escribir nada en la bomba de calor (entidades y servicios)."
+            }
+          },
+          "advanced": {
+            "name": "Avanzado",
+            "description": "Para la resolución de problemas.",
+            "data": {
+              "debug_attributes": "Añadir los valores sin procesar de los registros como atributos"
+            },
+            "data_description": {
+              "debug_attributes": "Añade los identificadores de registro y los valores sin procesar a los atributos de la entidad."
+            }
+          }
         }
       },
       "registers": {
         "title": "Instalaciones y registros",
         "description": "Los cambios se aplican al recargar la integración.",
-        "data": {
-          "installations": "Instalaciones",
-          "show_hidden": "Mostrar registros ocultos por Thermia",
-          "expose_unknown": "Exponer registros desconocidos (como entidades deshabilitadas)"
-        },
-        "data_description": {
-          "installations": "Qué instalaciones de la cuenta se usarán.",
-          "show_hidden": "Crea entidades aunque las reglas propias de Thermia las oculten.",
-          "expose_unknown": "Crea entidades deshabilitadas para los registros que esta integración no conoce."
+        "sections": {
+          "installations": {
+            "name": "Instalaciones",
+            "description": "Qué bombas de calor de esta cuenta se usarán.",
+            "data": {
+              "installations": "Instalaciones"
+            },
+            "data_description": {
+              "installations": "Qué instalaciones de la cuenta se usarán."
+            }
+          },
+          "visibility": {
+            "name": "Visibilidad",
+            "description": "Qué registros se convierten en entidades.",
+            "data": {
+              "show_hidden": "Mostrar registros ocultos por Thermia",
+              "expose_unknown": "Exponer registros desconocidos (como entidades deshabilitadas)"
+            },
+            "data_description": {
+              "show_hidden": "Crea entidades aunque las reglas propias de Thermia las oculten.",
+              "expose_unknown": "Crea entidades deshabilitadas para los registros que esta integración no conoce."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automático (idioma de Home Assistant)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Supervisar y controlar (recomendado)",
+        "monitor": "Solo supervisar (solo lectura)"
       }
     }
   },

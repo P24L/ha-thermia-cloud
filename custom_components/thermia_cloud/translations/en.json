@@ -44,6 +44,16 @@
           "username": "The e-mail address of the same Thermia account.",
           "password": "The current password."
         }
+      },
+      "mode": {
+        "title": "How should it work?",
+        "description": "Choose what the integration may do with your heat pump. You can change this at any time under *Configure → General → Safety*.",
+        "data": {
+          "start_mode": "Mode"
+        },
+        "data_description": {
+          "start_mode": "Monitor and control lets you change settings such as the heating curve and hot water. Monitor only (read-only) can never write to the heat pump."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "General",
-        "description": "Read-only mode blocks every write to the heat pump (entities and services). The update interval takes effect after saving.",
-        "data": {
-          "scan_interval": "Update interval (seconds)",
-          "read_only": "Read-only mode",
-          "timeout": "Request timeout (seconds)",
-          "debug_attributes": "Add raw register values as attributes"
-        },
-        "data_description": {
-          "scan_interval": "How often the cloud is asked for new values (10–600 seconds).",
-          "read_only": "When on, nothing can be written to the heat pump.",
-          "timeout": "How long to wait for one answer from the cloud.",
-          "debug_attributes": "Adds register ids and raw values to the entity attributes."
+        "description": "How the integration talks to the Thermia cloud and how careful it is.",
+        "sections": {
+          "updates": {
+            "name": "Updates",
+            "description": "How often values are read from the cloud.",
+            "data": {
+              "scan_interval": "Update interval (seconds)",
+              "timeout": "Request timeout (seconds)"
+            },
+            "data_description": {
+              "scan_interval": "How often the cloud is asked for new values (10–600 seconds).",
+              "timeout": "How long to wait for one answer from the cloud."
+            }
+          },
+          "safety": {
+            "name": "Safety",
+            "description": "Control what the integration is allowed to do.",
+            "data": {
+              "read_only": "Read-only mode"
+            },
+            "data_description": {
+              "read_only": "When on, nothing can be written to the heat pump (entities and services)."
+            }
+          },
+          "advanced": {
+            "name": "Advanced",
+            "description": "For troubleshooting.",
+            "data": {
+              "debug_attributes": "Add raw register values as attributes"
+            },
+            "data_description": {
+              "debug_attributes": "Adds register ids and raw values to the entity attributes."
+            }
+          }
         }
       },
       "registers": {
         "title": "Installations & registers",
         "description": "Changes are applied by reloading the integration.",
-        "data": {
-          "installations": "Installations",
-          "show_hidden": "Show registers hidden by Thermia",
-          "expose_unknown": "Expose unknown registers (as disabled entities)"
-        },
-        "data_description": {
-          "installations": "Which installations of the account to use.",
-          "show_hidden": "Create entities even when Thermia's own rules hide them.",
-          "expose_unknown": "Create disabled entities for registers this integration has no entry for."
+        "sections": {
+          "installations": {
+            "name": "Installations",
+            "description": "Which heat pumps of this account to use.",
+            "data": {
+              "installations": "Installations"
+            },
+            "data_description": {
+              "installations": "Which installations of the account to use."
+            }
+          },
+          "visibility": {
+            "name": "Visibility",
+            "description": "Which registers become entities.",
+            "data": {
+              "show_hidden": "Show registers hidden by Thermia",
+              "expose_unknown": "Expose unknown registers (as disabled entities)"
+            },
+            "data_description": {
+              "show_hidden": "Create entities even when Thermia's own rules hide them.",
+              "expose_unknown": "Create disabled entities for registers this integration has no entry for."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatic (Home Assistant language)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Monitor and control (recommended)",
+        "monitor": "Monitor only (read-only)"
       }
     }
   },

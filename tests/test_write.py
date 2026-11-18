@@ -303,7 +303,11 @@ async def test_options_flow_switches_read_only_on_and_reloads(
     )
     result = await hass.config_entries.options.async_configure(
         result["flow_id"],
-        {"scan_interval": 30, "read_only": True, "timeout": 20, "debug_attributes": True},
+        {
+            "updates": {"scan_interval": 30, "timeout": 20},
+            "safety": {"read_only": True},
+            "advanced": {"debug_attributes": True},
+        },
     )
     await hass.async_block_till_done()
     assert entry.options[CONF_READ_ONLY] is True and entry.options[CONF_INSTALLATIONS]

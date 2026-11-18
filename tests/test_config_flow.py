@@ -18,7 +18,9 @@ from custom_components.thermia_cloud.config_flow import Probe
 from custom_components.thermia_cloud.const import (
     CONF_INSTALLATIONS,
     CONF_PASSWORD,
+    CONF_READ_ONLY,
     CONF_REFRESH_TOKEN,
+    CONF_START_MODE,
     CONF_USERNAME,
     DOMAIN,
 )
@@ -47,13 +49,19 @@ async def start(hass: HomeAssistant):  # type: ignore[no-untyped-def]
     )
 
 
-async def test_single_installation_creates_entry(hass: HomeAssistant) -> None:
+async def test_single_installation_asks_for_the_mode_then_creates_the_entry(
+    hass: HomeAssistant,
+) -> None:
     result = await start(hass)
     assert result["type"] is FlowResultType.FORM and result["step_id"] == "user"
     with patch(
         "custom_components.thermia_cloud.config_flow.async_probe", return_value=probe(inst(7))
     ):
         result = await hass.config_entries.flow.async_configure(result["flow_id"], CREDS)
+    assert result["type"] is FlowResultType.FORM and result["step_id"] == "mode"
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_START_MODE: "control"}
+    )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["title"] == "user@example.invalid"
     assert result["data"] == {
@@ -62,7 +70,21 @@ async def test_single_installation_creates_entry(hass: HomeAssistant) -> None:
         CONF_REFRESH_TOKEN: "refresh-1",
     }
     assert result["options"][CONF_INSTALLATIONS] == [7]
+    assert result["options"][CONF_READ_ONLY] is False
     assert result["result"].unique_id == "sub-1"
+
+
+async def test_choosing_monitor_only_turns_read_only_mode_on(hass: HomeAssistant) -> None:
+    result = await start(hass)
+    with patch(
+        "custom_components.thermia_cloud.config_flow.async_probe", return_value=probe(inst(7))
+    ):
+        result = await hass.config_entries.flow.async_configure(result["flow_id"], CREDS)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_START_MODE: "monitor"}
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["options"][CONF_READ_ONLY] is True
 
 
 async def test_several_installations_ask_which(hass: HomeAssistant) -> None:
@@ -75,6 +97,10 @@ async def test_several_installations_ask_which(hass: HomeAssistant) -> None:
     assert result["type"] is FlowResultType.FORM and result["step_id"] == "installations"
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], {CONF_INSTALLATIONS: ["2"]}
+    )
+    assert result["type"] is FlowResultType.FORM and result["step_id"] == "mode"
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_START_MODE: "control"}
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["options"][CONF_INSTALLATIONS] == [2]
@@ -101,6 +127,10 @@ async def test_errors_are_shown_and_retry_works(
         "custom_components.thermia_cloud.config_flow.async_probe", return_value=probe(inst(1))
     ):
         result = await hass.config_entries.flow.async_configure(result["flow_id"], CREDS)
+    assert result["type"] is FlowResultType.FORM and result["step_id"] == "mode"
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_START_MODE: "control"}
+    )
     assert result["type"] is FlowResultType.CREATE_ENTRY
 
 

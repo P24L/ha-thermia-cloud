@@ -188,5 +188,23 @@
         "default": "mdi:database-refresh"
       }
     }
-  }
+  },
+  "options": {
+    "step": {
+      "general": {
+        "sections": {
+          "updates": "mdi:update",
+          "safety": "mdi:shield-lock-outline",
+          "advanced": "mdi:bug-outline"
+        }
+      },
+      "registers": {
+        "sections": {
+          "installations": "mdi:home-group",
+          "visibility": "mdi:eye-settings-outline"
+        }
+      }
+    }
+  },
+  "config": {}
 }

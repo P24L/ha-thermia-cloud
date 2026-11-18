@@ -44,6 +44,16 @@
           "username": "E-poštni naslov istega računa Thermia.",
           "password": "Trenutno geslo."
         }
+      },
+      "mode": {
+        "title": "Kako naj deluje?",
+        "description": "Izberite, kaj sme integracija početi z vašo toplotno črpalko. To lahko kadar koli spremenite v *Konfiguriraj → Splošno → Varnost*.",
+        "data": {
+          "start_mode": "Način"
+        },
+        "data_description": {
+          "start_mode": "Spremljanje in upravljanje omogoča spreminjanje nastavitev, kot sta ogrevalna krivulja in topla voda. Samo spremljanje (samo za branje) v toplotno črpalko nikoli ne zapisuje."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Splošno",
-        "description": "Način samo za branje blokira vsako pisanje v toplotno črpalko (entitete in storitve). Interval posodabljanja začne veljati po shranjevanju.",
-        "data": {
-          "scan_interval": "Interval posodabljanja (sekunde)",
-          "read_only": "Način samo za branje",
-          "timeout": "Časovna omejitev zahteve (sekunde)",
-          "debug_attributes": "Dodaj surove vrednosti registrov kot atribute"
-        },
-        "data_description": {
-          "scan_interval": "Kako pogosto se v oblaku zahtevajo nove vrednosti (10–600 sekund).",
-          "read_only": "Če je vklopljeno, v toplotno črpalko ni mogoče ničesar zapisati.",
-          "timeout": "Kako dolgo čakati na en odgovor oblaka.",
-          "debug_attributes": "Atributom entitete doda ID-je registrov in surove vrednosti."
+        "description": "Kako integracija komunicira z oblakom Thermia in kako previdna je.",
+        "sections": {
+          "updates": {
+            "name": "Posodobitve",
+            "description": "Kako pogosto se vrednosti berejo iz oblaka.",
+            "data": {
+              "scan_interval": "Interval posodabljanja (sekunde)",
+              "timeout": "Časovna omejitev zahteve (sekunde)"
+            },
+            "data_description": {
+              "scan_interval": "Kako pogosto se v oblaku zahtevajo nove vrednosti (10–600 sekund).",
+              "timeout": "Kako dolgo čakati na en odgovor oblaka."
+            }
+          },
+          "safety": {
+            "name": "Varnost",
+            "description": "Določite, kaj sme integracija početi.",
+            "data": {
+              "read_only": "Način samo za branje"
+            },
+            "data_description": {
+              "read_only": "Če je vklopljeno, v toplotno črpalko ni mogoče ničesar zapisati (entitete in storitve)."
+            }
+          },
+          "advanced": {
+            "name": "Napredno",
+            "description": "Za odpravljanje težav.",
+            "data": {
+              "debug_attributes": "Dodaj surove vrednosti registrov kot atribute"
+            },
+            "data_description": {
+              "debug_attributes": "Atributom entitete doda ID-je registrov in surove vrednosti."
+            }
+          }
         }
       },
       "registers": {
         "title": "Namestitve in registri",
         "description": "Spremembe se uveljavijo s ponovnim nalaganjem integracije.",
-        "data": {
-          "installations": "Namestitve",
-          "show_hidden": "Pokaži registre, ki jih skrije Thermia",
-          "expose_unknown": "Izpostavi neznane registre (kot onemogočene entitete)"
-        },
-        "data_description": {
-          "installations": "Katere namestitve računa uporabiti.",
-          "show_hidden": "Ustvari entitete, tudi če jih pravila podjetja Thermia skrivajo.",
-          "expose_unknown": "Ustvari onemogočene entitete za registre, za katere ta integracija nima vnosa."
+        "sections": {
+          "installations": {
+            "name": "Namestitve",
+            "description": "Katere toplotne črpalke tega računa uporabiti.",
+            "data": {
+              "installations": "Namestitve"
+            },
+            "data_description": {
+              "installations": "Katere namestitve računa uporabiti."
+            }
+          },
+          "visibility": {
+            "name": "Vidnost",
+            "description": "Kateri registri postanejo entitete.",
+            "data": {
+              "show_hidden": "Pokaži registre, ki jih skrije Thermia",
+              "expose_unknown": "Izpostavi neznane registre (kot onemogočene entitete)"
+            },
+            "data_description": {
+              "show_hidden": "Ustvari entitete, tudi če jih pravila podjetja Thermia skrivajo.",
+              "expose_unknown": "Ustvari onemogočene entitete za registre, za katere ta integracija nima vnosa."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Samodejno (jezik Home Assistanta)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Spremljanje in upravljanje (priporočeno)",
+        "monitor": "Samo spremljanje (samo za branje)"
       }
     }
   },

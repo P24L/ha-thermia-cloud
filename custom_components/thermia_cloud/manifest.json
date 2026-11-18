@@ -1,13 +1,17 @@
 {
   "domain": "thermia_cloud",
   "name": "Thermia Cloud (unofficial)",
-  "codeowners": ["@P24L"],
+  "codeowners": [
+    "@P24L"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/P24L/ha-thermia-cloud",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/P24L/ha-thermia-cloud/issues",
-  "loggers": ["custom_components.thermia_cloud"],
+  "loggers": [
+    "custom_components.thermia_cloud"
+  ],
   "requirements": [],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

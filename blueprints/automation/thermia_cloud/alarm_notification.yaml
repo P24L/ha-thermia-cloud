@@ -1,0 +1,44 @@
+blueprint:
+  name: Thermia heat pump alarm
+  description: >
+    Runs your actions (for example a phone notification) when the heat pump reports an active
+    alarm. Uses the *Alarm* sensor of the Thermia Cloud integration.
+  domain: automation
+  source_url: https://github.com/P24L/ha-thermia-cloud/blob/main/blueprints/automation/thermia_cloud/alarm_notification.yaml
+  input:
+    alarm:
+      name: Alarm sensor
+      description: The *Alarm* binary sensor of your heat pump.
+      selector:
+        entity:
+          filter:
+            - integration: thermia_cloud
+              domain: binary_sensor
+              device_class: problem
+    delay:
+      name: Wait before notifying
+      description: Ignore alarms that clear again within this time.
+      default: {minutes: 2}
+      selector:
+        duration:
+    actions:
+      name: What to do
+      description: >
+        For example *Send a notification via mobile_app_…*. The text can use
+        `{{ states[alarm_entity].name }}` to name the sensor.
+      default: []
+      selector:
+        action:
+
+mode: single
+
+variables:
+  alarm_entity: !input alarm
+
+triggers:
+  - trigger: state
+    entity_id: !input alarm
+    to: "on"
+    for: !input delay
+
+actions: !input actions

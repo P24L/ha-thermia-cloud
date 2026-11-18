@@ -44,6 +44,16 @@
           "username": "E-postadressen till samma Thermia-konto.",
           "password": "Det aktuella lösenordet."
         }
+      },
+      "mode": {
+        "title": "Hur ska den fungera?",
+        "description": "Välj vad integrationen får göra med din värmepump. Du kan ändra detta när som helst under *Konfigurera → Allmänt → Säkerhet*.",
+        "data": {
+          "start_mode": "Läge"
+        },
+        "data_description": {
+          "start_mode": "Övervaka och styra låter dig ändra inställningar som värmekurvan och varmvattnet. Endast övervakning (skrivskyddat) kan aldrig skriva något till värmepumpen."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Allmänt",
-        "description": "Skrivskyddat läge blockerar all skrivning till värmepumpen (entiteter och tjänster). Uppdateringsintervallet börjar gälla efter att du sparat.",
-        "data": {
-          "scan_interval": "Uppdateringsintervall (sekunder)",
-          "read_only": "Skrivskyddat läge",
-          "timeout": "Tidsgräns för förfrågan (sekunder)",
-          "debug_attributes": "Lägg till råa registervärden som attribut"
-        },
-        "data_description": {
-          "scan_interval": "Hur ofta molnet efterfrågas om nya värden (10–600 sekunder).",
-          "read_only": "När det är på kan inget skrivas till värmepumpen.",
-          "timeout": "Hur länge man väntar på ett svar från molnet.",
-          "debug_attributes": "Lägger till register-id och råvärden i entitetens attribut."
+        "description": "Hur integrationen kommunicerar med Thermia-molnet och hur försiktig den är.",
+        "sections": {
+          "updates": {
+            "name": "Uppdateringar",
+            "description": "Hur ofta värden läses från molnet.",
+            "data": {
+              "scan_interval": "Uppdateringsintervall (sekunder)",
+              "timeout": "Tidsgräns för förfrågan (sekunder)"
+            },
+            "data_description": {
+              "scan_interval": "Hur ofta molnet efterfrågas om nya värden (10–600 sekunder).",
+              "timeout": "Hur länge man väntar på ett svar från molnet."
+            }
+          },
+          "safety": {
+            "name": "Säkerhet",
+            "description": "Styr vad integrationen får göra.",
+            "data": {
+              "read_only": "Skrivskyddat läge"
+            },
+            "data_description": {
+              "read_only": "När det är på kan inget skrivas till värmepumpen (entiteter och tjänster)."
+            }
+          },
+          "advanced": {
+            "name": "Avancerat",
+            "description": "För felsökning.",
+            "data": {
+              "debug_attributes": "Lägg till råa registervärden som attribut"
+            },
+            "data_description": {
+              "debug_attributes": "Lägger till register-id och råvärden i entitetens attribut."
+            }
+          }
         }
       },
       "registers": {
         "title": "Anläggningar och register",
         "description": "Ändringar tillämpas genom att integrationen läses in på nytt.",
-        "data": {
-          "installations": "Anläggningar",
-          "show_hidden": "Visa register som Thermia döljer",
-          "expose_unknown": "Visa okända register (som inaktiverade entiteter)"
-        },
-        "data_description": {
-          "installations": "Vilka anläggningar på kontot som ska användas.",
-          "show_hidden": "Skapa entiteter även när Thermias egna regler döljer dem.",
-          "expose_unknown": "Skapa inaktiverade entiteter för register som integrationen saknar uppgifter om."
+        "sections": {
+          "installations": {
+            "name": "Anläggningar",
+            "description": "Vilka värmepumpar på det här kontot som ska användas.",
+            "data": {
+              "installations": "Anläggningar"
+            },
+            "data_description": {
+              "installations": "Vilka anläggningar på kontot som ska användas."
+            }
+          },
+          "visibility": {
+            "name": "Synlighet",
+            "description": "Vilka register som blir entiteter.",
+            "data": {
+              "show_hidden": "Visa register som Thermia döljer",
+              "expose_unknown": "Visa okända register (som inaktiverade entiteter)"
+            },
+            "data_description": {
+              "show_hidden": "Skapa entiteter även när Thermias egna regler döljer dem.",
+              "expose_unknown": "Skapa inaktiverade entiteter för register som integrationen saknar uppgifter om."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatiskt (Home Assistants språk)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Övervaka och styra (rekommenderas)",
+        "monitor": "Endast övervakning (skrivskyddat)"
       }
     }
   },

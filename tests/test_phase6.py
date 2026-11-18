@@ -150,7 +150,10 @@ async def test_registers_step_selects_installations(hass: HomeAssistant, api: Fa
     assert result["step_id"] == "registers"
     await hass.config_entries.options.async_configure(
         result["flow_id"],
-        {CONF_INSTALLATIONS: ["42", "43"], "show_hidden": True, CONF_EXPOSE_UNKNOWN: False},
+        {
+            "installations": {CONF_INSTALLATIONS: ["42", "43"]},
+            "visibility": {"show_hidden": True, CONF_EXPOSE_UNKNOWN: False},
+        },
     )
     await hass.async_block_till_done()
     assert entry.options[CONF_INSTALLATIONS] == [42, 43] and entry.options["show_hidden"] is True

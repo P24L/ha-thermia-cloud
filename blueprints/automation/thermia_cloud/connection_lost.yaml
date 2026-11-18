@@ -1,0 +1,42 @@
+blueprint:
+  name: Thermia heat pump connection lost
+  description: >
+    Runs your actions when the heat pump has been offline in the Thermia cloud for a while.
+    Uses the *Online* sensor of the Thermia Cloud integration.
+  domain: automation
+  source_url: https://github.com/P24L/ha-thermia-cloud/blob/main/blueprints/automation/thermia_cloud/connection_lost.yaml
+  input:
+    online:
+      name: Online sensor
+      description: The *Online* binary sensor of your heat pump.
+      selector:
+        entity:
+          filter:
+            - integration: thermia_cloud
+              domain: binary_sensor
+              device_class: connectivity
+    delay:
+      name: Offline for at least
+      description: Short interruptions of the pump's internet connection are normal.
+      default: {minutes: 30}
+      selector:
+        duration:
+    actions:
+      name: What to do
+      description: For example *Send a notification via mobile_app_…*.
+      default: []
+      selector:
+        action:
+
+mode: single
+
+variables:
+  online_entity: !input online
+
+triggers:
+  - trigger: state
+    entity_id: !input online
+    to: "off"
+    for: !input delay
+
+actions: !input actions

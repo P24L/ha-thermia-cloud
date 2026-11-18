@@ -15,6 +15,7 @@ from homeassistant.config_entries import (
     OptionsFlowWithReload,
 )
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.data_entry_flow import section
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
     BooleanSelector,
@@ -24,6 +25,7 @@ from homeassistant.helpers.selector import (
     SelectOptionDict,
     SelectSelector,
     SelectSelectorConfig,
+    SelectSelectorMode,
 )
 
 from .catalog.labels import I18N_DIR
@@ -47,6 +49,7 @@ from .const import (
     CONF_REFRESH_TOKEN,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_HIDDEN,
+    CONF_START_MODE,
     CONF_TIMEOUT,
     CONF_USERNAME,
     DEFAULT_SCAN_INTERVAL,
@@ -106,6 +109,7 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
         self._username = ""
         self._password = ""
         self._probe: Probe | None = None
+        self._installation_ids: list[int] = []
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
@@ -122,7 +126,8 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
                     return self.async_abort(reason="no_installations")
                 if len(self._probe.installations) > 1:
                     return await self.async_step_installations()
-                return self._create_entry([self._probe.installations[0].id])
+                self._installation_ids = [self._probe.installations[0].id]
+                return await self.async_step_mode()
 
         schema = vol.Schema(
             {
@@ -137,7 +142,8 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         assert self._probe is not None
         if user_input is not None:
-            return self._create_entry([int(i) for i in user_input[CONF_INSTALLATIONS]])
+            self._installation_ids = [int(i) for i in user_input[CONF_INSTALLATIONS]]
+            return await self.async_step_mode()
         options = [
             SelectOptionDict(
                 value=str(inst.id),
@@ -225,7 +231,26 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
             _LOGGER.exception("Unexpected error during sign-in")
             return None, "unknown"
 
-    def _create_entry(self, installation_ids: list[int]) -> ConfigFlowResult:
+    async def async_step_mode(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Last question of the setup: may the integration change settings on the heat pump?"""
+        if user_input is not None:
+            return self._create_entry(
+                self._installation_ids, read_only=user_input[CONF_START_MODE] == "monitor"
+            )
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_START_MODE, default="control"): SelectSelector(
+                    SelectSelectorConfig(
+                        options=["control", "monitor"],
+                        mode=SelectSelectorMode.LIST,
+                        translation_key="start_mode",
+                    )
+                )
+            }
+        )
+        return self.async_show_form(step_id="mode", data_schema=schema)
+
+    def _create_entry(self, installation_ids: list[int], *, read_only: bool) -> ConfigFlowResult:
         assert self._probe is not None
         return self.async_create_entry(
             title=self._username,
@@ -237,13 +262,24 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
             options={
                 CONF_INSTALLATIONS: installation_ids,
                 CONF_SCAN_INTERVAL: DEFAULT_SCAN_INTERVAL,
-                CONF_READ_ONLY: False,
+                CONF_READ_ONLY: read_only,
                 CONF_TIMEOUT: DEFAULT_TIMEOUT,
                 CONF_SHOW_HIDDEN: False,
                 CONF_EXPOSE_UNKNOWN: True,
                 CONF_DEBUG_ATTRIBUTES: False,
             },
         )
+
+
+def _flatten(user_input: dict[str, Any]) -> dict[str, Any]:
+    """Fields of a form made of collapsible sections arrive nested one level deep."""
+    flat: dict[str, Any] = {}
+    for key, value in user_input.items():
+        if isinstance(value, dict):
+            flat.update(value)
+        else:
+            flat[key] = value
+    return flat
 
 
 class ThermiaOptionsFlow(OptionsFlowWithReload):
@@ -259,35 +295,62 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         if user_input is not None:
+            flat = _flatten(user_input)
             return self._save(
                 **{
-                    CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
-                    CONF_READ_ONLY: user_input[CONF_READ_ONLY],
-                    CONF_TIMEOUT: int(user_input[CONF_TIMEOUT]),
-                    CONF_DEBUG_ATTRIBUTES: user_input[CONF_DEBUG_ATTRIBUTES],
+                    CONF_SCAN_INTERVAL: int(flat[CONF_SCAN_INTERVAL]),
+                    CONF_TIMEOUT: int(flat[CONF_TIMEOUT]),
+                    CONF_READ_ONLY: flat[CONF_READ_ONLY],
+                    CONF_DEBUG_ATTRIBUTES: flat[CONF_DEBUG_ATTRIBUTES],
                 }
             )
         options = self.config_entry.options
         seconds = {"min": 5, "step": 1, "unit_of_measurement": "s", "mode": NumberSelectorMode.BOX}
         schema = vol.Schema(
             {
-                vol.Required(
-                    CONF_SCAN_INTERVAL,
-                    default=options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-                ): NumberSelector(
-                    NumberSelectorConfig(
-                        **{**seconds, "min": MIN_SCAN_INTERVAL, "max": MAX_SCAN_INTERVAL}
-                    )
+                vol.Required("updates"): section(
+                    vol.Schema(
+                        {
+                            vol.Required(
+                                CONF_SCAN_INTERVAL,
+                                default=options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+                            ): NumberSelector(
+                                NumberSelectorConfig(
+                                    **{
+                                        **seconds,
+                                        "min": MIN_SCAN_INTERVAL,
+                                        "max": MAX_SCAN_INTERVAL,
+                                    }
+                                )
+                            ),
+                            vol.Required(
+                                CONF_TIMEOUT, default=options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
+                            ): NumberSelector(NumberSelectorConfig(**{**seconds, "max": 120})),
+                        }
+                    ),
+                    {"collapsed": False},
                 ),
-                vol.Required(
-                    CONF_TIMEOUT, default=options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
-                ): NumberSelector(NumberSelectorConfig(**{**seconds, "max": 120})),
-                vol.Required(
-                    CONF_READ_ONLY, default=options.get(CONF_READ_ONLY, False)
-                ): BooleanSelector(),
-                vol.Required(
-                    CONF_DEBUG_ATTRIBUTES, default=options.get(CONF_DEBUG_ATTRIBUTES, False)
-                ): BooleanSelector(),
+                vol.Required("safety"): section(
+                    vol.Schema(
+                        {
+                            vol.Required(
+                                CONF_READ_ONLY, default=options.get(CONF_READ_ONLY, False)
+                            ): BooleanSelector()
+                        }
+                    ),
+                    {"collapsed": False},
+                ),
+                vol.Required("advanced"): section(
+                    vol.Schema(
+                        {
+                            vol.Required(
+                                CONF_DEBUG_ATTRIBUTES,
+                                default=options.get(CONF_DEBUG_ATTRIBUTES, False),
+                            ): BooleanSelector()
+                        }
+                    ),
+                    {"collapsed": True},
+                ),
             }
         )
         return self.async_show_form(step_id="general", data_schema=schema)
@@ -296,11 +359,12 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         if user_input is not None:
+            flat = _flatten(user_input)
             return self._save(
                 **{
-                    CONF_INSTALLATIONS: [int(i) for i in user_input[CONF_INSTALLATIONS]],
-                    CONF_SHOW_HIDDEN: user_input[CONF_SHOW_HIDDEN],
-                    CONF_EXPOSE_UNKNOWN: user_input[CONF_EXPOSE_UNKNOWN],
+                    CONF_INSTALLATIONS: [int(i) for i in flat[CONF_INSTALLATIONS]],
+                    CONF_SHOW_HIDDEN: flat[CONF_SHOW_HIDDEN],
+                    CONF_EXPOSE_UNKNOWN: flat[CONF_EXPOSE_UNKNOWN],
                 }
             )
         if not hasattr(self.config_entry, "runtime_data"):
@@ -324,15 +388,30 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
         ]
         schema = vol.Schema(
             {
-                vol.Required(CONF_INSTALLATIONS, default=chosen): SelectSelector(
-                    SelectSelectorConfig(options=choices, multiple=True)
+                vol.Required("installations"): section(
+                    vol.Schema(
+                        {
+                            vol.Required(CONF_INSTALLATIONS, default=chosen): SelectSelector(
+                                SelectSelectorConfig(options=choices, multiple=True)
+                            )
+                        }
+                    ),
+                    {"collapsed": False},
                 ),
-                vol.Required(
-                    CONF_SHOW_HIDDEN, default=options.get(CONF_SHOW_HIDDEN, False)
-                ): BooleanSelector(),
-                vol.Required(
-                    CONF_EXPOSE_UNKNOWN, default=options.get(CONF_EXPOSE_UNKNOWN, True)
-                ): BooleanSelector(),
+                vol.Required("visibility"): section(
+                    vol.Schema(
+                        {
+                            vol.Required(
+                                CONF_SHOW_HIDDEN, default=options.get(CONF_SHOW_HIDDEN, False)
+                            ): BooleanSelector(),
+                            vol.Required(
+                                CONF_EXPOSE_UNKNOWN,
+                                default=options.get(CONF_EXPOSE_UNKNOWN, True),
+                            ): BooleanSelector(),
+                        }
+                    ),
+                    {"collapsed": False},
+                ),
             }
         )
         return self.async_show_form(step_id="registers", data_schema=schema)

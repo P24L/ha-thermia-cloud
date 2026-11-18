@@ -20,6 +20,7 @@ CONF_SHOW_HIDDEN = "show_hidden"
 CONF_EXPOSE_UNKNOWN = "expose_unknown"
 CONF_DEBUG_ATTRIBUTES = "debug_attributes"
 CONF_LABEL_LANGUAGE = "label_language"
+CONF_START_MODE = "start_mode"  # setup only: "control" or "monitor" (read-only)
 LABEL_LANGUAGE_AUTO = "auto"
 
 DEFAULT_SCAN_INTERVAL = 60

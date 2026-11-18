@@ -44,6 +44,16 @@
           "username": "Die E-Mail-Adresse desselben Thermia-Kontos.",
           "password": "Das aktuelle Passwort."
         }
+      },
+      "mode": {
+        "title": "Wie soll es arbeiten?",
+        "description": "Legen Sie fest, was die Integration mit Ihrer Wärmepumpe tun darf. Sie können das jederzeit unter *Konfigurieren → Allgemein → Sicherheit* ändern.",
+        "data": {
+          "start_mode": "Modus"
+        },
+        "data_description": {
+          "start_mode": "„Überwachen und steuern“ erlaubt es, Einstellungen wie die Heizkurve und das Warmwasser zu ändern. „Nur überwachen (schreibgeschützt)“ schreibt nie etwas auf die Wärmepumpe."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Allgemein",
-        "description": "Der schreibgeschützte Modus blockiert jedes Schreiben auf die Wärmepumpe (Entitäten und Dienste). Das Aktualisierungsintervall gilt nach dem Speichern.",
-        "data": {
-          "scan_interval": "Aktualisierungsintervall (Sekunden)",
-          "read_only": "Schreibgeschützter Modus",
-          "timeout": "Zeitlimit für Anfragen (Sekunden)",
-          "debug_attributes": "Rohwerte der Register als Attribute hinzufügen"
-        },
-        "data_description": {
-          "scan_interval": "Wie oft die Cloud nach neuen Werten gefragt wird (10–600 Sekunden).",
-          "read_only": "Wenn aktiv, kann nichts auf die Wärmepumpe geschrieben werden.",
-          "timeout": "Wie lange auf eine Antwort der Cloud gewartet wird.",
-          "debug_attributes": "Fügt den Entitätsattributen Register-IDs und Rohwerte hinzu."
+        "description": "Wie die Integration mit der Thermia-Cloud kommuniziert und wie vorsichtig sie ist.",
+        "sections": {
+          "updates": {
+            "name": "Aktualisierung",
+            "description": "Wie oft Werte aus der Cloud gelesen werden.",
+            "data": {
+              "scan_interval": "Aktualisierungsintervall (Sekunden)",
+              "timeout": "Zeitlimit für Anfragen (Sekunden)"
+            },
+            "data_description": {
+              "scan_interval": "Wie oft die Cloud nach neuen Werten gefragt wird (10–600 Sekunden).",
+              "timeout": "Wie lange auf eine Antwort der Cloud gewartet wird."
+            }
+          },
+          "safety": {
+            "name": "Sicherheit",
+            "description": "Legt fest, was die Integration tun darf.",
+            "data": {
+              "read_only": "Schreibgeschützter Modus"
+            },
+            "data_description": {
+              "read_only": "Wenn aktiv, kann nichts auf die Wärmepumpe geschrieben werden (Entitäten und Dienste)."
+            }
+          },
+          "advanced": {
+            "name": "Erweitert",
+            "description": "Zur Fehlersuche.",
+            "data": {
+              "debug_attributes": "Rohwerte der Register als Attribute hinzufügen"
+            },
+            "data_description": {
+              "debug_attributes": "Fügt den Entitätsattributen Register-IDs und Rohwerte hinzu."
+            }
+          }
         }
       },
       "registers": {
         "title": "Anlagen & Register",
         "description": "Änderungen werden durch Neuladen der Integration übernommen.",
-        "data": {
-          "installations": "Anlagen",
-          "show_hidden": "Von Thermia ausgeblendete Register anzeigen",
-          "expose_unknown": "Unbekannte Register bereitstellen (als deaktivierte Entitäten)"
-        },
-        "data_description": {
-          "installations": "Welche Anlagen des Kontos verwendet werden.",
-          "show_hidden": "Entitäten auch dann erstellen, wenn Thermias eigene Regeln sie ausblenden.",
-          "expose_unknown": "Deaktivierte Entitäten für Register erstellen, zu denen diese Integration keinen Eintrag hat."
+        "sections": {
+          "installations": {
+            "name": "Anlagen",
+            "description": "Welche Wärmepumpen dieses Kontos verwendet werden.",
+            "data": {
+              "installations": "Anlagen"
+            },
+            "data_description": {
+              "installations": "Welche Anlagen des Kontos verwendet werden."
+            }
+          },
+          "visibility": {
+            "name": "Sichtbarkeit",
+            "description": "Welche Register zu Entitäten werden.",
+            "data": {
+              "show_hidden": "Von Thermia ausgeblendete Register anzeigen",
+              "expose_unknown": "Unbekannte Register bereitstellen (als deaktivierte Entitäten)"
+            },
+            "data_description": {
+              "show_hidden": "Entitäten auch dann erstellen, wenn Thermias eigene Regeln sie ausblenden.",
+              "expose_unknown": "Deaktivierte Entitäten für Register erstellen, zu denen diese Integration keinen Eintrag hat."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatisch (Sprache von Home Assistant)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Überwachen und steuern (empfohlen)",
+        "monitor": "Nur überwachen (schreibgeschützt)"
       }
     }
   },

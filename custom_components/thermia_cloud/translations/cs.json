@@ -44,6 +44,16 @@
           "username": "E-mail téhož účtu Thermia.",
           "password": "Aktuální heslo."
         }
+      },
+      "mode": {
+        "title": "Jak má fungovat?",
+        "description": "Vyberte, co smí integrace s vaším tepelným čerpadlem dělat. Kdykoli to změníte v *Konfigurovat → Obecné → Bezpečnost*.",
+        "data": {
+          "start_mode": "Režim"
+        },
+        "data_description": {
+          "start_mode": "Sledování a ovládání umožní měnit nastavení, například topnou křivku a teplou vodu. Pouze sledování (jen pro čtení) nikdy nic do tepelného čerpadla nezapíše."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Obecné",
-        "description": "Režim jen pro čtení zablokuje jakýkoli zápis do tepelného čerpadla (entity i služby). Interval aktualizace se projeví po uložení.",
-        "data": {
-          "scan_interval": "Interval aktualizace (sekundy)",
-          "read_only": "Režim jen pro čtení",
-          "timeout": "Časový limit požadavku (sekundy)",
-          "debug_attributes": "Přidat surové hodnoty registrů jako atributy"
-        },
-        "data_description": {
-          "scan_interval": "Jak často se cloud ptá na nové hodnoty (10–600 sekund).",
-          "read_only": "Když je zapnuto, nelze do tepelného čerpadla nic zapsat.",
-          "timeout": "Jak dlouho čekat na jednu odpověď z cloudu.",
-          "debug_attributes": "Přidá ke atributům entit id registrů a surové hodnoty."
+        "description": "Jak integrace komunikuje s cloudem Thermia a jak je opatrná.",
+        "sections": {
+          "updates": {
+            "name": "Aktualizace",
+            "description": "Jak často se z cloudu čtou hodnoty.",
+            "data": {
+              "scan_interval": "Interval aktualizace (sekundy)",
+              "timeout": "Časový limit požadavku (sekundy)"
+            },
+            "data_description": {
+              "scan_interval": "Jak často se cloud ptá na nové hodnoty (10–600 sekund).",
+              "timeout": "Jak dlouho čekat na jednu odpověď z cloudu."
+            }
+          },
+          "safety": {
+            "name": "Bezpečnost",
+            "description": "Určuje, co smí integrace dělat.",
+            "data": {
+              "read_only": "Režim jen pro čtení"
+            },
+            "data_description": {
+              "read_only": "Když je zapnuto, nelze do tepelného čerpadla nic zapsat (entity ani služby)."
+            }
+          },
+          "advanced": {
+            "name": "Pokročilé",
+            "description": "Pro řešení problémů.",
+            "data": {
+              "debug_attributes": "Přidat surové hodnoty registrů jako atributy"
+            },
+            "data_description": {
+              "debug_attributes": "Přidá k atributům entit id registrů a surové hodnoty."
+            }
+          }
         }
       },
       "registers": {
         "title": "Instalace a registry",
         "description": "Změny se projeví opětovným načtením integrace.",
-        "data": {
-          "installations": "Instalace",
-          "show_hidden": "Zobrazit registry skryté Thermií",
-          "expose_unknown": "Zpřístupnit neznámé registry (jako vypnuté entity)"
-        },
-        "data_description": {
-          "installations": "Které instalace účtu používat.",
-          "show_hidden": "Vytvořit entity i tehdy, když je pravidla Thermie skrývají.",
-          "expose_unknown": "Vytvořit vypnuté entity pro registry, které integrace nezná."
+        "sections": {
+          "installations": {
+            "name": "Instalace",
+            "description": "Která tepelná čerpadla tohoto účtu používat.",
+            "data": {
+              "installations": "Instalace"
+            },
+            "data_description": {
+              "installations": "Které instalace účtu používat."
+            }
+          },
+          "visibility": {
+            "name": "Viditelnost",
+            "description": "Které registry se stanou entitami.",
+            "data": {
+              "show_hidden": "Zobrazit registry skryté Thermií",
+              "expose_unknown": "Zpřístupnit neznámé registry (jako vypnuté entity)"
+            },
+            "data_description": {
+              "show_hidden": "Vytvořit entity i tehdy, když je pravidla Thermie skrývají.",
+              "expose_unknown": "Vytvořit vypnuté entity pro registry, které integrace nezná."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automaticky (jazyk Home Assistantu)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Sledování a ovládání (doporučeno)",
+        "monitor": "Pouze sledování (jen pro čtení)"
       }
     }
   },

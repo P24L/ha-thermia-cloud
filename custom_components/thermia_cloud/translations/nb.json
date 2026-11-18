@@ -44,6 +44,16 @@
           "username": "E-postadressen til den samme Thermia-kontoen.",
           "password": "Gjeldende passord."
         }
+      },
+      "mode": {
+        "title": "Hvordan skal den fungere?",
+        "description": "Velg hva integrasjonen får gjøre med varmepumpen din. Du kan endre dette når som helst under *Konfigurer → Generelt → Sikkerhet*.",
+        "data": {
+          "start_mode": "Modus"
+        },
+        "data_description": {
+          "start_mode": "Overvåke og styre lar deg endre innstillinger som varmekurven og varmtvannet. Bare overvåking (skrivebeskyttet) kan aldri skrive noe til varmepumpen."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Generelt",
-        "description": "Skrivebeskyttet modus blokkerer all skriving til varmepumpen (entiteter og tjenester). Oppdateringsintervallet trer i kraft etter lagring.",
-        "data": {
-          "scan_interval": "Oppdateringsintervall (sekunder)",
-          "read_only": "Skrivebeskyttet modus",
-          "timeout": "Tidsavbrudd for forespørsel (sekunder)",
-          "debug_attributes": "Legg til rå registerverdier som attributter"
-        },
-        "data_description": {
-          "scan_interval": "Hvor ofte skyen spørres om nye verdier (10–600 sekunder).",
-          "read_only": "Når den er på, kan ingenting skrives til varmepumpen.",
-          "timeout": "Hvor lenge det ventes på ett svar fra skyen.",
-          "debug_attributes": "Legger til register-ID-er og rå verdier i entitetens attributter."
+        "description": "Hvordan integrasjonen kommuniserer med Thermia-skyen, og hvor forsiktig den er.",
+        "sections": {
+          "updates": {
+            "name": "Oppdateringer",
+            "description": "Hvor ofte verdier leses fra skyen.",
+            "data": {
+              "scan_interval": "Oppdateringsintervall (sekunder)",
+              "timeout": "Tidsavbrudd for forespørsel (sekunder)"
+            },
+            "data_description": {
+              "scan_interval": "Hvor ofte skyen spørres om nye verdier (10–600 sekunder).",
+              "timeout": "Hvor lenge det ventes på ett svar fra skyen."
+            }
+          },
+          "safety": {
+            "name": "Sikkerhet",
+            "description": "Styr hva integrasjonen har lov til å gjøre.",
+            "data": {
+              "read_only": "Skrivebeskyttet modus"
+            },
+            "data_description": {
+              "read_only": "Når den er på, kan ingenting skrives til varmepumpen (entiteter og tjenester)."
+            }
+          },
+          "advanced": {
+            "name": "Avansert",
+            "description": "For feilsøking.",
+            "data": {
+              "debug_attributes": "Legg til rå registerverdier som attributter"
+            },
+            "data_description": {
+              "debug_attributes": "Legger til register-ID-er og rå verdier i entitetens attributter."
+            }
+          }
         }
       },
       "registers": {
         "title": "Anlegg og registre",
         "description": "Endringer tas i bruk ved å laste integrasjonen på nytt.",
-        "data": {
-          "installations": "Anlegg",
-          "show_hidden": "Vis registre som Thermia skjuler",
-          "expose_unknown": "Vis ukjente registre (som deaktiverte entiteter)"
-        },
-        "data_description": {
-          "installations": "Hvilke anlegg på kontoen som skal brukes.",
-          "show_hidden": "Opprett entiteter selv om Thermias egne regler skjuler dem.",
-          "expose_unknown": "Opprett deaktiverte entiteter for registre som integrasjonen ikke har noen oppføring for."
+        "sections": {
+          "installations": {
+            "name": "Anlegg",
+            "description": "Hvilke varmepumper på denne kontoen som skal brukes.",
+            "data": {
+              "installations": "Anlegg"
+            },
+            "data_description": {
+              "installations": "Hvilke anlegg på kontoen som skal brukes."
+            }
+          },
+          "visibility": {
+            "name": "Synlighet",
+            "description": "Hvilke registre som blir til entiteter.",
+            "data": {
+              "show_hidden": "Vis registre som Thermia skjuler",
+              "expose_unknown": "Vis ukjente registre (som deaktiverte entiteter)"
+            },
+            "data_description": {
+              "show_hidden": "Opprett entiteter selv om Thermias egne regler skjuler dem.",
+              "expose_unknown": "Opprett deaktiverte entiteter for registre som integrasjonen ikke har noen oppføring for."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automatisk (språket i Home Assistant)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Overvåke og styre (anbefalt)",
+        "monitor": "Bare overvåking (skrivebeskyttet)"
       }
     }
   },

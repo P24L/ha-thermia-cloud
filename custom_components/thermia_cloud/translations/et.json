@@ -44,6 +44,16 @@
           "username": "Sama Thermia konto e-posti aadress.",
           "password": "Praegune parool."
         }
+      },
+      "mode": {
+        "title": "Kuidas see peaks töötama?",
+        "description": "Vali, mida integratsioon tohib sinu soojuspumbaga teha. Seda saab igal ajal muuta jaotises *Seadista → Üldist → Ohutus*.",
+        "data": {
+          "start_mode": "Režiim"
+        },
+        "data_description": {
+          "start_mode": "Jälgimine ja juhtimine võimaldab muuta seadeid, näiteks küttekõverat ja sooja vett. Ainult jälgimine (kirjutuskaitse) ei kirjuta soojuspumbale kunagi midagi."
+        }
       }
     },
     "error": {
@@ -261,32 +271,68 @@
       },
       "general": {
         "title": "Üldist",
-        "description": "Kirjutuskaitse režiim blokeerib kõik kirjutamised soojuspumbale (olemid ja teenused). Uuendusintervall jõustub pärast salvestamist.",
-        "data": {
-          "scan_interval": "Uuendusintervall (sekundit)",
-          "read_only": "Kirjutuskaitse režiim",
-          "timeout": "Päringu ajalimiit (sekundit)",
-          "debug_attributes": "Lisa registrite toorväärtused atribuutidena"
-        },
-        "data_description": {
-          "scan_interval": "Kui tihti pilvelt uusi väärtusi küsitakse (10–600 sekundit).",
-          "read_only": "Kui see on sees, ei saa soojuspumbale midagi kirjutada.",
-          "timeout": "Kui kaua ühte pilve vastust oodata.",
-          "debug_attributes": "Lisab registrite ID-d ja toorväärtused olemi atribuutidele."
+        "description": "Kuidas integratsioon Thermia pilvega suhtleb ja kui ettevaatlik see on.",
+        "sections": {
+          "updates": {
+            "name": "Uuendused",
+            "description": "Kui tihti väärtusi pilvest loetakse.",
+            "data": {
+              "scan_interval": "Uuendusintervall (sekundit)",
+              "timeout": "Päringu ajalimiit (sekundit)"
+            },
+            "data_description": {
+              "scan_interval": "Kui tihti pilvelt uusi väärtusi küsitakse (10–600 sekundit).",
+              "timeout": "Kui kaua ühte pilve vastust oodata."
+            }
+          },
+          "safety": {
+            "name": "Ohutus",
+            "description": "Määra, mida integratsioon tohib teha.",
+            "data": {
+              "read_only": "Kirjutuskaitse režiim"
+            },
+            "data_description": {
+              "read_only": "Kui see on sees, ei saa soojuspumbale midagi kirjutada (olemid ja teenused)."
+            }
+          },
+          "advanced": {
+            "name": "Lisaseaded",
+            "description": "Tõrkeotsinguks.",
+            "data": {
+              "debug_attributes": "Lisa registrite toorväärtused atribuutidena"
+            },
+            "data_description": {
+              "debug_attributes": "Lisab registrite ID-d ja toorväärtused olemi atribuutidele."
+            }
+          }
         }
       },
       "registers": {
         "title": "Paigaldised ja registrid",
         "description": "Muudatused rakendatakse integratsiooni taaslaadimisega.",
-        "data": {
-          "installations": "Paigaldised",
-          "show_hidden": "Näita Thermia peidetud registreid",
-          "expose_unknown": "Ava tundmatud registrid (keelatud olemitena)"
-        },
-        "data_description": {
-          "installations": "Millist konto paigaldist kasutada.",
-          "show_hidden": "Loo olemid ka siis, kui Thermia enda reeglid need peidavad.",
-          "expose_unknown": "Loo keelatud olemid registritele, mille kohta sellel integratsioonil kirjet ei ole."
+        "sections": {
+          "installations": {
+            "name": "Paigaldised",
+            "description": "Milliseid selle konto soojuspumpasid kasutada.",
+            "data": {
+              "installations": "Paigaldised"
+            },
+            "data_description": {
+              "installations": "Millist konto paigaldist kasutada."
+            }
+          },
+          "visibility": {
+            "name": "Nähtavus",
+            "description": "Millistest registritest saavad olemid.",
+            "data": {
+              "show_hidden": "Näita Thermia peidetud registreid",
+              "expose_unknown": "Ava tundmatud registrid (keelatud olemitena)"
+            },
+            "data_description": {
+              "show_hidden": "Loo olemid ka siis, kui Thermia enda reeglid need peidavad.",
+              "expose_unknown": "Loo keelatud olemid registritele, mille kohta sellel integratsioonil kirjet ei ole."
+            }
+          }
         }
       },
       "names": {
@@ -333,6 +379,12 @@
     "label_language": {
       "options": {
         "auto": "Automaatne (Home Assistanti keel)"
+      }
+    },
+    "start_mode": {
+      "options": {
+        "control": "Jälgimine ja juhtimine (soovitatav)",
+        "monitor": "Ainult jälgimine (kirjutuskaitse)"
       }
     }
   },

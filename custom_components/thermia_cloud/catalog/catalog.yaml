@@ -41,6 +41,7 @@ registers:
     risk: heating
     shared: true
     state_dependent: true
+    default_enabled: true
   REG_HEATING_HEAT_CURVE_MAX:
     kind: number
     translation_key: heating_curve_max
@@ -49,6 +50,7 @@ registers:
     risk: heating
     shared: true
     state_dependent: true
+    default_enabled: true
 
   # main circuit (the heat pump device itself); the plain entries above serve circuit 1
   REG_GROUP_HEATING_CURVE/REG_HEATING_HEAT_CURVE:
@@ -65,12 +67,14 @@ registers:
     device_class: temperature
     risk: heating
     translation_key: heating_curve_min_main
+    default_enabled: true
   REG_GROUP_HEATING_CURVE/REG_HEATING_HEAT_CURVE_MAX:
     kind: number
     unit: "°C"
     device_class: temperature
     risk: heating
     translation_key: heating_curve_max_main
+    default_enabled: true
 
   REG_HEATING_HEAT_STOP:
     kind: number
@@ -78,6 +82,7 @@ registers:
     unit: "°C"
     device_class: temperature
     risk: heating
+    default_enabled: true
 
   # Only returned by the cloud while circuit 1 is in *Constant* mode (the curve registers vanish
   # then). The cloud has no text for it in any language. Observed 2026-11-17.
@@ -415,6 +420,7 @@ registers:
     unit: "°C"
     device_class: temperature
     risk: heating
+    default_enabled: true
   REG_CURVE2_CURVE:
     kind: number
     unit: "°C"
@@ -430,6 +436,7 @@ registers:
     risk: heating
     translation_key: heating_curve_min
     state_dependent: true
+    default_enabled: true
   REG_CURVE2_MAX:
     kind: number
     unit: "°C"
@@ -437,6 +444,7 @@ registers:
     risk: heating
     translation_key: heating_curve_max
     state_dependent: true
+    default_enabled: true
   REG_SHUNT_COOLING:
     kind: number
     unit: "°C"
