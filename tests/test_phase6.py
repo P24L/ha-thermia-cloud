@@ -104,7 +104,7 @@ async def test_device_names_fall_back_to_english_for_unknown_languages(
     child = dr.async_get(hass).async_get_device_by_identifier(
         (DOMAIN, f"{INSTALLATION_ID}_circuit_1"), entry.entry_id
     )
-    assert child.name == "Mixing circuit 1"
+    assert child.name.endswith(" - Mixing circuit 1")
 
 
 async def test_label_language_option_overrides_the_home_assistant_language(
@@ -117,7 +117,7 @@ async def test_label_language_option_overrides_the_home_assistant_language(
     child = dr.async_get(hass).async_get_device_by_identifier(
         (DOMAIN, f"{INSTALLATION_ID}_circuit_1"), entry.entry_id
     )
-    assert child.name == "Směšovací okruh 1"
+    assert child.name.endswith(" - Směšovací okruh 1")
 
 
 async def test_names_step_saves_the_language(hass: HomeAssistant) -> None:

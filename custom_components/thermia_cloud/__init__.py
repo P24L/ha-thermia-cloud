@@ -501,6 +501,8 @@ def _register_devices(
         name=installation.name or "Thermia heat pump",
         sw_version=installation.firmware_version,
     )
+    # Circuit devices carry the heat pump's name ("My Heat Pump - Mixing circuit 1"): they sort
+    # right behind it in the device list and stay distinguishable with several installations.
     for key in sorted({p.device for p in plans} - {"main"}):
         device = catalog.devices.get(key)
         registry.async_get_or_create(
@@ -508,7 +510,7 @@ def _register_devices(
             identifiers={device_identifier(installation.id, key)},
             manufacturer="Thermia",
             via_device_id=main.id,
-            name=labels.label(key, device.translation_key if device else None),
+            name=f"{main.name} - " + labels.label(key, device.translation_key if device else None),
         )
 
 

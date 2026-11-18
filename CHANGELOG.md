@@ -2,6 +2,11 @@
 
 All notable changes are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
+## [0.2.2] - 2026-11-18
+
+### Changed
+- Heating circuit devices are named after the heat pump ("My Heat Pump - Mixing circuit 1"), so they sit right behind it in the device list and are clear with several installations. Existing devices are renamed on update; entity ids do not change.
+
 ## [0.2.1] - 2026-11-18
 
 ### Added
