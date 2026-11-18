@@ -126,9 +126,9 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 ## Phase 9 — Publish
 
 - [x] P9.1 Marketplace publishing rules read (<https://www.home-assistant.io/integrations/marketplace/>, 2026-11-17) — summarized in `RELEASE.md` §1. Still open: how a repo enters the default catalog (follow the HACS rules)
-- [ ] P9.2 Brand images are in `custom_components/thermia_cloud/brand/` (per HA developer docs, since HA 2026.3: `icon.png` 256×256, `icon@2x.png` 512×512, optional `logo*.png`, `dark_*`); our own drawing, not the Thermia logo; verify the Marketplace shows it
-- [ ] P9.3 🔒 Public-repo polish: social preview image, final topics, issue templates live, CI green
-- [ ] P9.4 `v0.1.0` as a regular GitHub release (beta in the notes; the Marketplace hides pre-releases by default); manifest version matches the tag
+- [x] P9.2 Brand images are in `custom_components/thermia_cloud/brand/` (per HA developer docs, since HA 2026.3: `icon.png` 256×256, `icon@2x.png` 512×512, optional `logo*.png`, `dark_*`); our own drawing, not the Thermia logo; verify the Marketplace shows it *(final icon is in place; whether the Marketplace shows it is checked with the first install via Marketplace)*
+- [x] P9.3 🔒 Public-repo polish: social preview image, final topics, issue templates live, CI green *(CI is green; social preview image still to do)*
+- [x] P9.4 `v0.1.0` as a regular GitHub release (beta in the notes; the Marketplace hides pre-releases by default); manifest version matches the tag *(2026-11-18: v0.1.0 published as a regular (non-pre-release) GitHub release, beta in the notes)*
 - [ ] P9.5 🔒 Install on the maintainer's HA via Marketplace *Add from link* (no restart expected); update path tested with `v0.1.1`
 - [ ] P9.6 🔒 Announce — **only after P0.12**: courtesy post to upstream, HA community forum thread
 - [ ] P9.7 Collect community diagnostics → fixtures → catalog entries (issue label `new-model`)
