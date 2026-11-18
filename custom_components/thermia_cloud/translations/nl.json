@@ -230,6 +230,17 @@
       "connected": {
         "name": "Online"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Warm water",
+        "state": {
+          "off": "Uit",
+          "comfort": "Comfort",
+          "economy": "Eco",
+          "away": "Afwezig"
+        }
+      }
     }
   },
   "exceptions": {

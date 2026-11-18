@@ -230,6 +230,17 @@
       "connected": {
         "name": "Võrgus"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Kuum vesi",
+        "state": {
+          "off": "Väljas",
+          "comfort": "Mugavus",
+          "economy": "Säästu",
+          "away": "Eemal"
+        }
+      }
     }
   },
   "exceptions": {

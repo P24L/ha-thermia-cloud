@@ -230,6 +230,17 @@
       "connected": {
         "name": "Online"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Warmwasser",
+        "state": {
+          "off": "Aus",
+          "comfort": "Komfort",
+          "economy": "Sparbetrieb",
+          "away": "Abwesend"
+        }
+      }
     }
   },
   "exceptions": {

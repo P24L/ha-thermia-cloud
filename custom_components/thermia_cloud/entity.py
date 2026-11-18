@@ -18,6 +18,16 @@ def device_identifier(installation_id: int, device: str) -> tuple[str, str]:
     return (DOMAIN, str(installation_id) if device == "main" else f"{installation_id}_{device}")
 
 
+def register_value(coordinator: ThermiaCoordinator, register_id: int) -> Any:
+    """The value an entity shows: a write awaiting confirmation wins over the register."""
+    pending = coordinator.pending.get(register_id)
+    if pending is not None:
+        return float(pending[0])
+    data = coordinator.data
+    entry = data.values.get(register_id) if data else None
+    return entry.value if entry else None
+
+
 class ThermiaEntity(CoordinatorEntity[ThermiaCoordinator]):
     _attr_has_entity_name = True
 
@@ -43,19 +53,14 @@ class ThermiaEntity(CoordinatorEntity[ThermiaCoordinator]):
 
     @property
     def _value(self) -> Any:
-        """What the entity shows: the value just written while it awaits confirmation.
+        """What the entity shows (see :func:`register_value`).
 
         After the cloud accepted a write the register still reports the old value for a second
         or several; showing it would make a changed setting snap back and forth. So the written
         value is shown right away (``pending_value`` marks it as unconfirmed) and replaced by the
         real one when it arrives, or after 30 s if it never shows up.
         """
-        pending = self.coordinator.pending.get(self.plan.register_id)
-        if pending is not None:
-            return float(pending[0])
-        data = self.coordinator.data
-        entry = data.values.get(self.plan.register_id) if data else None
-        return entry.value if entry else None
+        return register_value(self.coordinator, self.plan.register_id)
 
     @property
     def available(self) -> bool:

@@ -230,6 +230,17 @@
       "connected": {
         "name": "En línea"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Agua caliente",
+        "state": {
+          "off": "Apagado",
+          "comfort": "Confort",
+          "economy": "Económico",
+          "away": "Ausente"
+        }
+      }
     }
   },
   "exceptions": {

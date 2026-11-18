@@ -78,6 +78,7 @@ PLATFORMS = [
     Platform.SELECT,
     Platform.SWITCH,
     Platform.BUTTON,
+    Platform.WATER_HEATER,
 ]
 DISCOVERY_MAX_AGE = 24 * 3600
 SETUP_RETRY_DELAY = 120  # seconds until a failed installation is tried again

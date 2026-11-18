@@ -230,6 +230,17 @@
       "connected": {
         "name": "Online"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Varmvatten",
+        "state": {
+          "off": "Av",
+          "comfort": "Komfort",
+          "economy": "Ekonomi",
+          "away": "Borta"
+        }
+      }
     }
   },
   "exceptions": {

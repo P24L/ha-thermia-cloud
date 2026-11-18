@@ -230,6 +230,17 @@
       "connected": {
         "name": "En ligne"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "ECS",
+        "state": {
+          "off": "Arrêt",
+          "comfort": "Confort",
+          "economy": "Éco",
+          "away": "Absent"
+        }
+      }
     }
   },
   "exceptions": {

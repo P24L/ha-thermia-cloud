@@ -230,6 +230,17 @@
       "connected": {
         "name": "Verkossa"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Käyttövesi",
+        "state": {
+          "off": "Pois",
+          "comfort": "Mukavuus",
+          "economy": "Säästö",
+          "away": "Poissa"
+        }
+      }
     }
   },
   "exceptions": {

@@ -230,6 +230,17 @@
       "connected": {
         "name": "Na spletu"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Topla voda",
+        "state": {
+          "off": "Izključeno",
+          "comfort": "Udobje",
+          "economy": "Varčno",
+          "away": "Odsoten"
+        }
+      }
     }
   },
   "exceptions": {

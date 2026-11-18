@@ -230,6 +230,17 @@
       "connected": {
         "name": "В сети"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Горячая вода",
+        "state": {
+          "off": "Выкл",
+          "comfort": "Комфорт",
+          "economy": "Эконом",
+          "away": "Отсутствие"
+        }
+      }
     }
   },
   "exceptions": {

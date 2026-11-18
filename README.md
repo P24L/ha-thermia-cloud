@@ -38,6 +38,7 @@ The existing [Thermia integration by klejejs](https://github.com/klejejs/ha-ther
 
 - ✅ Sensors, binary sensors (compressor, heating, hot water, defrost, …), numbers, selects and switches generated from your pump's register list
 - ✅ **Control, not just monitoring:** hot water on/off and mode, operation mode, heating curve — plus minimum/maximum supply temperature, heating stop and any other writable register, all with the cloud's own limits
+- ✅ Hot water also as a standard **water heater** entity (on/off, comfort/economy/away) for the default cards and voice assistants
 - ✅ Main circuit and additional circuits/pool as separate devices
 - ✅ UI in English and Czech; entity names in the language of your choice (default: your HA language): our own names where we have them, Thermia's own texts otherwise, with a **Refresh names** button
 - ✅ Action `thermia_cloud.set_register` for registers without an entity

@@ -44,6 +44,7 @@ class FakeApi:
         self.last_online = "2026-11-18T18:16:39.25"  # UTC, as the cloud sends it
         self.active_alarms = 0
         self.status_error: Exception | None = None  # makes the installation list fail
+        self.hide_ids: set[int] = set()  # register ids the cloud stops returning
         self.constant_mode = False  # circuit 1 in Constant mode: different registers in its group
         self.group_calls: list[str] = []  # groups read, in order
         self.writes: list[tuple[int, float]] = []  # (register id, value) the "cloud" accepted
@@ -105,7 +106,7 @@ class FakeApi:
             raw = [*raw, *self.extra]
         out = []
         for item in raw:
-            if item["registerName"] in self.hide:
+            if item["registerName"] in self.hide or item["registerId"] in self.hide_ids:
                 continue
             if item["registerId"] in self.values:
                 item = {**item, "registerValue": self.values[item["registerId"]]}

@@ -102,7 +102,7 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 7 — Polish
 
-- [ ] P7.1 Optional composite `water_heater` for hot water (convenience; generic entities stay) *(optional; not started — a hot-water setpoint register is unknown, so a composite entity would add little)*
+- [x] P7.1 Water heater entity for the hot water (2026-11-18): on/off and comfort/economy/away from the generic registers; no setpoint (the heat pump decides), generic entities stay
 - [ ] P7.2 *(moved to P10.7)*
 - [x] P7.3 Quality-scale **bronze** final audit (the criteria are already enforced in P4.12) *(audit in `docs/QUALITY.md`)*
 - [x] P7.4 Quality-scale **silver**: reauth, parallel updates, `config-entry-unloading`, `integration-owner`, `docs-configuration-parameters`, `docs-installation-parameters`, `log-when-unavailable`, integration-module coverage > 95 % *(audit in `docs/QUALITY.md`, coverage 97 %)*

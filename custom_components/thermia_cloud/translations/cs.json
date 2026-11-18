@@ -230,6 +230,17 @@
       "connected": {
         "name": "Online"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Teplá voda",
+        "state": {
+          "off": "Vypnuto",
+          "comfort": "Komfort",
+          "economy": "Ekonomický",
+          "away": "Pryč"
+        }
+      }
     }
   },
   "exceptions": {

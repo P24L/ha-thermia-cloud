@@ -230,6 +230,17 @@
       "connected": {
         "name": "Online"
       }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "CWU",
+        "state": {
+          "off": "Wyłączony",
+          "comfort": "Komfortowy",
+          "economy": "Ekonomiczny",
+          "away": "Nieobecność"
+        }
+      }
     }
   },
   "exceptions": {
