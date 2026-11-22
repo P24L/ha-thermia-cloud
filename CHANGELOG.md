@@ -2,6 +2,11 @@
 
 All notable changes are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
+## [0.2.3] - 2026-11-22
+
+### Fixed
+- The *Names & language* options step no longer lists a directory inside Home Assistant's event loop (Home Assistant logged a blocking-call warning).
+
 ## [0.2.2] - 2026-11-18
 
 ### Changed
