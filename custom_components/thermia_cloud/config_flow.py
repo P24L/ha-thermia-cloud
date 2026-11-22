@@ -271,6 +271,10 @@ class ThermiaConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
 
+def _bundled_cultures() -> list[str]:
+    return sorted(p.stem for p in I18N_DIR.glob("*.json") if not p.name.startswith("_"))
+
+
 def _flatten(user_input: dict[str, Any]) -> dict[str, Any]:
     """Fields of a form made of collapsible sections arrive nested one level deep."""
     flat: dict[str, Any] = {}
@@ -419,7 +423,7 @@ class ThermiaOptionsFlow(OptionsFlowWithReload):
     async def async_step_names(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         if user_input is not None:
             return self._save(**{CONF_LABEL_LANGUAGE: user_input[CONF_LABEL_LANGUAGE]})
-        cultures = sorted(p.stem for p in I18N_DIR.glob("*.json") if not p.name.startswith("_"))
+        cultures = await self.hass.async_add_executor_job(_bundled_cultures)
         schema = vol.Schema(
             {
                 vol.Required(
