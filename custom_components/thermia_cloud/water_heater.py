@@ -28,6 +28,9 @@ from .entity import device_identifier, register_value
 from .writer import async_write_register
 
 PARALLEL_UPDATES = 1
+# Home Assistant 2026.11 renamed current_temperature / temperature_unit to native_* (the old
+# names are removed in 2027.11); the older core we still support only knows the old names.
+_NATIVE_NAMES = hasattr(WaterHeaterEntity, "native_current_temperature")
 # the hot water mode register only exists while hot water is on: wait for it after switching on
 MODE_WAIT_STEPS = 6
 MODE_WAIT_SECONDS = 2
@@ -57,7 +60,10 @@ async def async_setup_entry(
 
 class ThermiaWaterHeater(CoordinatorEntity[ThermiaCoordinator], WaterHeaterEntity):
     _attr_has_entity_name = True
-    _attr_temperature_unit = UnitOfTemperature.CELSIUS
+    if _NATIVE_NAMES:
+        _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
+    else:
+        _attr_temperature_unit = UnitOfTemperature.CELSIUS
 
     def __init__(
         self,
@@ -89,12 +95,23 @@ class ThermiaWaterHeater(CoordinatorEntity[ThermiaCoordinator], WaterHeaterEntit
         data = self.coordinator.data
         return super().available and data is not None and self._status.register_id in data.values
 
-    @property
-    def current_temperature(self) -> float | None:
+    def _hot_water_temperature(self) -> float | None:
         if self._temperature is None:
             return None
         value = register_value(self.coordinator, self._temperature.register_id)
         return None if value is None else float(value)
+
+    if _NATIVE_NAMES:
+
+        @property
+        def native_current_temperature(self) -> float | None:
+            return self._hot_water_temperature()
+
+    else:
+
+        @property
+        def current_temperature(self) -> float | None:
+            return self._hot_water_temperature()
 
     @property
     def current_operation(self) -> str | None:

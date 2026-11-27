@@ -2,6 +2,11 @@
 
 All notable changes are documented here. Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- The water heater uses Home Assistant 2026.11's `native_current_temperature` / `native_temperature_unit` where available (the old names log a deprecation warning and are removed in 2027.11).
+
 ## [0.2.3] - 2026-11-22
 
 ### Fixed
