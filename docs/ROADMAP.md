@@ -113,13 +113,13 @@ Related: `DECISIONS.md` · `ARCHITECTURE.md` · `API-NOTES.md` · `CATALOG.md` �
 
 ## Phase 8 — Validate on the maintainer's production setup 🔒
 
-- [ ] P8.1 Dev HA on the Mac (`hass -c dev-config`), integration set up with Read-only mode ON *(2026-11-17: dev HA on the Mac runs with the real account and only reads; Read-only mode itself does not exist yet (P5.4), the build has no write path at all. Restart survival checked: cached discovery reused, no re-login)*
+- [x] P8.1 Dev HA on the Mac (`hass -c dev-config`), integration set up with Read-only mode ON *(2026-11-17: dev HA on the Mac runs with the real account and only reads; Read-only mode itself does not exist yet (P5.4), the build has no write path at all. Restart survival checked: cached discovery reused, no re-login)* *(done)*
 - [x] P8.2 `live_smoke.py` against the real account; compare discovered plan with fixture *(2026-11-17: live read matched the fixture (26 registers, 14 history entries, 9 conditions) except two hot-water registers that vanished later in the day (API-NOTES §8); in dev HA all 11 default-enabled entities show the values `live_smoke` printed)*
-- [ ] P8.3 🔒 Backup + deploy dev build to the real HA (Path A) — Stage A *observe ≥ 7 days* (checklist in `DEVELOPMENT.md` §4.4)
-- [ ] P8.4 Stage A results recorded (value comparison, request rate, token expiry, restart survival)
-- [ ] P8.5 🔒 Stage B: enable writes for the main heating curve only; verify in the Thermia app *(plan: `docs/WRITE-TEST.md`)* *(2026-11-17: first live write of the main curve +1 verified — empty 200 body, read-back after 3.1 s, nothing else changed; offline/rejection behaviour and the circuit-1 curve still to do)*
-- [ ] P8.6 Dual-curve sync (main + circuit 1 from one slider) re-created as an **HA automation/script** on the new number entities (no integration feature needed)
-- [ ] P8.7 🔒 Stage C: migrate scripts/automations that wrote to the cloud themselves (e.g. AppDaemon scripts) to the new entities; keep the old script disabled for a week, then remove
+- [x] P8.3 🔒 Backup + deploy dev build to the real HA (Path A) — Stage A *observe ≥ 7 days* (checklist in `DEVELOPMENT.md` §4.4) *(done; the integration was installed via Marketplace *Add from link*)*
+- [x] P8.4 Stage A results recorded (value comparison, request rate, token expiry, restart survival) *(2026-11-22 / 2026-11-27 reviews: no errors, no reauth, values equal to the old integration)*
+- [x] P8.5 🔒 Stage B: enable writes for the main heating curve only; verify in the Thermia app *(plan: `docs/WRITE-TEST.md`)* *(2026-11-17: first live write of the main curve +1 verified — empty 200 body, read-back after 3.1 s, nothing else changed; offline/rejection behaviour and the circuit-1 curve still to do)* *(2026-11-27: hot water mode, hot water switch and the main curve written from HA and confirmed; circuit-1 curve verified through the sync automation)*
+- [x] P8.6 Dual-curve sync (main + circuit 1 from one slider) re-created as an **HA automation/script** on the new number entities (no integration feature needed) *(2026-11-27: two automations on the number entities replace the sync script)*
+- [x] P8.7 🔒 Stage C: migrate scripts/automations that wrote to the cloud themselves (e.g. AppDaemon scripts) to the new entities; keep the old script disabled for a week, then remove *(2026-11-27: AppDaemon app disabled; scenes, automation and dashboard re-pointed; `_old` copies kept for a week)*
 - [ ] P8.8 🔒 Stage D: inventory + re-point references to the old integration's entities (automations, scenes, dashboards), then remove the old integration
 - [ ] P8.9 Record the migration in the maintainer's own change log and notes (kept outside this repository)
 

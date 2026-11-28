@@ -51,7 +51,7 @@ The existing [Thermia integration by klejejs](https://github.com/klejejs/ha-ther
   <img src="docs/img/options-general.png" width="30%" alt="General options with read-only mode">
 </p>
 
-> 👋 **New here?** Follow the [getting started guide](docs/GETTING-STARTED.md).
+> 👋 **New here?** Follow the [getting started guide](docs/GETTING-STARTED.md). Coming from the older *Thermia Heat Pump* integration? See [migrating](docs/MIGRATING.md).
 
 ## Requirements
 
