@@ -164,6 +164,10 @@ cards:
     icon: mdi:chart-bell-curve
 ```
 
+## Does it work for you?
+
+Tell us in [Discussions](https://github.com/P24L/ha-thermia-cloud/discussions): your heat pump model, the integration version and whether it works. That is the most useful feedback a young integration can get. Something is wrong or your model is missing? Open an [issue](https://github.com/P24L/ha-thermia-cloud/issues/new/choose) with the diagnostics download attached.
+
 ## Supported models
 
 | Family | Status | Notes |

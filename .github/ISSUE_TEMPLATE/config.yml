@@ -1,1 +1,5 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Questions and "it works on my model" reports
+    url: https://github.com/P24L/ha-thermia-cloud/discussions
+    about: Ask a question, or tell us which heat pump model and version works for you.
